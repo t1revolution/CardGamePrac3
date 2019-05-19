@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class player1 : MonoBehaviour
 {
     public Deck deck;
+    public Mana mana;
     public Graveyard graveyard;
     public Card card;
     public Hand hand;
     public Field field;
+    public Manazone manazone;
 
     public int x = 1;
     public int y = 2;
+    int times;
 
     //public Type step = Type.NONE;
     private Image image;
@@ -22,6 +25,7 @@ public class player1 : MonoBehaviour
         ATTACK,
         SUPPORT,
         REFLECT,
+        MANA,
     };
 
     public void PushSettingCardOnFieldFromHand(Card card)
@@ -83,16 +87,47 @@ public class player1 : MonoBehaviour
 
     public void SetGraveyard()
     {
-        for(int i = 0; i < field.cardList.Count; i++)
+        times = field.cardList.Count;
+        int n = 0;
+        for (int i = 0; i < times; i++)
         {
-            Card card = field.cardList[i];
-            if (card.type != (int)Type.REFLECT)
+            Card card = field.cardList[n];
+            if (card.type != (int)Type.REFLECT && card.type != (int)Type.MANA)
             {
                 SendGraveyard(card);
+            }
+            else
+            {
+                n += 1;
             }
         }
     }
 
+    public void SendManazone(Card _card)
+    {
+        field.Pull(_card);
+        manazone.Add(_card);
+    }
+    
+    public void SetManazone()
+    {
+        Debug.Log("field.cardList.Count:" + field.cardList.Count);
+        times = field.cardList.Count;
+        int n = 0;
+        for (int i = 0; i < times; i++)
+        {
+            Card card = field.cardList[n];
+            Debug.Log("i:" + i);
+            if (card.type == (int)Type.MANA)
+            {
+                SendManazone(card);
+            }
+            else
+            {
+                n += 1;
+            }
+        }
+    }
 
     Card SelectAttacker()
     {

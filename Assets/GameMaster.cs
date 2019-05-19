@@ -7,6 +7,7 @@ public class GameMaster : MonoBehaviour
 {
     public player1[] playerList;
     public DeckGenerater deckGenerater;
+    public ManaGenerater manaGenerater;
     public IEnumerator coroutine;
     public string current_phase;
     public string current_player;
@@ -28,12 +29,14 @@ public class GameMaster : MonoBehaviour
         ATTACK,
         SUPPORT,
         REFLECT,
+        MANA,
     };
 
     Phase phase;
     void Start()
     {
         deckGenerater = GetComponent<DeckGenerater>();
+        manaGenerater = GetComponent<ManaGenerater>();
         phase = Phase.INIT;
         InitPhase();
     }
@@ -43,6 +46,11 @@ public class GameMaster : MonoBehaviour
         this.step_timer += Time.deltaTime;
     }
 
+    List<CardData> ManacardDataList = new List<CardData>()
+    {
+        new CardData(0, "M_1", (int)Type.MANA, 1),
+        new CardData(1, "M_1", (int)Type.MANA, 2),
+    };
     List<CardData> player1CardDataList = new List<CardData>()
     {
         new CardData(0, "A_1", (int)Type.ATTACK, 1),
@@ -87,6 +95,8 @@ public class GameMaster : MonoBehaviour
         */
         deckGenerater.Generate(player1CardDataList, currentPlayer.deck);
         deckGenerater.Generate(player2CardDataList, waitPlayer.deck);
+        manaGenerater.Generate(ManacardDataList, currentPlayer.mana);
+        manaGenerater.Generate(ManacardDataList, waitPlayer.mana);
         
         // 現在のプレイヤー
         currentPlayer = playerList[0];
@@ -146,6 +156,7 @@ public class GameMaster : MonoBehaviour
     {
         Debug.Log("EndPhase");
         currentPlayer.SetGraveyard();
+        currentPlayer.SetManazone();
         player1 tmpPlayer = waitPlayer;
         waitPlayer = currentPlayer;
         currentPlayer = tmpPlayer;
