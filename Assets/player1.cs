@@ -86,7 +86,7 @@ public class player1 : MonoBehaviour
         for(int i = 0; i < field.cardList.Count; i++)
         {
             Card card = field.cardList[i];
-            if (card.type == (int)Type.REFLECT)
+            if (card.type != (int)Type.REFLECT)
             {
                 SendGraveyard(card);
             }
