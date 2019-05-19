@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CanvasScript : MonoBehaviour
 {
+    /*
     // Start is called before the first frame update
     void Start()
     {
@@ -54,9 +55,9 @@ public class CanvasScript : MonoBehaviour
         dice9Trans.localScale = komaScale;
         dice10Trans.position = new Vector3(basex - per1x * 3, basey - per1y * 3, 0);
         dice10Trans.localScale = komaScale;
-
+        
     }
-
+    */
     // Update is called once per frame
     void Update()
     {
