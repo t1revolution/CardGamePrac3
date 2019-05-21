@@ -13,7 +13,7 @@ public class DiceGenerater : MonoBehaviour
     {
         float per1x = 65f;
         float per1y = 65f;
-        float basex = 690f + per1x;
+        float basex = 735f + per1x;
         float basey = 590f + per1y;
         /*
         float basex = 335f + per1x;

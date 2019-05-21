@@ -63,4 +63,48 @@ public class CanvasScript : MonoBehaviour
     {
         
     }
+
+    // 移動可能マスの表示
+    public void RefresAbles(KomaScript sc, List<KomaMove> moves, string name)
+    {
+        GameObject refObj = GameObject.Find("ban2_1");
+        BanScript banScript = refObj.GetComponent<BanScript>();
+        float per1x = 50.6f;
+        float per1y = 50.6f;
+        float basex = 575f + per1x;
+        float basey = 420f + per1y;
+        List<KomaMove> choosemoves = new List<KomaMove>();
+        if (!banScript.chooseflag)
+        {
+            int i = 0;
+            foreach (KomaMove move in moves)
+            {
+                if (sc.x + move.x > 5 || sc.x + move.x < 1)
+                {
+                    continue;
+                }
+                if (sc.y + move.y > 5 || sc.y + move.y < 1)
+                {
+                    continue;
+                }
+                Sprite sp = Resources.Load<Sprite>("koma_able");
+                GameObject gameObj = new GameObject();
+                SpriteRenderer spriteRenderer = gameObj.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = sp;
+                gameObj.transform.parent = FindObjectOfType<Canvas>().transform;
+                gameObj.transform.localScale = new Vector3(14, 14, 0);
+                gameObj.transform.name = "koma_able" + i;
+                gameObj.transform.position = new Vector3(basex - per1x * (sc.x + move.x), basey - per1y * (sc.y + move.y), -2);
+                BoxCollider2D box = gameObj.AddComponent<BoxCollider2D>() as BoxCollider2D;
+                KomaAble komaAble = gameObj.AddComponent<KomaAble>();
+                komaAble.x = sc.x + move.x;
+                komaAble.y = sc.y + move.y;
+                i++;
+                choosemoves.Add(move);
+            }
+            banScript.chooseflag = true;
+            banScript.choosemoves = choosemoves;
+            banScript.choosekomaname = name;
+        }
+    }
 }
