@@ -118,14 +118,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.step = CARD.STEP.IDLE;
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
             }
-            /*
-            if (Ret == true)
-            {
-                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
-                this.step = CARD.STEP.IDLE;
-                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
-            }
-            */
         }
 
         if (this.dice_step == DICE.STEP.TOUCHE)
@@ -168,14 +160,14 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 }
                 if (dice.flag == true)
                 {
-                    bool activate_i = GUI.Button(new Rect(basex - 31f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66),"");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66),"");
                     koma_position[i, 0] = basex - per1x * (dice.x + move.x);
                     koma_position[i, 1] = basey - per1y * (dice.y + move.y);
                     koma_able[i] = activate_i;
                 }
                 else if (dice.flag == false)
                 {
-                    bool activate_i = GUI.Button(new Rect(basex - 31f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66), "");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + move.x);
                     koma_position[i, 1] = basey - per1y * (dice.y + move.y);
                     koma_able[i] = activate_i;
@@ -183,10 +175,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 i++;
             }
 
-            /*
-            bool activate = GUI.Button(new Rect(400, 350, 100, 90), "↑方向移動");
-            bool ret = GUI.Button(new Rect(700, 350, 100, 90), "→方向移動");
-            */
             if (koma_able[0] == true)
             {
                 Debug.Log("0 BUTTON WAS CLICKED!!!!!!");
@@ -195,18 +183,11 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
                 this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
 
-                Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
-
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
-                /*
-                float move_x = (float)moves[0].x;
-                dice.x = dice.x + move_x * per1x;
-                */
                 dice.x = dice.x + moves[0].x;
                 dice.y = dice.y + moves[0].y;
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
-                //Debug.Log("x + move.x:" + (dice.x + move.x) + "y + move.y:" + dice.y);
                 /*
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
