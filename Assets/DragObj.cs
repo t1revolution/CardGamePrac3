@@ -101,7 +101,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 */
 
                 //graveyard.AAA();
-
                 Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
 
@@ -126,7 +125,9 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             // 必要な情報を辞書型で返してそれの個数分Lengthなどで大きさ取得してfor分を回せばいいのでは?
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
-            List<KomaMove> moves = new List<KomaMove>();
+            //List<KomaMove> moves = new List<KomaMove>();
+            int[,] moves = new int[4, 2];
+
             bool[] koma_able = new bool[4];
             float[,] koma_position = new float[4,2];
 
@@ -139,40 +140,55 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
             Vector3 tmp = this.transform.position;
 
-            int i = 0;
-            foreach (KomaMove move in moves)
+            //int i = 0;
+            //foreach (KomaMove move in moves)
+            //foreach (float move in moves)
+            for(int i = 0; i < 4; i++)
             {
-                if (dice.x + move.x > 5 || dice.x + move.x < 1)
+                //if (dice.x + move.x > 5 || dice.x + move.x < 1)
+                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
                 {
-                    koma_able[i] = false;
+                    koma_able[i] = false;　
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
-                    i++;
+                    //i++;
                     continue;
                 }
-                if (dice.y + move.y > 5 || dice.y + move.y < 1)
+                if (dice.y + moves[i, 1] > 5 || dice.y + moves[i, 1] < 1)
                 {
                     koma_able[i] = false;
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
-                    i++;
+                    //i++;
                     continue;
                 }
                 if (dice.flag == true)
                 {
+                    /*
                     bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66),"");
                     koma_position[i, 0] = basex - per1x * (dice.x + move.x);
                     koma_position[i, 1] = basey - per1y * (dice.y + move.y);
+                    */
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
                     koma_able[i] = activate_i;
                 }
                 else if (dice.flag == false)
                 {
+                    /*
                     bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + move.x);
                     koma_position[i, 1] = basey - per1y * (dice.y + move.y);
+                    */
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
                     koma_able[i] = activate_i;
                 }
-                i++;
+                //i++;
             }
 
             if (koma_able[0] == true)
@@ -184,8 +200,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
+                /*
                 dice.x = dice.x + moves[0].x;
                 dice.y = dice.y + moves[0].y;
+                */
+                dice.x = dice.x + moves[0, 0];
+                dice.y = dice.y + moves[0, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
                 /*
@@ -216,8 +236,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
+                /*
                 dice.x = dice.x + moves[1].x;
                 dice.y = dice.y + moves[1].y;
+                */
+                dice.x = dice.x + moves[1, 0];
+                dice.y = dice.y + moves[1, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[1, 0]:" + koma_position[1, 0] + "koma_position[1, 1]:" + koma_position[1, 1]);
             }
@@ -232,8 +256,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
+                /*
                 dice.x = dice.x + moves[2].x;
                 dice.y = dice.y + moves[2].y;
+                */
+                dice.x = dice.x + moves[2, 0];
+                dice.y = dice.y + moves[2, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[2, 0]:" + koma_position[2, 0] + "koma_position[2, 1]:" + koma_position[2, 1]);
             }
@@ -248,8 +276,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
+                /*
                 dice.x = dice.x + moves[3].x;
                 dice.y = dice.y + moves[3].y;
+                */
+                dice.x = dice.x + moves[3, 0];
+                dice.y = dice.y + moves[3, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[3, 0]:" + koma_position[3, 0] + "koma_position[3, 1]:" + koma_position[3, 1]);
             }

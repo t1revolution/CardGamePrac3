@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Dice_move1 : MonoBehaviour
 {
-    public List<KomaMove> GetMoves(bool reverse = false)
+    //public List<KomaMove> GetMoves(bool reverse = false)
+    public int[,] GetMoves(bool reverse = false)
     {
         int reversenum = 1;
         if (reverse)
@@ -12,7 +13,10 @@ public class Dice_move1 : MonoBehaviour
             reversenum = -1;
         }
 
-        List<KomaMove> moves = new List<KomaMove>();
+        //List<KomaMove> moves = new List<KomaMove>();###############
+        int[,] moves = new int[4, 2];
+
+
         //KomaMove move = GetComponentInParent<KomaMove>();
         //KomaMove move = new KomaMove();
 
@@ -22,11 +26,15 @@ public class Dice_move1 : MonoBehaviour
         foreach (int x in xs)
         {
             int y = ys[i];
+            /*
             KomaMove move = new KomaMove();
             //KomaMove move = GetComponentInParent<KomaMove>();
             move.x = x;
             move.y = y * reversenum;
             moves.Add(move);
+            */
+            moves[i, 0] = x;
+            moves[i, 1] = y * reversenum;
             i++;
         }
 
