@@ -121,6 +121,12 @@ public class GameMaster : MonoBehaviour
         phase = Phase.DRAW;
         current_phase = "InitPhase";
         current_player = "自分";
+        // ゲーム開始時に手札をセット
+        for (int i = 0; i < 5; i++)
+        {
+            currentPlayer.Draw();
+            waitPlayer.Draw();
+        }
     }
     void DrawPhase()
     {
