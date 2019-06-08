@@ -10,6 +10,7 @@ public class CARD {
         NONE = -1,
         IDLE = 0,
         TOUCHE,
+        ACTIVATE,
     };
 }
 public class DICE {
@@ -76,6 +77,25 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     void OnGUI()
     {
+        float per1x = 65f;
+        float per1y = 65f;
+        float basex = 735f + per1x;
+        float basey = 590f + per1y;
+
+        if(this.step == CARD.STEP.ACTIVATE)
+        {
+            CardEffect cardeffect = GetComponentInParent<CardEffect>();
+            int[,] position = cardeffect.A_1();
+            int dice_x;
+            int dice_y;
+            for (int i = 0; i < position.GetLength(0); i++)
+            {
+                dice_x = position[i, 0];
+                dice_y = position[i, 1];
+                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+            }
+        }
+
         if (this.step == CARD.STEP.TOUCHE)
         {
             bool activate = GUI.Button(new Rect(400, 350, 100, 90), "発動");
@@ -110,6 +130,11 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                     image = this.GetComponent<Image>();
                     image.sprite = sprite;
                 }
+                // カード効果の発動
+                else
+                {
+                    step = CARD.STEP.ACTIVATE;
+                }
             }
             if (ret == true)
             {
@@ -133,10 +158,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
             moves = dice_move1.GetMoves();
 
+            /*
             float per1x = 65f;
             float per1y = 65f;
             float basex = 735f + per1x;
             float basey = 590f + per1y;
+            */
 
             Vector3 tmp = this.transform.position;
 
