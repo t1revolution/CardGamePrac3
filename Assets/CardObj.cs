@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-/*
-public class CARD {
+public class CARD
+{
     public enum STEP
     {
         NONE = -1,
@@ -14,19 +14,19 @@ public class CARD {
         ACTIVATE,
     };
 }
-*/
-/*
-public class DICE {
+
+public class DICE
+{
     public enum STEP
     {
         NONE = -1,
         IDLE = 0,
         TOUCHE,
+        DAMAGED,
     };
 }
-*/
 
-public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     //public Dice dice;
     public CARD.STEP step = CARD.STEP.NONE;
@@ -71,7 +71,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         this.transform.localScale = new Vector3(1.0f, 1.5f, 0.0f);
         this.step = CARD.STEP.TOUCHE;
     }
-    /*
     public void DiceAction()
     {
         //this.transform.localScale = new Vector3(5.0f, 7.5f, 0.0f);
@@ -79,50 +78,46 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         this.transform.localScale = new Vector3(0.6f, 0.6f, 0.0f);
         this.dice_step = DICE.STEP.TOUCHE;
     }
-    */
 
-    // ダイスの移動に関する関数
-    public void ddd()
+    public void ccc()
     {
-        this.dice_step = DICE.STEP.TOUCHE;
-    }
-    // ダイスのダメージに関する関数
-    public void eee()
-    {
-        this.dice_step = DICE.STEP.DAMAGED;
+        this.step = CARD.STEP.IDLE;
     }
 
     void OnGUI()
     {
-        /*
-        GameObject gameobj = GameObject.Find("Card");
-        CardObj cardObj = gameobj.GetComponent<CardObj>();
-        DICE.STEP dice_step = cardObj.DICE.STEP();
-        */
-
-
         float per1x = 65f;
         float per1y = 65f;
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
-        //Debug.Log("dice_step == DICE.STEP.TOUCHE" + this.dice_step);
-
-        if(this.step == CARD.STEP.ACTIVATE)
+        if (this.step == CARD.STEP.ACTIVATE)
         {
             CardEffect cardeffect = GetComponentInParent<CardEffect>();
-            int[,] position = cardeffect.A_1();
+            int[,] position = cardeffect.A_1(); // ここで座標のみを受け取っているため受け取りもとで行っている作業を下でもしている
             int dice_x;
             int dice_y;
             for (int i = 0; i < position.GetLength(0); i++)
             {
                 dice_x = position[i, 0];
                 dice_y = position[i, 1];
+
                 bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                 if (activate_i == true)
                 {
-                    this.dice_step = DICE.STEP.TOUCHE;
-                    Debug.Log("bbbbbbbbbbb");
+                    dice_step = DICE.STEP.TOUCHE;
+                    var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                    for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                    {
+                        Dice dice = gameObj[j].GetComponent<Dice>();
+                        if (dice.x == dice_x && dice.y == dice_y)　// 再び座標と一致するオブジェクトを探している、後で絶対直す
+                        {
+                            DragObj dragObj = dice.GetComponent<DragObj>();
+                            //dragObj.ddd();
+                            dragObj.eee();
+                            step = CARD.STEP.IDLE;
+                        }
+                    }
                 }
             }
         }
@@ -175,45 +170,39 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             }
         }
 
-        if (dice_step == DICE.STEP.TOUCHE)
+        /*
+        if (this.dice_step == DICE.STEP.TOUCHE)
         {
             // KomaAbleから必要なボタン数、ボタンの位置を調べて表示させる。
             // 必要な情報を辞書型で返してそれの個数分Lengthなどで大きさ取得してfor分を回せばいいのでは?
 
-            Dice dice = GetComponentInParent<Dice>();
-            Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
-            /*
+            //Dice dice = GetComponentInParent<Dice>();
+            //Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
+
             var gameObj = GameObject.FindGameObjectsWithTag("DICE");
             Dice dice = gameObj[0].GetComponent<Dice>();
             Dice_move1 dice_move1 = gameObj[0].GetComponent<Dice_move1>();
-            */
+
 
             //List<KomaMove> moves = new List<KomaMove>();
             int[,] moves = new int[4, 2];
 
             bool[] koma_able = new bool[4];
-            float[,] koma_position = new float[4,2];
+            float[,] koma_position = new float[4, 2];
 
             moves = dice_move1.GetMoves();
-
-            /*
-            float per1x = 65f;
-            float per1y = 65f;
-            float basex = 735f + per1x;
-            float basey = 590f + per1y;
-            */
 
             Vector3 tmp = this.transform.position;
 
             //int i = 0;
             //foreach (KomaMove move in moves)
             //foreach (float move in moves)
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 //if (dice.x + move.x > 5 || dice.x + move.x < 1)
-                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                if (dice.x + moves[i, 0] > 5 || dice.x + moves[i, 0] < 1)
                 {
-                    koma_able[i] = false;　
+                    koma_able[i] = false;
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
                     //i++;
@@ -229,12 +218,7 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 }
                 if (dice.flag == true)
                 {
-                    /*
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66),"");
-                    koma_position[i, 0] = basex - per1x * (dice.x + move.x);
-                    koma_position[i, 1] = basey - per1y * (dice.y + move.y);
-                    */
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
 
@@ -242,11 +226,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 }
                 else if (dice.flag == false)
                 {
-                    /*
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + move.x), basey - 432f + per1y * (dice.y + move.y), 66, 66), "");
-                    koma_position[i, 0] = basex - per1x * (dice.x + move.x);
-                    koma_position[i, 1] = basey - per1y * (dice.y + move.y);
-                    */
                     bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
@@ -266,30 +245,10 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
-                /*
-                dice.x = dice.x + moves[0].x;
-                dice.y = dice.y + moves[0].y;
-                */
                 dice.x = dice.x + moves[0, 0];
                 dice.y = dice.y + moves[0, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
-                /*
-                GameObject gameObj = GameObject.Find("GameMaster");
-                GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
-                player1 player = gamemaster.currentPlayer;
-
-                Card card = this.GetComponent<Card>();
-                player.PushSettingCardOnFieldFromHand(card);
-
-                //スプライトの差し替えはいらないが、移動先のマスにほかの駒が存在するなら大きさを小さくして同じマスに表示させる。
-  　            if (card.type == (int)Type.REFLECT)
-                {
-                    sprite = Resources.Load<Sprite>("back_1");
-                    image = this.GetComponent<Image>();
-                    image.sprite = sprite;
-                }
-                */
             }
             if (koma_able[1] == true)
             {
@@ -303,10 +262,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
-                /*
-                dice.x = dice.x + moves[1].x;
-                dice.y = dice.y + moves[1].y;
-                */
                 dice.x = dice.x + moves[1, 0];
                 dice.y = dice.y + moves[1, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
@@ -324,10 +279,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
-                /*
-                dice.x = dice.x + moves[2].x;
-                dice.y = dice.y + moves[2].y;
-                */
                 dice.x = dice.x + moves[2, 0];
                 dice.y = dice.y + moves[2, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
@@ -345,21 +296,12 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 Debug.Log("tmp.x:" + tmp.x + "tmp.y" + tmp.y);
 
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
-                /*
-                dice.x = dice.x + moves[3].x;
-                dice.y = dice.y + moves[3].y;
-                */
                 dice.x = dice.x + moves[3, 0];
                 dice.y = dice.y + moves[3, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[3, 0]:" + koma_position[3, 0] + "koma_position[3, 1]:" + koma_position[3, 1]);
             }
         }
-
-        if (dice_step == DICE.STEP.DAMAGED)
-        {
-            Debug.Log("SUCCEED!!!!");
-            this.dice_step = DICE.STEP.NONE;
-        }
+        */
     }
 }
