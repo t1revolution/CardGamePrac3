@@ -26,8 +26,9 @@ public class DICE {
 }
 */
 
-public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-{
+//public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragObj : MonoBehaviour
+{ 
     //public Dice dice;
     public CARD.STEP step = CARD.STEP.NONE;
     public DICE.STEP dice_step = DICE.STEP.NONE;
@@ -36,7 +37,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     public int y;
 
     //public Graveyard graveyard;
-
 
     private Image image;
     private Sprite sprite;
@@ -47,6 +47,7 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         REFLECT,
     };
 
+    /*
     public void OnBeginDrag(PointerEventData data)
     {
         Debug.Log("OnBeginDrag");
@@ -64,6 +65,7 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         transform.SetParent(parentTransform);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
+    */
     public void OnUserAction()
     {
         //this.transform.localScale = new Vector3(5.0f, 7.5f, 0.0f);
@@ -94,19 +96,10 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     void OnGUI()
     {
-        /*
-        GameObject gameobj = GameObject.Find("Card");
-        CardObj cardObj = gameobj.GetComponent<CardObj>();
-        DICE.STEP dice_step = cardObj.DICE.STEP();
-        */
-
-
         float per1x = 65f;
         float per1y = 65f;
         float basex = 735f + per1x;
         float basey = 590f + per1y;
-
-        //Debug.Log("dice_step == DICE.STEP.TOUCHE" + this.dice_step);
 
         if(this.step == CARD.STEP.ACTIVATE)
         {
@@ -122,7 +115,6 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 if (activate_i == true)
                 {
                     this.dice_step = DICE.STEP.TOUCHE;
-                    Debug.Log("bbbbbbbbbbb");
                 }
             }
         }
@@ -359,6 +351,8 @@ public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         if (dice_step == DICE.STEP.DAMAGED)
         {
             Debug.Log("SUCCEED!!!!");
+            Dice dice = GetComponentInParent<Dice>();
+            dice.hp -= 1;
             this.dice_step = DICE.STEP.NONE;
         }
     }
