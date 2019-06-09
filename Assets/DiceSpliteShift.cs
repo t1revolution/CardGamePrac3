@@ -62,7 +62,7 @@ public class DiceSpliteShift : MonoBehaviour
             image = this.GetComponent<Image>();
             image.sprite = sprite;
         }
-        if (dice.hp == 0)
+        if (dice.hp < 1)
         {
             Destroy(this.gameObject);
         }

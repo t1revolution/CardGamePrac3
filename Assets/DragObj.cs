@@ -230,7 +230,7 @@ public class DragObj : MonoBehaviour
         {
             Debug.Log("SUCCEED!!!!");
             Dice dice = GetComponentInParent<Dice>();
-            dice.hp -= 1;
+            //dice.hp -= 1;
             this.dice_step = DICE.STEP.NONE;
         }
     }

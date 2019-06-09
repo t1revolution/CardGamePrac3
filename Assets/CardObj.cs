@@ -83,6 +83,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
+        /*
         if (this.step == CARD.STEP.ACTIVATE)
         {
             CardEffect cardeffect = GetComponentInParent<CardEffect>();
@@ -113,6 +114,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 }
             }
         }
+        */
 
         if (this.step == CARD.STEP.TOUCHE)
         {
@@ -141,7 +143,15 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 else
                 {
                     // CardEffect関数にこのカードの効果の系統を処理してもらう必要がある。
-                    step = CARD.STEP.ACTIVATE;
+                    // ここでreturnとしてどのような型返されるかにいよってstep = CARD.STEP.?????;
+                    // が変化するように実装する。
+
+                    Card cardObj = GetComponentInParent<Card>();
+                    CardEffect cardeffectObj = GetComponentInParent<CardEffect>();
+                    cardeffectObj.Activate(cardObj);
+
+                    step = CARD.STEP.IDLE;
+                    //step = CARD.STEP.ACTIVATE;
                 }
             }
             if (ret == true)
