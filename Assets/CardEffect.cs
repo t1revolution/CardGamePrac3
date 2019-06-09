@@ -10,7 +10,8 @@ class CARDEFFECT
     {
         NONE = -1,
         IDLE = 0,
-        ACTIVATE,
+        ATTACK,
+        MANA,
     };
     public enum TYPE
     {
@@ -28,61 +29,63 @@ public class CardEffect : MonoBehaviour
         if(card.name == "A_1")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
-            //A_1();
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_2")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_3")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_4")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_5")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_6")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_7")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_8")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_9")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_10")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
         if(card.name == "A_11")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ACTIVATE;
+            step = CARDEFFECT.STEP.ATTACK;
         }
-
-        //step = CARDEFFECT.STEP.ACTIVATE;
+        if(card.name == "M_1")
+        {
+            cardname = card.name;
+            step = CARDEFFECT.STEP.MANA;
+        }
     }
 
     public int[,] A_1()
@@ -221,6 +224,15 @@ public class CardEffect : MonoBehaviour
         return position;
     }
 
+    public int[,] M_1()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        return position;
+    }
+
     public int[,] R_1()
     {
         int a;
@@ -252,7 +264,7 @@ public class CardEffect : MonoBehaviour
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
-        if (this.step == CARDEFFECT.STEP.ACTIVATE)
+        if (this.step == CARDEFFECT.STEP.ATTACK)
         {
             //CardEffect cardeffect = GetComponentInParent<CardEffect>();
             //int[,] position = cardeffect.A_1(); // ここで座標のみを受け取っているため受け取りもとで行っている作業を下でもしている
@@ -320,8 +332,8 @@ public class CardEffect : MonoBehaviour
                 dice_x = position[i, 0];
                 dice_y = position[i, 1];
 
-                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (activate_i == true)
+                bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                if (ATTACK_i == true)
                 {
                     //dice_step = DICE.STEP.TOUCHE;
                     var gameObj = GameObject.FindGameObjectsWithTag("DICE");
@@ -339,9 +351,8 @@ public class CardEffect : MonoBehaviour
                     }
                 }
             }
-
             /*
-            if (step == CARDEFFECT.STEP.ACTIVATE)
+            if (step == CARDEFFECT.STEP.ATTACK)
             {
                 step = CARDEFFECT.STEP.IDLE;
                 int[,] position = A_1();
@@ -355,13 +366,44 @@ public class CardEffect : MonoBehaviour
                 {
                     dice_x = position[i, 0];
                     dice_y = position[i, 1];
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 10366, 10366), "aaaaa");
-                    //bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "aaaaa");
+                    bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 10366, 10366), "aaaaa");
+                    //bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "aaaaa");
                     //koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     //koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
                 }
             }
             */
+        }
+        if (step == CARDEFFECT.STEP.MANA)
+        {
+            int[,] position = M_1();
+            int damage = position[0, 2];
+            int distance = position[0, 3];
+            int dice_x;
+            int dice_y;
+            for (int i = 0; i < position.GetLength(0); i++)
+            {
+                dice_x = position[i, 0];
+                dice_y = position[i, 1];
+
+                bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                if (ATTACK_i == true)
+                {
+                    //dice_step = DICE.STEP.TOUCHE;
+                    var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                    for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                    {
+                        Dice dice = gameObj[j].GetComponent<Dice>();
+                        if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                        {
+                            DragObj dragObj = dice.GetComponent<DragObj>();
+                            dragObj.ddd();
+                            //dice.hp -= damage;
+                            step = CARDEFFECT.STEP.IDLE;
+                        }
+                    }
+                }
+            }
         }
     }
 }
