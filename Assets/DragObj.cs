@@ -4,39 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-/*
-public class CARD {
-    public enum STEP
-    {
-        NONE = -1,
-        IDLE = 0,
-        TOUCHE,
-        ACTIVATE,
-    };
-}
-*/
-/*
-public class DICE {
-    public enum STEP
-    {
-        NONE = -1,
-        IDLE = 0,
-        TOUCHE,
-    };
-}
-*/
-
-//public class DragObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 public class DragObj : MonoBehaviour
 { 
-    //public Dice dice;
     public CARD.STEP step = CARD.STEP.NONE;
     public DICE.STEP dice_step = DICE.STEP.NONE;
     public Transform parentTransform;
     public int x;
     public int y;
-
-    //public Graveyard graveyard;
 
     private Image image;
     private Sprite sprite;
@@ -47,29 +21,8 @@ public class DragObj : MonoBehaviour
         REFLECT,
     };
 
-    /*
-    public void OnBeginDrag(PointerEventData data)
-    {
-        Debug.Log("OnBeginDrag");
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
-        parentTransform = transform.parent;
-        transform.SetParent(transform.parent.parent);
-    }
-    public void OnDrag(PointerEventData data)
-    {
-        transform.position = data.position;
-    }
-    public void OnEndDrag(PointerEventData data)
-    {
-        Debug.Log("OneEndDrag");
-        transform.SetParent(parentTransform);
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
-    }
-    */
     public void OnUserAction()
     {
-        //this.transform.localScale = new Vector3(5.0f, 7.5f, 0.0f);
-        //this.transform.position = new Rect(400, 350, 100, 90);
         this.transform.localScale = new Vector3(1.0f, 1.5f, 0.0f);
         this.step = CARD.STEP.TOUCHE;
     }
@@ -82,6 +35,8 @@ public class DragObj : MonoBehaviour
         this.dice_step = DICE.STEP.TOUCHE;
     }
     */
+
+    // CardObjからcard名を受け取り発動タイプを切り分ける関数
 
     // ダイスの移動に関する関数
     public void ddd()
@@ -101,77 +56,8 @@ public class DragObj : MonoBehaviour
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
-        if(this.step == CARD.STEP.ACTIVATE)
-        {
-            CardEffect cardeffect = GetComponentInParent<CardEffect>();
-            int[,] position = cardeffect.A_1();
-            int dice_x;
-            int dice_y;
-            for (int i = 0; i < position.GetLength(0); i++)
-            {
-                dice_x = position[i, 0];
-                dice_y = position[i, 1];
-                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (activate_i == true)
-                {
-                    this.dice_step = DICE.STEP.TOUCHE;
-                }
-            }
-        }
-
-        if (this.step == CARD.STEP.TOUCHE)
-        {
-            bool activate = GUI.Button(new Rect(400, 350, 100, 90), "発動");
-            bool ret = GUI.Button(new Rect(700, 350, 100, 90), "戻る");
-            //bool Ret = GUI.Button(new Rect(100, 0, 1000, 1500), "");
-
-            if (activate == true)
-            {
-                Debug.Log("ACTIVATE BUTTON WAS CLICKED!!!!!!");
-                this.step = CARD.STEP.IDLE;
-                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
-                GameObject gameObj = GameObject.Find("GameMaster");
-                GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
-                player1 player = gamemaster.currentPlayer;
-
-                /*
-                Texture2D texture = Resources.Load("back_2") as Texture2D;
-                Debug.Log("aaaa");
-                Image img = GameObject.Find("Canvas/Player/Hand").GetComponent<Image>();
-                Debug.Log("b");
-                img.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-                Debug.Log("c");
-                */
-
-                //graveyard.AAA();
-                Card card = this.GetComponent<Card>();
-                player.PushSettingCardOnFieldFromHand(card);
-
-                if (card.type == (int)Type.REFLECT)
-                {
-                    sprite = Resources.Load<Sprite>("back_1");
-                    image = this.GetComponent<Image>();
-                    image.sprite = sprite;
-                }
-                // カード効果の発動
-                else
-                {
-                    step = CARD.STEP.ACTIVATE;
-                }
-            }
-            if (ret == true)
-            {
-                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
-                this.step = CARD.STEP.IDLE;
-                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
-            }
-        }
-
         if (dice_step == DICE.STEP.TOUCHE)
         {
-            // KomaAbleから必要なボタン数、ボタンの位置を調べて表示させる。
-            // 必要な情報を辞書型で返してそれの個数分Lengthなどで大きさ取得してfor分を回せばいいのでは?
-
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
             /*
@@ -187,14 +73,6 @@ public class DragObj : MonoBehaviour
             float[,] koma_position = new float[4,2];
 
             moves = dice_move1.GetMoves();
-
-            /*
-            float per1x = 65f;
-            float per1y = 65f;
-            float basex = 735f + per1x;
-            float basey = 590f + per1y;
-            */
-
             Vector3 tmp = this.transform.position;
 
             //int i = 0;

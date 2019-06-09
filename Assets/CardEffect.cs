@@ -30,6 +30,51 @@ public class CardEffect : MonoBehaviour
         
         return position;
     }
+    public int[,] A_2()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        
+        return position;
+    }
+    public int[,] A_3()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        
+        return position;
+    }
+    public int[,] A_4()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        
+        return position;
+    }
+    public int[,] A_5()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        
+        return position;
+    }
+    public int[,] A_6()
+    {
+        int a;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 2];
+        position = Getdiceposition();
+        
+        return position;
+    }
 
     int[,] Getdiceposition()
     {
