@@ -78,15 +78,15 @@ public class GameMaster : MonoBehaviour
     List<CardData> player2CardDataList = new List<CardData>()
     {
         new CardData(0, "A_11", (int)Type.ATTACK, 1),
-        new CardData(1, "R_1_daishohuin", (int)Type.REFLECT, 2),
-        new CardData(2, "R_2_huuinn", (int)Type.REFLECT, 3),
-        new CardData(3, "R_3_bougyotennkai", (int)Type.REFLECT, 4),
-        new CardData(4, "R_4_syunnkannidou", (int)Type.REFLECT, 5),
-        new CardData(5, "S_1_kougekisirei", (int)Type.SUPPORT, 6),
-        new CardData(6, "S_2_sutekinahanebouki", (int)Type.SUPPORT, 7),
-        new CardData(7, "S_3_kasokusurukodou", (int)Type.SUPPORT, 8),
-        new CardData(8, "S_4_majyonohiyaku", (int)Type.SUPPORT, 9),
-        new CardData(9, "S_5_jigennsousa", (int)Type.SUPPORT, 10),
+        new CardData(1, "R_1", (int)Type.REFLECT, 2),
+        new CardData(2, "R_2", (int)Type.REFLECT, 3),
+        new CardData(3, "R_3", (int)Type.REFLECT, 4),
+        new CardData(4, "R_4", (int)Type.REFLECT, 5),
+        new CardData(5, "S_1", (int)Type.SUPPORT, 6),
+        new CardData(6, "S_2", (int)Type.SUPPORT, 7),
+        new CardData(7, "S_3", (int)Type.SUPPORT, 8),
+        new CardData(8, "S_4", (int)Type.SUPPORT, 9),
+        new CardData(9, "S_5", (int)Type.SUPPORT, 10),
     };
 
     public player1 currentPlayer;

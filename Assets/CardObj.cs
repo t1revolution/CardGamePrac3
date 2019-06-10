@@ -12,6 +12,8 @@ public class CARD
         IDLE = 0,
         TOUCHE,
         ACTIVATE,　// カードがDiceを対象にとる効果
+        EXPAND,
+        CHECK,
     };
 }
 
@@ -125,6 +127,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             {
                 Debug.Log("ACTIVATE BUTTON WAS CLICKED!!!!!!");
                 this.step = CARD.STEP.IDLE;
+                //this.step = CARD.STEP.EXPAND;
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
@@ -142,18 +145,38 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 // カード効果の発動
                 else
                 {
-                    // CardEffect関数にこのカードの効果の系統を処理してもらう必要がある。
-                    // ここでreturnとしてどのような型返されるかにいよってstep = CARD.STEP.?????;
-                    // が変化するように実装する。
-
                     Card cardObj = GetComponentInParent<Card>();
                     CardEffect cardeffectObj = GetComponentInParent<CardEffect>();
                     cardeffectObj.Activate(cardObj);
-
-                    step = CARD.STEP.IDLE;
-                    //step = CARD.STEP.ACTIVATE;
                 }
             }
+            if (ret == true)
+            {
+                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+            }
+        }
+        else if (this.step == CARD.STEP.EXPAND)
+        {
+            bool activate = GUI.Button(new Rect(400, 350, 100, 90), "確認");
+            bool ret = GUI.Button(new Rect(700, 350, 100, 90), "戻る");
+            if (activate == true)
+            {
+                Debug.Log("CHECK BUTTON WAS CLICKED!!!!!!");
+                this.transform.localScale = new Vector3(8f, 12f, -3f);
+                this.step = CARD.STEP.CHECK;
+            }
+            if (ret == true)
+            {
+                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+            }
+        }
+        else if (this.step == CARD.STEP.CHECK)
+        {
+            bool ret = GUI.Button(new Rect(550, 350, 100, 90), "戻る");
             if (ret == true)
             {
                 Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
