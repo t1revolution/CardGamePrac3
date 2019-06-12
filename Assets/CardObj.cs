@@ -14,7 +14,16 @@ public class CARD
         ACTIVATE,　// カードがDiceを対象にとる効果
         EXPAND,
         CHECK,
+        COST,
+        DISCAHRGE,
     };
+    // CardEffect関数からの作用で機能する関数　とりあえず攻撃カード用
+    public enum EFFECT
+    {
+        NONE,
+        COST,
+        CANCEL,
+    }
 }
 
 public class DICE
@@ -31,10 +40,14 @@ public class DICE
 public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public CARD.STEP step = CARD.STEP.NONE;
+    public CARD.EFFECT reference = CARD.EFFECT.NONE;
     public DICE.STEP dice_step = DICE.STEP.NONE;
     public Transform parentTransform;
     public int x;
     public int y;
+    private int cost;
+    private bool activate = false;
+    private Vector3 card_position;
 
     private Image image;
     private Sprite sprite;
@@ -64,13 +77,49 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     }
     public void OnUserAction()
     {
-        this.transform.localScale = new Vector3(1.0f, 1.5f, 0.0f);
-        this.step = CARD.STEP.TOUCHE;
+        CardEffect cardeffect = GetComponentInParent<CardEffect>();
+        activate = cardeffect.ExistActivate();
+        if (activate == false)
+        {
+            this.transform.localScale = new Vector3(1.0f, 1.5f, 0.0f);
+            this.step = CARD.STEP.TOUCHE;
+        }
     }
     public void DiceAction()
     {
         this.transform.localScale = new Vector3(0.6f, 0.6f, 0.0f);
         this.dice_step = DICE.STEP.TOUCHE;
+    }
+    // コスト支払い時のみ接触判定で機能する関数
+    public void CardCost()
+    {
+        Debug.Log("cost1:" + cost);
+
+        //if (this.reference != CARD.EFFECT.CANCEL && cost > 0)
+        if (this.reference != CARD.EFFECT.CANCEL)
+        {
+            //this.transform.localScale = new Vector3(0.6f, 0.6f, 0.0f);
+            Card card = GetComponentInParent<Card>();
+            CardEffect cardeffect = GetComponentInParent<CardEffect>();
+            bool self_activate = card.activate;
+            activate = cardeffect.ExistActivate();
+            if (activate == true && self_activate == false)
+            {
+                this.step = CARD.STEP.COST;
+                card_position = this.transform.position;
+                Debug.Log("card_position.x:" + card_position.x);
+                Debug.Log("card_position.y:" + card_position.y);
+                card.selected = true;
+            }
+        }
+        this.reference = CARD.EFFECT.NONE;
+    }
+    // CardEffectからの呼び出しで作用する関数
+    public void GetCardCost(int _card)
+    {
+        cost = _card;
+        this.reference = CARD.EFFECT.COST;
+        Debug.Log("cost:" + cost);
     }
 
     public void ccc()
@@ -184,5 +233,84 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
             }
         }
+        else if (this.step == CARD.STEP.COST)
+        {
+            CardEffect cardeffect = GetComponentInParent<CardEffect>();
+            Card card = GetComponentInParent<Card>();
+            int hand_num;
+            int selected_cost;
+            int cost;
+            cost = cardeffect.Getcost();
+            hand_num = cardeffect.GetHand();
+            selected_cost = cardeffect.ExistSelected();
+
+            //Debug.Log("card_position.x2:" + card_position.x);
+            //Debug.Log("card_position.y2:" + card_position.y);
+
+            //bool ret = GUI.Button(new Rect(550, 350, 100, 90), "コストとして支払うカード");
+            // タップされた手札にボタンを生成したい
+            //bool ret = GUI.Button(new Rect(card_position.x + 500f, card_position.y - 500f, 200, 300), "コストとして選択されたカード");
+            //bool ret = GUI.Button(new Rect(card_position.x + 620f, card_position.y + 640f, 80, 120), "select");
+            bool ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
+            if (ret == true)
+            {
+                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+                this.reference = CARD.EFFECT.CANCEL;
+                card.selected = false;
+
+                //card.activate = true;
+                //card_position = new Vector3();
+            }
+            if (selected_cost == cost)
+            {
+                //this.step = CARD.STEP.DISCAHRGE;
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したカードを捨てます。よろしいですか?");
+                if (card_choose == true)
+                {
+                    var targets = GameObject.FindGameObjectsWithTag("CARD");
+                    this.step = CARD.STEP.IDLE;
+                    foreach (GameObject target in targets)
+                    {
+                        if (target.GetComponent<Card>().selected == true)
+                        {
+                            GameObject gameObj = GameObject.Find("GameMaster");
+                            GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
+                            player1 player = gamemaster.currentPlayer;
+                            player.ActivationCostFromHand(card);
+                        }
+                    }
+                    cardeffect.Flagrestore();
+                }
+            }
+            //cost = 0;
+            //Debug.Log("selected_cost:" + selected_cost);
+        }
+        /*
+        else if (this.step == CARD.STEP.DISCAHRGE)
+        {
+            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したカードを捨てます。よろしいですか?");
+            if(card_choose == true)
+            {
+                Card card = GetComponentInParent<Card>();
+                CardEffect cardeffect = GetComponentInParent<CardEffect>();
+                var targets = GameObject.FindGameObjectsWithTag("CARD");
+                this.step = CARD.STEP.IDLE;
+                foreach (GameObject target in targets)
+                {
+                    if (target.GetComponent<Card>().selected == true)
+                    {
+                        GameObject gameObj = GameObject.Find("GameMaster");
+                        GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
+                        player1 player = gamemaster.currentPlayer;
+                        player.ActivationCostFromHand(card);
+                    }
+                }
+                cardeffect.Flagrestore();
+            }
+        }
+        */
     }
 }
+

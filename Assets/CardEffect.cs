@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using System.Reflection;
 
-class CARDEFFECT
+class EFFECT
 {
     public enum STEP
     {
@@ -17,74 +17,86 @@ class CARDEFFECT
     {
         NONE = -1,
 
+    };
+    public enum COST
+    {
+        NONE,
+        ONE,
+        TWO,
+        THREE,
+        X,
     }
+
 }
 
 public class CardEffect : MonoBehaviour
 {
-    CARDEFFECT.STEP step = CARDEFFECT.STEP.NONE;
+    EFFECT.STEP step = EFFECT.STEP.NONE;
+    EFFECT.COST activate_cost = EFFECT.COST.NONE;
     private string cardname;
+    private bool flag;
 
     public void Activate(Card card) {
-        if(card.name == "A_1")
+        flag = card.flag;
+        if (card.name == "A_1")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_2")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_3")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_4")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_5")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_6")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_7")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_8")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_9")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_10")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "A_11")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.ATTACK;
+            step = EFFECT.STEP.ATTACK;
         }
         if(card.name == "M_1")
         {
             cardname = card.name;
-            step = CARDEFFECT.STEP.MANA;
+            step = EFFECT.STEP.MANA;
         }
     }
 
@@ -93,11 +105,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 5; // 手札を捨てた枚数によって変化する効果　後に変更
         int distance = 2;
+        int cost = 2;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_2()
@@ -105,11 +119,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 5; // Field状の裏向きセットカードの枚数の合計値　後に変更
         int distance = 1;
+        int cost = 1;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_3()
@@ -117,11 +133,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 2; // 変則的に斜め1マス分だけ離れた位置の敵ダイスの身に使える
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_4()
@@ -129,11 +147,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 2;
         int distance = 1;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_5()
@@ -141,11 +161,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 2;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_6()
@@ -156,11 +178,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 3;
         int distance = 0;
+        int cost = 2;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_7()
@@ -168,11 +192,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 1;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_8()
@@ -180,11 +206,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 1;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_9()
@@ -192,11 +220,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1; // 墓地のカードが15枚以上ならダメージ+2
         int distance = 1;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_10()
@@ -204,11 +234,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 1;
+        int cost = 0;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
     public int[,] A_11()
@@ -216,11 +248,13 @@ public class CardEffect : MonoBehaviour
         int a;
         int damage = 1;
         int distance = 5; // 選択した自分のダイスの縦横すべての敵味方に1ダメージ
+        int cost = 1;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 4];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         position[0, 2] = damage;
         position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
 
@@ -228,7 +262,7 @@ public class CardEffect : MonoBehaviour
     {
         int a;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 2];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
         return position;
     }
@@ -237,7 +271,7 @@ public class CardEffect : MonoBehaviour
     {
         int a;
         a = Getdiceposition().GetLength(0);
-        int[,] position = new int[a, 2];
+        int[,] position = new int[a, 5];
         position = Getdiceposition();
 
         return position;
@@ -246,7 +280,7 @@ public class CardEffect : MonoBehaviour
     int[,] Getdiceposition()
     {
         var targets = GameObject.FindGameObjectsWithTag("DICE");
-        int[,] position = new int[targets.Length, 4];
+        int[,] position = new int[targets.Length, 5];
         int i = 0;
         foreach (GameObject target in targets)
         {
@@ -257,6 +291,93 @@ public class CardEffect : MonoBehaviour
         return position;
     }
 
+    public int GetHand()
+    {
+        /*
+        GameObject gameObj = this.transform.parent.gameObject;
+        //var targets = gameObj.FindGameObjectsWithTag("DICE");
+        var targe = gameObj.transform.Find("Card").gameObject;
+        int[,] pos = new int[targe.Length, 5];
+        */
+
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        //int[,] position = new int[targets.Length, 5];
+        //bool flag = card.flag;
+        int cardnum = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().flag == flag)
+            {
+                cardnum++;
+            }
+        }
+        return cardnum;
+    }
+
+    public bool ExistActivate()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        bool existactivate = false;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().activate == true)
+            {
+                existactivate = true;
+                break;
+            }
+        }
+        return existactivate;
+    }
+
+    public int ExistSelected()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        int existselected = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().selected == true)
+            {
+                existselected++;
+            }
+        }
+        return existselected;
+    }
+
+    public int Getcost()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        int activatecost = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().activate == true)
+            {
+                activatecost = target.GetComponent<Card>().cost;
+            }
+        }
+        return activatecost;
+    }
+
+    // コストに関する一連のステップが終わった後にflagを格納する。
+    public void Flagrestore()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().selected == true)
+            {
+                target.GetComponent<Card>().selected = false;
+            }
+            if (target.GetComponent<Card>().activate == true)
+            {
+                target.GetComponent<Card>().activate = false;
+            }
+            if (target.GetComponent<Card>().flag == true)
+            {
+                target.GetComponent<Card>().flag = false;
+            }
+        }
+    }
+
     void OnGUI()
     {
         float per1x = 65f;
@@ -264,10 +385,10 @@ public class CardEffect : MonoBehaviour
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
-        if (this.step == CARDEFFECT.STEP.ATTACK)
+        if (this.step == EFFECT.STEP.ATTACK)
         {
-            //CardEffect cardeffect = GetComponentInParent<CardEffect>();
-            //int[,] position = cardeffect.A_1(); // ここで座標のみを受け取っているため受け取りもとで行っている作業を下でもしている
+            //EFFECT EFFECT = GetComponentInParent<EFFECT>();
+            //int[,] position = EFFECT.A_1(); // ここで座標のみを受け取っているため受け取りもとで行っている作業を下でもしている
 
             /*
             Type t = this.GetType();
@@ -325,56 +446,97 @@ public class CardEffect : MonoBehaviour
 
             int damage = position[0, 2];
             int distance = position[0, 3];
+            //int cost = position[0, 4];
+            int cost = 1;
+            int anable_cost = 0;
             int dice_x;
             int dice_y;
-            for (int i = 0; i < position.GetLength(0); i++)
-            {
-                dice_x = position[i, 0];
-                dice_y = position[i, 1];
 
-                bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (ATTACK_i == true)
+            if (cost == 1 && activate_cost != EFFECT.COST.ONE)
+            {
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                if (card_choose == true)
                 {
-                    //dice_step = DICE.STEP.TOUCHE;
-                    var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                    for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                    {
-                        Dice dice = gameObj[j].GetComponent<Dice>();
-                        if (dice.x == dice_x && dice.y == dice_y)　// 再び座標と一致するオブジェクトを探している、後で絶対直す
-                        {
-                            DragObj dragObj = dice.GetComponent<DragObj>();
-                            //dragObj.ddd();
-                            dragObj.eee();
-                            dice.hp -= damage;
-                            step = CARDEFFECT.STEP.IDLE;
-                        }
-                    }
+                    anable_cost = GetHand();
+                    activate_cost = EFFECT.COST.ONE;
+                    CardObj _cardobj = GetComponentInParent<CardObj>();
+                    _cardobj.GetCardCost(cost);
                 }
             }
-            /*
-            if (step == CARDEFFECT.STEP.ATTACK)
+            if (cost == 2)
             {
-                step = CARDEFFECT.STEP.IDLE;
-                int[,] position = A_1();
-                float per1x = 65f;
-                float per1y = 65f;
-                float basex = 735f + per1x;
-                float basey = 590f + per1y;
-                int dice_x;
-                int dice_y;
+                bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを2枚選択してください");
+            }
+            if (cost > 3)
+            {
+                bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+            }
+            
+            if(activate_cost == EFFECT.COST.ONE)
+            {
+                Card card = GetComponentInParent<Card>();
+                card.activate = true;
                 for (int i = 0; i < position.GetLength(0); i++)
                 {
                     dice_x = position[i, 0];
                     dice_y = position[i, 1];
-                    bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 10366, 10366), "aaaaa");
-                    //bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "aaaaa");
-                    //koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
-                    //koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                    if (activate_i == true)
+                    {
+                        //dice_step = DICE.STEP.TOUCHE;
+                        var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                        for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                        {
+                            Dice dice = gameObj[j].GetComponent<Dice>();
+                            if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                            {
+                                DragObj dragObj = dice.GetComponent<DragObj>();
+                                //dragObj.ddd();
+                                dragObj.eee();
+                                dice.hp -= damage;
+                                step = EFFECT.STEP.IDLE;
+                            }
+                        }
+                    }
                 }
             }
-            */
+
+
+
+
+
+
+
+            if (cost == 0)
+            {
+                for (int i = 0; i < position.GetLength(0); i++)
+                {
+                    dice_x = position[i, 0];
+                    dice_y = position[i, 1];
+
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                    if (activate_i == true)
+                    {
+                        //dice_step = DICE.STEP.TOUCHE;
+                        var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                        for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                        {
+                            Dice dice = gameObj[j].GetComponent<Dice>();
+                            if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                            {
+                                DragObj dragObj = dice.GetComponent<DragObj>();
+                                //dragObj.ddd();
+                                dragObj.eee();
+                                dice.hp -= damage;
+                                step = EFFECT.STEP.IDLE;
+                            }
+                        }
+                    }
+                }
+            }
         }
-        if (step == CARDEFFECT.STEP.MANA)
+        if (step == EFFECT.STEP.MANA)
         {
             int[,] position = M_1();
             int damage = position[0, 2];
@@ -386,8 +548,8 @@ public class CardEffect : MonoBehaviour
                 dice_x = position[i, 0];
                 dice_y = position[i, 1];
 
-                bool ATTACK_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (ATTACK_i == true)
+                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                if (activate_i == true)
                 {
                     //dice_step = DICE.STEP.TOUCHE;
                     var gameObj = GameObject.FindGameObjectsWithTag("DICE");
@@ -399,7 +561,7 @@ public class CardEffect : MonoBehaviour
                             DragObj dragObj = dice.GetComponent<DragObj>();
                             dragObj.ddd();
                             //dice.hp -= damage;
-                            step = CARDEFFECT.STEP.IDLE;
+                            step = EFFECT.STEP.IDLE;
                         }
                     }
                 }

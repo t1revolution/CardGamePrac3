@@ -8,9 +8,12 @@ public class Card : MonoBehaviour
     public Text typeText;
     public Text atText;
     public Text nameText;
-    public int at;
+    public int cost;
     public string name;
     public int type;
+    public bool flag;
+    public bool activate;
+    public bool selected;
     
     /*
     public int type = 100;
@@ -22,10 +25,13 @@ public class Card : MonoBehaviour
     {
         type = _cardData.type;
         name = _cardData.name;
-        at = _cardData.at;
+        cost = _cardData.cost;
+        flag = _cardData.flag;
+        activate = _cardData.activate;
+        selected = _cardData.selected;
         typeText.text = type.ToString();
         nameText.text = name.ToString();
-        atText.text = at.ToString();
+        atText.text = cost.ToString();
     }
     
     /*

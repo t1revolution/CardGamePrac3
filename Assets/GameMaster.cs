@@ -57,36 +57,41 @@ public class GameMaster : MonoBehaviour
         new DiceData(5, "dice5", 6, 3, 1, false),
         new DiceData(6, "dice6", 6, 5, 1, false),
     };
-    List<CardData> ManacardDataList = new List<CardData>()
+    List<CardData> ManacardDataList1 = new List<CardData>()
     {
-        new CardData(0, "M_1", (int)Type.MANA, 1),
-        new CardData(1, "M_1", (int)Type.MANA, 2),
+        new CardData(0, "M_1", (int)Type.MANA, 0, true, false, false),
+        new CardData(1, "M_1", (int)Type.MANA, 0, true, false, false),
+    };
+    List<CardData> ManacardDataList2 = new List<CardData>()
+    {
+        new CardData(0, "M_1", (int)Type.MANA, 0, false, false, false),
+        new CardData(1, "M_1", (int)Type.MANA, 0, false, false, false),
     };
     List<CardData> player1CardDataList = new List<CardData>()
     {
-        new CardData(0, "A_1", (int)Type.ATTACK, 1),
-        new CardData(1, "A_2", (int)Type.ATTACK, 2),
-        new CardData(2, "A_3", (int)Type.ATTACK, 3),
-        new CardData(3, "A_4", (int)Type.ATTACK, 4),
-        new CardData(4, "A_5", (int)Type.ATTACK, 5),
-        new CardData(5, "A_6", (int)Type.ATTACK, 6),
-        new CardData(6, "A_7", (int)Type.ATTACK, 7),
-        new CardData(7, "A_8", (int)Type.ATTACK, 8),
-        new CardData(8, "A_9", (int)Type.ATTACK, 9),
-        new CardData(9, "A_10", (int)Type.ATTACK, 10),
+        new CardData(0, "A_1", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(1, "A_2", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(2, "A_3", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(3, "A_4", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(4, "A_5", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(5, "A_6", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(6, "A_7", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(7, "A_8", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(8, "A_9", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(9, "A_10", (int)Type.ATTACK, 1, true, false, false),
     };
     List<CardData> player2CardDataList = new List<CardData>()
     {
-        new CardData(0, "A_11", (int)Type.ATTACK, 1),
-        new CardData(1, "R_1", (int)Type.REFLECT, 2),
-        new CardData(2, "R_2", (int)Type.REFLECT, 3),
-        new CardData(3, "R_3", (int)Type.REFLECT, 4),
-        new CardData(4, "R_4", (int)Type.REFLECT, 5),
-        new CardData(5, "S_1", (int)Type.SUPPORT, 6),
-        new CardData(6, "S_2", (int)Type.SUPPORT, 7),
-        new CardData(7, "S_3", (int)Type.SUPPORT, 8),
-        new CardData(8, "S_4", (int)Type.SUPPORT, 9),
-        new CardData(9, "S_5", (int)Type.SUPPORT, 10),
+        new CardData(0, "A_11", (int)Type.ATTACK, 1, false, false, false),
+        new CardData(1, "R_1", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(2, "R_2", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(3, "R_3", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(4, "R_4", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(5, "S_1", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(6, "S_2", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(7, "S_3", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(8, "S_4", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(9, "S_5", (int)Type.SUPPORT, 1, false, false, false),
     };
 
     public player1 currentPlayer;
@@ -106,8 +111,8 @@ public class GameMaster : MonoBehaviour
         */
         deckGenerater.Generate(player1CardDataList, currentPlayer.deck);
         deckGenerater.Generate(player2CardDataList, waitPlayer.deck);
-        manaGenerater.Generate(ManacardDataList, currentPlayer.mana);
-        manaGenerater.Generate(ManacardDataList, waitPlayer.mana);
+        manaGenerater.Generate(ManacardDataList1, currentPlayer.mana);
+        manaGenerater.Generate(ManacardDataList2, waitPlayer.mana);
         diceGenerater.Generate(DiceDataList);
         //diceGenerater.Generate(DiceDataList, waitPlayer.mana);
         
