@@ -287,6 +287,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             //cost = 0;
             //Debug.Log("selected_cost:" + selected_cost);
         }
+        
         /*
         else if (this.step == CARD.STEP.DISCAHRGE)
         {

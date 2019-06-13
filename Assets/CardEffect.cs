@@ -369,6 +369,23 @@ public class CardEffect : MonoBehaviour
             }
             if (target.GetComponent<Card>().activate == true)
             {
+                Debug.Log("Flagstore1");
+                target.GetComponent<Card>().activate = false;
+            }
+            if (target.GetComponent<Card>().flag == true)
+            {
+                target.GetComponent<Card>().flag = false;
+            }
+        }
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().selected == true)
+            {
+                target.GetComponent<Card>().selected = false;
+            }
+            if (target.GetComponent<Card>().activate == true)
+            {
+                Debug.Log("Flagstore2");
                 target.GetComponent<Card>().activate = false;
             }
             if (target.GetComponent<Card>().flag == true)
@@ -461,6 +478,8 @@ public class CardEffect : MonoBehaviour
                     activate_cost = EFFECT.COST.ONE;
                     CardObj _cardobj = GetComponentInParent<CardObj>();
                     _cardobj.GetCardCost(cost);
+                    Card card = GetComponentInParent<Card>();
+                    card.activate = true;
                 }
             }
             if (cost == 2)
@@ -474,38 +493,35 @@ public class CardEffect : MonoBehaviour
             
             if(activate_cost == EFFECT.COST.ONE)
             {
-                Card card = GetComponentInParent<Card>();
-                card.activate = true;
-                for (int i = 0; i < position.GetLength(0); i++)
+                // カードの発動コストを支払い終えたか確認
+                if (this.ExistActivate() == false)
                 {
-                    dice_x = position[i, 0];
-                    dice_y = position[i, 1];
-
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                    if (activate_i == true)
+                    for (int i = 0; i < position.GetLength(0); i++)
                     {
-                        //dice_step = DICE.STEP.TOUCHE;
-                        var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                        for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                        dice_x = position[i, 0];
+                        dice_y = position[i, 1];
+
+                        bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                        if (activate_i == true)
                         {
-                            Dice dice = gameObj[j].GetComponent<Dice>();
-                            if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                            //dice_step = DICE.STEP.TOUCHE;
+                            var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                            for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
                             {
-                                DragObj dragObj = dice.GetComponent<DragObj>();
-                                //dragObj.ddd();
-                                dragObj.eee();
-                                dice.hp -= damage;
-                                step = EFFECT.STEP.IDLE;
+                                Dice dice = gameObj[j].GetComponent<Dice>();
+                                if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                                {
+                                    DragObj dragObj = dice.GetComponent<DragObj>();
+                                    //dragObj.ddd();
+                                    dragObj.eee();
+                                    dice.hp -= damage;
+                                    step = EFFECT.STEP.IDLE;
+                                }
                             }
                         }
                     }
                 }
             }
-
-
-
-
-
 
 
             if (cost == 0)
