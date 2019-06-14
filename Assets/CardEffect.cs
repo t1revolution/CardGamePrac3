@@ -463,8 +463,7 @@ public class CardEffect : MonoBehaviour
 
             int damage = position[0, 2];
             int distance = position[0, 3];
-            //int cost = position[0, 4];
-            int cost = 1;
+            int cost = position[0, 4];
             int anable_cost = 0;
             int dice_x;
             int dice_y;
@@ -482,9 +481,18 @@ public class CardEffect : MonoBehaviour
                     card.activate = true;
                 }
             }
-            if (cost == 2)
+            if (cost == 2 && activate_cost != EFFECT.COST.TWO)
             {
-                bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを2枚選択してください");
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                if (card_choose == true)
+                {
+                    anable_cost = GetHand();
+                    activate_cost = EFFECT.COST.TWO;
+                    CardObj _cardobj = GetComponentInParent<CardObj>();
+                    _cardobj.GetCardCost(cost);
+                    Card card = GetComponentInParent<Card>();
+                    card.activate = true;
+                }
             }
             if (cost > 3)
             {
@@ -522,6 +530,40 @@ public class CardEffect : MonoBehaviour
                     }
                 }
             }
+
+            if(activate_cost == EFFECT.COST.TWO)
+            {
+                // カードの発動コストを支払い終えたか確認
+                if (this.ExistActivate() == false)
+                {
+                    for (int i = 0; i < position.GetLength(0); i++)
+                    {
+                        dice_x = position[i, 0];
+                        dice_y = position[i, 1];
+
+                        bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                        if (activate_i == true)
+                        {
+                            //dice_step = DICE.STEP.TOUCHE;
+                            var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                            for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                            {
+                                Dice dice = gameObj[j].GetComponent<Dice>();
+                                if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                                {
+                                    DragObj dragObj = dice.GetComponent<DragObj>();
+                                    //dragObj.ddd();
+                                    dragObj.eee();
+                                    dice.hp -= damage;
+                                    step = EFFECT.STEP.IDLE;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
 
 
             if (cost == 0)

@@ -69,15 +69,15 @@ public class GameMaster : MonoBehaviour
     };
     List<CardData> player1CardDataList = new List<CardData>()
     {
-        new CardData(0, "A_1", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(0, "A_1", (int)Type.ATTACK, 2, true, false, false),
         new CardData(1, "A_2", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(2, "A_3", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(3, "A_4", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(4, "A_5", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(5, "A_6", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(6, "A_7", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(7, "A_8", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(8, "A_9", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(2, "A_3", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(3, "A_4", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(4, "A_5", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(5, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(6, "A_7", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(7, "A_8", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(8, "A_9", (int)Type.ATTACK, 0, true, false, false),
         new CardData(9, "A_10", (int)Type.ATTACK, 1, true, false, false),
     };
     List<CardData> player2CardDataList = new List<CardData>()

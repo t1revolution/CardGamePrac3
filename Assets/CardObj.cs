@@ -267,7 +267,8 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             {
                 //this.step = CARD.STEP.DISCAHRGE;
                 bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したカードを捨てます。よろしいですか?");
-                if (card_choose == true)
+                int checkcost = cardeffect.Getcost();
+                if (card_choose == true || checkcost == 0)
                 {
                     var targets = GameObject.FindGameObjectsWithTag("CARD");
                     this.step = CARD.STEP.IDLE;
@@ -278,14 +279,12 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                             GameObject gameObj = GameObject.Find("GameMaster");
                             GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                             player1 player = gamemaster.currentPlayer;
-                            player.ActivationCostFromHand(card);
+                            player.ActivationCostFromHand(target.GetComponent<Card>());
                         }
                     }
                     cardeffect.Flagrestore();
                 }
             }
-            //cost = 0;
-            //Debug.Log("selected_cost:" + selected_cost);
         }
         
         /*
