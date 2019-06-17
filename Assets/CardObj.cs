@@ -178,12 +178,15 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.step = CARD.STEP.IDLE;
                 //this.step = CARD.STEP.EXPAND;
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+
+                Card card = this.GetComponent<Card>();
+                /*
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
-
                 Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
+                */
 
                 if (card.type == (int)Type.REFLECT)
                 {

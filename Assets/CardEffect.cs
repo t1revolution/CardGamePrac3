@@ -26,74 +26,86 @@ class EFFECT
         THREE,
         X,
     }
-
 }
+
+class ACTIVATE // 発動コストの二重払いを回避するため
+{
+    public enum STEP
+    {
+        NONE = -1,
+        IDLE = 0,
+
+    }
+}
+
 
 public class CardEffect : MonoBehaviour
 {
     EFFECT.STEP step = EFFECT.STEP.NONE;
     EFFECT.COST activate_cost = EFFECT.COST.NONE;
+    ACTIVATE.STEP activate_step = ACTIVATE.STEP.NONE;
     private string cardname;
     private bool flag;
 
-    public void Activate(Card card) {
+    public void Activate(Card card)
+    {
         flag = card.flag;
         if (card.name == "A_1")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_2")
+        if (card.name == "A_2")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_3")
+        if (card.name == "A_3")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_4")
+        if (card.name == "A_4")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_5")
+        if (card.name == "A_5")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_6")
+        if (card.name == "A_6")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_7")
+        if (card.name == "A_7")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_8")
+        if (card.name == "A_8")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_9")
+        if (card.name == "A_9")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_10")
+        if (card.name == "A_10")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "A_11")
+        if (card.name == "A_11")
         {
             cardname = card.name;
             step = EFFECT.STEP.ATTACK;
         }
-        if(card.name == "M_1")
+        if (card.name == "M_1")
         {
             cardname = card.name;
             step = EFFECT.STEP.MANA;
@@ -300,6 +312,23 @@ public class CardEffect : MonoBehaviour
         int[,] pos = new int[targe.Length, 5];
         */
 
+        
+        GameObject gameObj = this.transform.parent.gameObject;
+        GameObject gamehandobj = GameObject.Find("Hand");
+        int pObjCount = gameObj.transform.childCount;
+        int cObjCount = this.transform.childCount;
+        int handCount = gamehandobj.transform.childCount;
+
+        //Debug.Log("cardList.Count:" + pObjCount);
+        Debug.Log("cObjCount:" + cObjCount);
+        Debug.Log("pObjCount:" + pObjCount);
+        Debug.Log("handCount:" + handCount);
+
+        /*
+        Hand hand = gameObj.GetComponent<Hand>();
+        List<Card> cardList = hand.cardList;
+        */
+
         var targets = GameObject.FindGameObjectsWithTag("CARD");
         //int[,] position = new int[targets.Length, 5];
         //bool flag = card.flag;
@@ -311,7 +340,8 @@ public class CardEffect : MonoBehaviour
                 cardnum++;
             }
         }
-        return cardnum;
+        //return cardnum;
+        return handCount;
     }
 
     public bool ExistActivate()
@@ -369,28 +399,7 @@ public class CardEffect : MonoBehaviour
             }
             if (target.GetComponent<Card>().activate == true)
             {
-                Debug.Log("Flagstore1");
                 target.GetComponent<Card>().activate = false;
-            }
-            if (target.GetComponent<Card>().flag == true)
-            {
-                target.GetComponent<Card>().flag = false;
-            }
-        }
-        foreach (GameObject target in targets)
-        {
-            if (target.GetComponent<Card>().selected == true)
-            {
-                target.GetComponent<Card>().selected = false;
-            }
-            if (target.GetComponent<Card>().activate == true)
-            {
-                Debug.Log("Flagstore2");
-                target.GetComponent<Card>().activate = false;
-            }
-            if (target.GetComponent<Card>().flag == true)
-            {
-                target.GetComponent<Card>().flag = false;
             }
         }
     }
@@ -464,46 +473,131 @@ public class CardEffect : MonoBehaviour
             int damage = position[0, 2];
             int distance = position[0, 3];
             int cost = position[0, 4];
-            int anable_cost = 0;
+            int enable_cost = GetHand() - 1; // 発動中のカードを除くため-1
             int dice_x;
             int dice_y;
 
-            if (cost == 1 && activate_cost != EFFECT.COST.ONE)
+            // 手札が発動コストを満たしているか確認
+            if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
             {
-                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
-                if (card_choose == true)
+                activate_step = ACTIVATE.STEP.IDLE;
+                if (cost == 1 && activate_cost != EFFECT.COST.ONE)
                 {
-                    anable_cost = GetHand();
-                    activate_cost = EFFECT.COST.ONE;
-                    CardObj _cardobj = GetComponentInParent<CardObj>();
-                    _cardobj.GetCardCost(cost);
-                    Card card = GetComponentInParent<Card>();
-                    card.activate = true;
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                    if (card_choose == true)
+                    {
+                        //enable_cost = GetHand();
+                        activate_cost = EFFECT.COST.ONE;
+                        CardObj _cardobj = GetComponentInParent<CardObj>();
+                        _cardobj.GetCardCost(cost);
+                        Card card = GetComponentInParent<Card>();
+                        card.activate = true;
+                    }
                 }
-            }
-            if (cost == 2 && activate_cost != EFFECT.COST.TWO)
-            {
-                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
-                if (card_choose == true)
+                if (cost == 2 && activate_cost != EFFECT.COST.TWO)
                 {
-                    anable_cost = GetHand();
-                    activate_cost = EFFECT.COST.TWO;
-                    CardObj _cardobj = GetComponentInParent<CardObj>();
-                    _cardobj.GetCardCost(cost);
-                    Card card = GetComponentInParent<Card>();
-                    card.activate = true;
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                    if (card_choose == true)
+                    {
+                        //enable_cost = GetHand();
+                        activate_cost = EFFECT.COST.TWO;
+                        CardObj _cardobj = GetComponentInParent<CardObj>();
+                        _cardobj.GetCardCost(cost);
+                        Card card = GetComponentInParent<Card>();
+                        card.activate = true;
+                    }
                 }
-            }
-            if (cost > 3)
-            {
-                bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
-            }
-            
-            if(activate_cost == EFFECT.COST.ONE)
-            {
-                // カードの発動コストを支払い終えたか確認
-                if (this.ExistActivate() == false)
+                if (cost > 3)
                 {
+                    bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+                }
+
+                if (activate_cost == EFFECT.COST.ONE)
+                {
+                    // カードの発動コストを支払い終えたか確認
+                    if (this.ExistActivate() == false)
+                    {
+                        GameObject gameOb = GameObject.Find("GameMaster");
+                        GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                        player1 player = gamemaster.currentPlayer;
+                        Card card = this.GetComponent<Card>();
+                        player.PushSettingCardOnFieldFromHand(card);
+
+                        for (int i = 0; i < position.GetLength(0); i++)
+                        {
+                            dice_x = position[i, 0];
+                            dice_y = position[i, 1];
+
+                            bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                            if (activate_i == true)
+                            {
+                                //dice_step = DICE.STEP.TOUCHE;
+                                var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                                for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                                {
+                                    Dice dice = gameObj[j].GetComponent<Dice>();
+                                    if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                                    {
+                                        DragObj dragObj = dice.GetComponent<DragObj>();
+                                        //dragObj.ddd();
+                                        dragObj.eee();
+                                        dice.hp -= damage;
+                                        step = EFFECT.STEP.IDLE;
+                                        activate_step = ACTIVATE.STEP.NONE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (activate_cost == EFFECT.COST.TWO)
+                {
+                    // カードの発動コストを支払い終えたか確認
+                    if (this.ExistActivate() == false)
+                    {
+                        GameObject gameOb = GameObject.Find("GameMaster");
+                        GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                        player1 player = gamemaster.currentPlayer;
+                        Card card = this.GetComponent<Card>();
+                        player.PushSettingCardOnFieldFromHand(card);
+
+                        for (int i = 0; i < position.GetLength(0); i++)
+                        {
+                            dice_x = position[i, 0];
+                            dice_y = position[i, 1];
+
+                            bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                            if (activate_i == true)
+                            {
+                                //dice_step = DICE.STEP.TOUCHE;
+                                var gameObj = GameObject.FindGameObjectsWithTag("DICE");
+                                for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
+                                {
+                                    Dice dice = gameObj[j].GetComponent<Dice>();
+                                    if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
+                                    {
+                                        DragObj dragObj = dice.GetComponent<DragObj>();
+                                        //dragObj.ddd();
+                                        dragObj.eee();
+                                        dice.hp -= damage;
+                                        step = EFFECT.STEP.IDLE;
+                                        activate_step = ACTIVATE.STEP.NONE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (cost == 0)
+                {
+                    GameObject gameOb = GameObject.Find("GameMaster");
+                    GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                    player1 player = gamemaster.currentPlayer;
+                    Card card = this.GetComponent<Card>();
+                    player.PushSettingCardOnFieldFromHand(card);
+
                     for (int i = 0; i < position.GetLength(0); i++)
                     {
                         dice_x = position[i, 0];
@@ -524,78 +618,33 @@ public class CardEffect : MonoBehaviour
                                     dragObj.eee();
                                     dice.hp -= damage;
                                     step = EFFECT.STEP.IDLE;
+                                    activate_step = ACTIVATE.STEP.NONE;
                                 }
                             }
                         }
                     }
                 }
             }
-
-            if(activate_cost == EFFECT.COST.TWO)
+            //else if(cost > enable_cost && activate_step == ACTIVATE.STEP.NONE)
+            else
             {
-                // カードの発動コストを支払い終えたか確認
-                if (this.ExistActivate() == false)
+                Debug.Log("cost:" + cost + "enable_cost:" + enable_cost);
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "このカードの発動に必要なコストが足りていません");
+                if (card_choose == true)
                 {
-                    for (int i = 0; i < position.GetLength(0); i++)
-                    {
-                        dice_x = position[i, 0];
-                        dice_y = position[i, 1];
-
-                        bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                        if (activate_i == true)
-                        {
-                            //dice_step = DICE.STEP.TOUCHE;
-                            var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                            for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                            {
-                                Dice dice = gameObj[j].GetComponent<Dice>();
-                                if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                                {
-                                    DragObj dragObj = dice.GetComponent<DragObj>();
-                                    //dragObj.ddd();
-                                    dragObj.eee();
-                                    dice.hp -= damage;
-                                    step = EFFECT.STEP.IDLE;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-
-
-            if (cost == 0)
-            {
-                for (int i = 0; i < position.GetLength(0); i++)
-                {
-                    dice_x = position[i, 0];
-                    dice_y = position[i, 1];
-
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                    if (activate_i == true)
-                    {
-                        //dice_step = DICE.STEP.TOUCHE;
-                        var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                        for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                        {
-                            Dice dice = gameObj[j].GetComponent<Dice>();
-                            if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                            {
-                                DragObj dragObj = dice.GetComponent<DragObj>();
-                                //dragObj.ddd();
-                                dragObj.eee();
-                                dice.hp -= damage;
-                                step = EFFECT.STEP.IDLE;
-                            }
-                        }
-                    }
+                    step = EFFECT.STEP.IDLE;
                 }
             }
         }
+
         if (step == EFFECT.STEP.MANA)
         {
+            GameObject gameOb = GameObject.Find("GameMaster");
+            GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+            player1 player = gamemaster.currentPlayer;
+            Card card = this.GetComponent<Card>();
+            player.PushSettingCardOnFieldFromHand(card);
+
             int[,] position = M_1();
             int damage = position[0, 2];
             int distance = position[0, 3];

@@ -8,7 +8,7 @@ public class CardData
     public string name;
     public int type;
     public int cost; // 発動コスト
-    public bool flag; // なんだろう
+    public bool flag; // treu:先手 false:後手
     public bool activate; // その瞬間に発動しているカードをtrue
     public bool selected; // カードの発動コストとして選ばれているものをtrue
 
