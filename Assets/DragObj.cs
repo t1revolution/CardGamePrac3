@@ -8,6 +8,7 @@ public class DragObj : MonoBehaviour
 { 
     public CARD.STEP step = CARD.STEP.NONE;
     public DICE.STEP dice_step = DICE.STEP.NONE;
+    private CARD.EFFECT reference = CARD.EFFECT.NONE;
     public Transform parentTransform;
     public int x;
     public int y;
@@ -48,6 +49,30 @@ public class DragObj : MonoBehaviour
     {
         this.dice_step = DICE.STEP.DAMAGED;
     }
+
+    /*
+    // 攻撃を行うダイスを選択する際のみ機能する関数
+    public void AttackDice_select()
+    {
+        Debug.Log("cost1:");
+        if (this.reference != CARD.EFFECT.CANCEL)
+        {
+            Card card = GetComponentInParent<Card>();
+            CardEffect cardeffect = GetComponentInParent<CardEffect>();
+            bool self_activate = card.activate;
+            activate = cardeffect.ExistActivate();
+            if (activate == true && self_activate == false)
+            {
+                this.step = CARD.STEP.COST;
+                card_position = this.transform.position;
+                Debug.Log("card_position.x:" + card_position.x);
+                Debug.Log("card_position.y:" + card_position.y);
+                card.selected = true;
+            }
+        }
+        this.reference = CARD.EFFECT.NONE;
+    }
+    */
 
     void OnGUI()
     {
@@ -226,12 +251,62 @@ public class DragObj : MonoBehaviour
             }
         }
 
-        if (dice_step == DICE.STEP.DAMAGED)
+        else if (dice_step == DICE.STEP.DAMAGED)
         {
             Debug.Log("SUCCEED!!!!");
             Dice dice = GetComponentInParent<Dice>();
             //dice.hp -= 1;
             this.dice_step = DICE.STEP.NONE;
         }
+
+        /*
+        else if (dice_step == DICE.STEP.ATTACK)
+        {
+            CardEffect cardeffect = GetComponentInParent<CardEffect>();
+            Card card = GetComponentInParent<Card>();
+            int hand_num;
+            int selected_cost;
+            int cost;
+            cost = cardeffect.Getcost();
+            hand_num = cardeffect.GetHand();
+            selected_cost = cardeffect.ExistSelected();
+
+            bool ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
+            if (ret == true)
+            {
+                Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+                this.reference = CARD.EFFECT.CANCEL;
+                card.selected = false;
+
+                //card.activate = true;
+                //card_position = new Vector3();
+            }
+            if (selected_cost == cost)
+            {
+                //this.step = CARD.STEP.DISCAHRGE;
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したカードを捨てます。よろしいですか?");
+                int checkcost = cardeffect.Getcost();
+                if (card_choose == true || checkcost == 0)
+                {
+                    var targets = GameObject.FindGameObjectsWithTag("CARD");
+                    this.step = CARD.STEP.IDLE;
+                    foreach (GameObject target in targets)
+                    {
+                        if (target.GetComponent<Card>().selected == true)
+                        {
+                            GameObject gameObj = GameObject.Find("GameMaster");
+                            GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
+                            player1 player = gamemaster.currentPlayer;
+                            player.ActivationCostFromHand(target.GetComponent<Card>());
+                        }
+                    }
+                    cardeffect.Flagrestore();
+                }
+            }
+        }
+        */
+
     }
 }

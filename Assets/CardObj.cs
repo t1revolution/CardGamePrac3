@@ -34,6 +34,8 @@ public class DICE
         IDLE = 0,
         TOUCHE,
         DAMAGED,
+        ATTACK,
+        TARGET,
     };
 }
 
