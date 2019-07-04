@@ -50,12 +50,12 @@ public class GameMaster : MonoBehaviour
 
     List<DiceData> DiceDataList = new List<DiceData>()
     {
-        new DiceData(1, "dice1", 6, 1, 5, true),
-        new DiceData(2, "dice2", 6, 3, 5, true),
-        new DiceData(3, "dice3", 6, 5, 5, true),
-        new DiceData(4, "dice4", 6, 1, 1, false),
-        new DiceData(5, "dice5", 6, 3, 1, false),
-        new DiceData(6, "dice6", 6, 5, 1, false),
+        new DiceData(1, "dice1", 6, 1, 5, true, false, false),
+        new DiceData(2, "dice2", 6, 3, 5, true, false, false),
+        new DiceData(3, "dice3", 6, 5, 5, true, false, false),
+        new DiceData(4, "dice4", 6, 1, 1, false, false, false),
+        new DiceData(5, "dice5", 6, 3, 1, false, false, false),
+        new DiceData(6, "dice6", 6, 5, 1, false, false, false),
     };
     List<CardData> ManacardDataList1 = new List<CardData>()
     {

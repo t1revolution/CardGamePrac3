@@ -37,6 +37,12 @@ public class DICE
         ATTACK,
         TARGET,
     };
+    public enum EFFECT
+    {
+        NONE,
+        TARGET,
+        CANCEL,
+    }
 }
 
 public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -77,10 +83,11 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         transform.SetParent(parentTransform);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
+
     public void OnUserAction()
     {
         CardEffect cardeffect = GetComponentInParent<CardEffect>();
-        activate = cardeffect.ExistActivate();
+        activate = cardeffect.CardExistActivate();
         if (activate == false)
         {
             this.transform.localScale = new Vector3(1.0f, 1.5f, 0.0f);
@@ -104,7 +111,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             Card card = GetComponentInParent<Card>();
             CardEffect cardeffect = GetComponentInParent<CardEffect>();
             bool self_activate = card.activate;
-            activate = cardeffect.ExistActivate();
+            activate = cardeffect.CardExistActivate();
             if (activate == true && self_activate == false)
             {
                 this.step = CARD.STEP.COST;
@@ -247,7 +254,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             int cost;
             cost = cardeffect.Getcost();
             hand_num = cardeffect.GetHand();
-            selected_cost = cardeffect.ExistSelected();
+            selected_cost = cardeffect.CardExistSelected();
 
             //Debug.Log("card_position.x2:" + card_position.x);
             //Debug.Log("card_position.y2:" + card_position.y);
@@ -287,7 +294,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                             player.ActivationCostFromHand(target.GetComponent<Card>());
                         }
                     }
-                    cardeffect.Flagrestore();
+                    cardeffect.CardFlagrestore();
                 }
             }
         }

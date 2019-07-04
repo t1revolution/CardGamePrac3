@@ -11,6 +11,8 @@ public class Dice : MonoBehaviour
     public int x;
     public int y;
     public bool flag;
+    public bool activate;
+    public bool selected;
 
     public void Load(DiceData _diceData)
     {
@@ -20,5 +22,7 @@ public class Dice : MonoBehaviour
         x = _diceData.x;
         y = _diceData.y;
         flag = _diceData.flag;
+        activate = _diceData.activate;
+        selected = _diceData.selected;
     }
 }

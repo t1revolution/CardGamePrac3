@@ -588,7 +588,7 @@ public class CardEffect : MonoBehaviour
         return handCount;
     }
 
-    public bool ExistActivate()
+    public bool CardExistActivate()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
         bool existactivate = false;
@@ -603,9 +603,38 @@ public class CardEffect : MonoBehaviour
         return existactivate;
     }
 
-    public int ExistSelected()
+    public bool DiceExistActivate()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        bool existactivate = false;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().activate == true)
+            {
+                existactivate = true;
+                break;
+            }
+        }
+        return existactivate;
+    }
+
+    public int CardExistSelected()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
+        int existselected = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().selected == true)
+            {
+                existselected++;
+            }
+        }
+        return existselected;
+    }
+
+    public int DiceExistSelected()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
         int existselected = 0;
         foreach (GameObject target in targets)
         {
@@ -632,7 +661,7 @@ public class CardEffect : MonoBehaviour
     }
 
     // コストに関する一連のステップが終わった後にflagを格納する。
-    public void Flagrestore()
+    public void CardFlagrestore()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
         foreach (GameObject target in targets)
@@ -644,6 +673,22 @@ public class CardEffect : MonoBehaviour
             if (target.GetComponent<Card>().activate == true)
             {
                 target.GetComponent<Card>().activate = false;
+            }
+        }
+    }
+
+    public void DiceFlagrestore()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().selected == true)
+            {
+                target.GetComponent<Dice>().selected = false;
+            }
+            if (target.GetComponent<Dice>().activate == true)
+            {
+                target.GetComponent<Dice>().activate = false;
             }
         }
     }
@@ -761,18 +806,24 @@ public class CardEffect : MonoBehaviour
                 if (activate_cost == EFFECT.COST.ONE)
                 {
                     // カードの発動コストを支払い終えたか確認
-                    if (this.ExistActivate() == false)
+                    if (this.CardExistActivate() == false)
                     {
                         GameObject gameOb = GameObject.Find("GameMaster");
                         GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
                         player1 player = gamemaster.currentPlayer;
                         Card card = this.GetComponent<Card>();
                         player.PushSettingCardOnFieldFromHand(card);
+
+
+                        //bool activate_i = false;
                         for (int i = 0; i < position.GetLength(0); i++)
                         {
                             dice_x = position[i, 0];
                             dice_y = position[i, 1];
+                            //activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                             bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+
+
                             if (activate_i == true)
                             {
                                 //dice_step = DICE.STEP.TOUCHE;
@@ -791,6 +842,7 @@ public class CardEffect : MonoBehaviour
                                     }
                                 }
                             }
+
                         }
                     }
                 }
@@ -798,7 +850,7 @@ public class CardEffect : MonoBehaviour
                 if (activate_cost == EFFECT.COST.TWO)
                 {
                     // カードの発動コストを支払い終えたか確認
-                    if (this.ExistActivate() == false)
+                    if (this.CardExistActivate() == false)
                     {
                         GameObject gameOb = GameObject.Find("GameMaster");
                         GameMaster gamemaster = gameOb.GetComponent<GameMaster>();

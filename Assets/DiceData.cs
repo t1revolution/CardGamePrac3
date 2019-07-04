@@ -10,8 +10,10 @@ public class DiceData : MonoBehaviour
     public int x;
     public int y;
     public bool flag;
+    public bool activate;
+    public bool selected;
 
-    public DiceData(int _id, string _name, int _hp, int _x, int _y, bool _flag)
+    public DiceData(int _id, string _name, int _hp, int _x, int _y, bool _flag, bool _activate, bool _selected)
     {
         id = _id;
         name = _name;
@@ -19,5 +21,7 @@ public class DiceData : MonoBehaviour
         x = _x;
         y = _y;
         flag = _flag;
+        activate = _activate;
+        selected = _selected;
     }
 }
