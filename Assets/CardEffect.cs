@@ -712,7 +712,14 @@ public class CardEffect : MonoBehaviour
             int[,] position = mi.Invoke(null, null);
             */
 
+
+
             int[,] position = A_1();
+            /*
+             
+            ここに個別の処理をそれぞれ埋め込む 
+
+             */
             if (cardname == "A_1")
             {
                 position = A_1();
@@ -842,7 +849,6 @@ public class CardEffect : MonoBehaviour
                                     }
                                 }
                             }
-
                         }
                     }
                 }

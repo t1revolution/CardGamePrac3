@@ -189,13 +189,21 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
 
                 Card card = this.GetComponent<Card>();
-                /*
+
+
+                // ##########################################################
+                // カードの発動条件を満たしたものを手札からフィールドに移動させる。
+                // 発動コスト、その他特殊な発動条件のカードがあり実行タイミングは要検討
+                
+
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
-                Card card = this.GetComponent<Card>();
+                //Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
-                */
+
+
+                // ##########################################################
 
                 if (card.type == (int)Type.REFLECT)
                 {

@@ -242,18 +242,19 @@ public class DragObj : MonoBehaviour
         {
             CardEffect cardeffect = GetComponentInParent<CardEffect>();
             Dice dice = GetComponentInParent<Dice>();
-            int hand_num;
+            //int hand_num;
+            //int cost;
+            //cost = cardeffect.Getcost();
+            //hand_num = cardeffect.GetHand();
             int selected_cost;
-            int cost;
-            cost = cardeffect.Getcost();
-            hand_num = cardeffect.GetHand();
             selected_cost = cardeffect.DiceExistSelected();
 
             //bool ret = GUI.Button(new Rect(550, 350, 100, 90), "コストとして支払うカード");
             // タップされた手札にボタンを生成したい
             //bool ret = GUI.Button(new Rect(card_position.x + 500f, card_position.y - 500f, 200, 300), "コストとして選択されたカード");
             //bool ret = GUI.Button(new Rect(card_position.x + 620f, card_position.y + 640f, 80, 120), "select");
-            bool ret = GUI.Button(new Rect(dice_position.x - 40f, dice_position.y + 700f, 80, 120), "select");
+            //bool ret = GUI.Button(new Rect(dice_position.x - 40f, dice_position.y + 700f, 80, 120), "select");
+            bool ret = GUI.Button(new Rect(basex - 33f - per1x * dice.x, basey - 432f + per1y * dice.y, 66, 66), "select");
             if (ret == true)
             {
                 Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");
@@ -261,18 +262,15 @@ public class DragObj : MonoBehaviour
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
                 this.reference = DICE.EFFECT.CANCEL;
                 dice.selected = false;
-
-                //card.activate = true;
-                //card_position = new Vector3();
             }
-            if (selected_cost == cost)
+            if (selected_cost == 2)
             {
                 //this.step = CARD.STEP.DISCAHRGE;
-                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したカードを捨てます。よろしいですか?");
+                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "選択したダイスを攻撃します。よろしいですか?");
                 int checkcost = cardeffect.Getcost();
                 if (card_choose == true || checkcost == 0)
                 {
-                    var targets = GameObject.FindGameObjectsWithTag("CARD");
+                    var targets = GameObject.FindGameObjectsWithTag("DICE");
                     this.dice_step = DICE.STEP.IDLE;
                     foreach (GameObject target in targets)
                     {
@@ -280,8 +278,8 @@ public class DragObj : MonoBehaviour
                         {
                             GameObject gameObj = GameObject.Find("GameMaster");
                             GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
-                            player1 player = gamemaster.currentPlayer;
-                            player.ActivationCostFromHand(target.GetComponent<Card>());
+                            //player1 player = gamemaster.currentPlayer;
+                            //player.ActivationCostFromHand(target.GetComponent<Card>());
                         }
                     }
                     cardeffect.DiceFlagrestore();
