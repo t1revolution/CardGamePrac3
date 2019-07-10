@@ -272,9 +272,11 @@ public class CardEffect : MonoBehaviour
     public int[,] M_1()
     {
         int a;
-        a = Getdiceposition().GetLength(0);
+        //a = Getdiceposition().GetLength(0);
+        a = Get_own_diceposition().GetLength(0);
         int[,] position = new int[a, 5];
-        position = Getdiceposition();
+        //position = Getdiceposition();
+        position = Get_own_diceposition();
         return position;
     }
 
@@ -820,34 +822,20 @@ public class CardEffect : MonoBehaviour
                         player1 player = gamemaster.currentPlayer;
                         Card card = this.GetComponent<Card>();
                         player.PushSettingCardOnFieldFromHand(card);
-
-
-                        //bool activate_i = false;
-                        for (int i = 0; i < position.GetLength(0); i++)
+                        List<GameObject> targets = own_diceList();
+                        foreach (GameObject target in targets)
                         {
-                            dice_x = position[i, 0];
-                            dice_y = position[i, 1];
-                            //activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                            dice_x = target.GetComponent<Dice>().x;
+                            dice_y = target.GetComponent<Dice>().y;
                             bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-
-
                             if (activate_i == true)
                             {
-                                //dice_step = DICE.STEP.TOUCHE;
-                                var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                                for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                                {
-                                    Dice dice = gameObj[j].GetComponent<Dice>();
-                                    if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                                    {
-                                        DragObj dragObj = dice.GetComponent<DragObj>();
-                                        //dragObj.ddd();
-                                        dragObj.eee();
-                                        dice.hp -= damage;
-                                        step = EFFECT.STEP.IDLE;
-                                        activate_step = ACTIVATE.STEP.NONE;
-                                    }
-                                }
+                                Dice dice = target.GetComponent<Dice>();
+                                DragObj dragObj = dice.GetComponent<DragObj>();
+                                dragObj.eee();
+                                dice.hp -= damage;
+                                step = EFFECT.STEP.IDLE;
+                                activate_step = ACTIVATE.STEP.NONE;
                             }
                         }
                     }
@@ -863,28 +851,20 @@ public class CardEffect : MonoBehaviour
                         player1 player = gamemaster.currentPlayer;
                         Card card = this.GetComponent<Card>();
                         player.PushSettingCardOnFieldFromHand(card);
-                        for (int i = 0; i < position.GetLength(0); i++)
+                        List<GameObject> targets = own_diceList();
+                        foreach (GameObject target in targets)
                         {
-                            dice_x = position[i, 0];
-                            dice_y = position[i, 1];
+                            dice_x = target.GetComponent<Dice>().x;
+                            dice_y = target.GetComponent<Dice>().y;
                             bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                             if (activate_i == true)
                             {
-                                //dice_step = DICE.STEP.TOUCHE;
-                                var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                                for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                                {
-                                    Dice dice = gameObj[j].GetComponent<Dice>();
-                                    if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                                    {
-                                        DragObj dragObj = dice.GetComponent<DragObj>();
-                                        //dragObj.ddd();
-                                        dragObj.eee();
-                                        dice.hp -= damage;
-                                        step = EFFECT.STEP.IDLE;
-                                        activate_step = ACTIVATE.STEP.NONE;
-                                    }
-                                }
+                                Dice dice = target.GetComponent<Dice>();
+                                DragObj dragObj = dice.GetComponent<DragObj>();
+                                dragObj.eee();
+                                dice.hp -= damage;
+                                step = EFFECT.STEP.IDLE;
+                                activate_step = ACTIVATE.STEP.NONE;
                             }
                         }
                     }
@@ -897,30 +877,20 @@ public class CardEffect : MonoBehaviour
                     player1 player = gamemaster.currentPlayer;
                     Card card = this.GetComponent<Card>();
                     player.PushSettingCardOnFieldFromHand(card);
-
-                    for (int i = 0; i < position.GetLength(0); i++)
+                    List<GameObject> targets = own_diceList();
+                    foreach (GameObject target in targets)
                     {
-                        dice_x = position[i, 0];
-                        dice_y = position[i, 1];
-
+                        dice_x = target.GetComponent<Dice>().x;
+                        dice_y = target.GetComponent<Dice>().y;
                         bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                         if (activate_i == true)
                         {
-                            //dice_step = DICE.STEP.TOUCHE;
-                            var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                            for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                            {
-                                Dice dice = gameObj[j].GetComponent<Dice>();
-                                if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                                {
-                                    DragObj dragObj = dice.GetComponent<DragObj>();
-                                    //dragObj.ddd();
-                                    dragObj.eee();
-                                    dice.hp -= damage;
-                                    step = EFFECT.STEP.IDLE;
-                                    activate_step = ACTIVATE.STEP.NONE;
-                                }
-                            }
+                            Dice dice = target.GetComponent<Dice>();
+                            DragObj dragObj = dice.GetComponent<DragObj>();
+                            dragObj.eee();
+                            dice.hp -= damage;
+                            step = EFFECT.STEP.IDLE;
+                            activate_step = ACTIVATE.STEP.NONE;
                         }
                     }
                 }
@@ -943,12 +913,42 @@ public class CardEffect : MonoBehaviour
             player1 player = gamemaster.currentPlayer;
             Card card = this.GetComponent<Card>();
             player.PushSettingCardOnFieldFromHand(card);
+            int dice_x;
+            int dice_y;
+            List<GameObject> targets = own_diceList();
+            foreach (GameObject target in targets)
+            {
+                dice_x = target.GetComponent<Dice>().x;
+                dice_y = target.GetComponent<Dice>().y;
+;
+                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                if (activate_i == true)
+                {
+                    Dice dice = target.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.ddd();
+                    step = EFFECT.STEP.IDLE;
+                }
+            }
+        }
+
+        /*
+        if (step == EFFECT.STEP.MANA)
+        {
+            GameObject gameOb = GameObject.Find("GameMaster");
+            GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+            player1 player = gamemaster.currentPlayer;
+            Card card = this.GetComponent<Card>();
+            player.PushSettingCardOnFieldFromHand(card);
 
             int[,] position = M_1();
             int damage = position[0, 2];
             int distance = position[0, 3];
             int dice_x;
             int dice_y;
+
+            List<GameObject> targets = own_diceList();
+
             for (int i = 0; i < position.GetLength(0); i++)
             {
                 dice_x = position[i, 0];
@@ -958,12 +958,16 @@ public class CardEffect : MonoBehaviour
                 if (activate_i == true)
                 {
                     //dice_step = DICE.STEP.TOUCHE;
+                    Debug.Log("aaaaaaaaaaaaaaaaaaaaa");
                     var gameObj = GameObject.FindGameObjectsWithTag("DICE");
                     for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
                     {
                         Dice dice = gameObj[j].GetComponent<Dice>();
+                        Debug.Log("dice.x:" + dice.x + "dice_x:" + dice_x);
+                        Debug.Log("dice.y:" + dice.y + "dice_y:" + dice_y);
                         if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
                         {
+                            Debug.Log("bbbbbbbbbbbbbbb");
                             DragObj dragObj = dice.GetComponent<DragObj>();
                             dragObj.ddd();
                             step = EFFECT.STEP.IDLE;
@@ -972,5 +976,7 @@ public class CardEffect : MonoBehaviour
                 }
             }
         }
+        */
+
     }
 }

@@ -194,14 +194,16 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 // ##########################################################
                 // カードの発動条件を満たしたものを手札からフィールドに移動させる。
                 // 発動コスト、その他特殊な発動条件のカードがあり実行タイミングは要検討
+                // 下4行のコメントアウトをとったことにより、
+                // 発動コストちょうどの手札枚数のときコスト不足が表示されてしまうので注意
                 
-
+                
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
                 //Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
-
+                
 
                 // ##########################################################
 
