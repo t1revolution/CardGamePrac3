@@ -620,6 +620,21 @@ public class CardEffect : MonoBehaviour
         return existactivate;
     }
 
+    public GameObject diceExistActivate()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        GameObject existactivate = targets[0];
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().activate == true)
+            {
+                existactivate = target;
+                break;
+            }
+        }
+        return existactivate;
+    }
+
     public int CardExistSelected()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
@@ -640,9 +655,24 @@ public class CardEffect : MonoBehaviour
         int existselected = 0;
         foreach (GameObject target in targets)
         {
-            if (target.GetComponent<Card>().selected == true)
+            if (target.GetComponent<Dice>().selected == true)
             {
                 existselected++;
+            }
+        }
+        return existselected;
+    }
+
+    public GameObject diceExistSelected()
+    {
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        GameObject existselected = targets[0];
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().selected == true)
+            {
+                existselected = target;
+                break;
             }
         }
         return existselected;
@@ -776,6 +806,75 @@ public class CardEffect : MonoBehaviour
             //int in_distance_dicenum = Get_in_distance_dicenum(distance); // distance内存在する相手のダイス数  distanceを渡せばいいのかな?
             int dice_x;
             int dice_y;
+            int attacker_dice_x;
+            int attacker_dice_y;
+            int target_dice_x;
+            int target_dice_y;
+
+            void attack_processing()
+            {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = own_diceList();
+                List<GameObject> targets = opp_diceList();
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
+                {
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+
+                if (activate_dice == true)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "at");
+                    foreach (GameObject target in targets)
+                    {
+                        target_dice_x = target.GetComponent<Dice>().x;
+                        target_dice_y = target.GetComponent<Dice>().y;
+                        bool atrget_i = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "");
+                        if (atrget_i == true)
+                        {
+                            target.GetComponent<Dice>().selected = true;
+                        }
+                    }
+                }
+
+                if(activate_dice == true && selected_dice_num > 0)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    bool target_ = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "tar");
+
+                    GameObject target = diceExistSelected();
+                    Dice dice = target.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.eee();
+                    dice.hp -= damage;
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
 
             // 手札が発動コストを満たしているか確認
             if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
@@ -817,27 +916,7 @@ public class CardEffect : MonoBehaviour
                     // カードの発動コストを支払い終えたか確認
                     if (this.CardExistActivate() == false)
                     {
-                        GameObject gameOb = GameObject.Find("GameMaster");
-                        GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
-                        player1 player = gamemaster.currentPlayer;
-                        Card card = this.GetComponent<Card>();
-                        player.PushSettingCardOnFieldFromHand(card);
-                        List<GameObject> targets = own_diceList();
-                        foreach (GameObject target in targets)
-                        {
-                            dice_x = target.GetComponent<Dice>().x;
-                            dice_y = target.GetComponent<Dice>().y;
-                            bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                            if (activate_i == true)
-                            {
-                                Dice dice = target.GetComponent<Dice>();
-                                DragObj dragObj = dice.GetComponent<DragObj>();
-                                dragObj.eee();
-                                dice.hp -= damage;
-                                step = EFFECT.STEP.IDLE;
-                                activate_step = ACTIVATE.STEP.NONE;
-                            }
-                        }
+                        attack_processing();
                     }
                 }
 
@@ -846,53 +925,13 @@ public class CardEffect : MonoBehaviour
                     // カードの発動コストを支払い終えたか確認
                     if (this.CardExistActivate() == false)
                     {
-                        GameObject gameOb = GameObject.Find("GameMaster");
-                        GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
-                        player1 player = gamemaster.currentPlayer;
-                        Card card = this.GetComponent<Card>();
-                        player.PushSettingCardOnFieldFromHand(card);
-                        List<GameObject> targets = own_diceList();
-                        foreach (GameObject target in targets)
-                        {
-                            dice_x = target.GetComponent<Dice>().x;
-                            dice_y = target.GetComponent<Dice>().y;
-                            bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                            if (activate_i == true)
-                            {
-                                Dice dice = target.GetComponent<Dice>();
-                                DragObj dragObj = dice.GetComponent<DragObj>();
-                                dragObj.eee();
-                                dice.hp -= damage;
-                                step = EFFECT.STEP.IDLE;
-                                activate_step = ACTIVATE.STEP.NONE;
-                            }
-                        }
+                        attack_processing();
                     }
                 }
 
                 if (cost == 0)
                 {
-                    GameObject gameOb = GameObject.Find("GameMaster");
-                    GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
-                    player1 player = gamemaster.currentPlayer;
-                    Card card = this.GetComponent<Card>();
-                    player.PushSettingCardOnFieldFromHand(card);
-                    List<GameObject> targets = own_diceList();
-                    foreach (GameObject target in targets)
-                    {
-                        dice_x = target.GetComponent<Dice>().x;
-                        dice_y = target.GetComponent<Dice>().y;
-                        bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                        if (activate_i == true)
-                        {
-                            Dice dice = target.GetComponent<Dice>();
-                            DragObj dragObj = dice.GetComponent<DragObj>();
-                            dragObj.eee();
-                            dice.hp -= damage;
-                            step = EFFECT.STEP.IDLE;
-                            activate_step = ACTIVATE.STEP.NONE;
-                        }
-                    }
+                    attack_processing();
                 }
             }
             else

@@ -40,7 +40,9 @@ public class DragObj : MonoBehaviour
     }
     */
 
-    // 攻撃対象選択時のみ接触判定で機能する関数
+    // 攻撃対象選択時のみ接触判定で機能する関数+
+    // この関数をお払い箱にする想定で、activate,selectを
+    // Cardeffectのカード効果処理のところでいじるので注意
     public void DiceTarget()
     {
         Debug.Log("target:");
