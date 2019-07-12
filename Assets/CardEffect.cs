@@ -308,7 +308,7 @@ public class CardEffect : MonoBehaviour
     {
         Card card = GetComponentInParent<Card>();
         var targets = GameObject.FindGameObjectsWithTag("DICE");
-        int own_dicenum = Get_own_dicenum();
+        int own_dicenum = Get_own_dicenum(card.flag);
         int[,] position = new int[own_dicenum, 5];
         int i = 0;
         foreach (GameObject target in targets)
@@ -328,7 +328,7 @@ public class CardEffect : MonoBehaviour
     {
         Card card = GetComponentInParent<Card>();
         var targets = GameObject.FindGameObjectsWithTag("DICE");
-        int opp_dicenum = Get_opp_dicenum();
+        int opp_dicenum = Get_opp_dicenum(card.flag);
         int[,] position = new int[opp_dicenum, 5];
         int i = 0;
         foreach (GameObject target in targets)
@@ -375,7 +375,7 @@ public class CardEffect : MonoBehaviour
     }
 
     // 攻撃可能な範囲に敵ダイスがある味方ダイスオブジェクトを取得
-    List<GameObject> Attackable_diceposition(int distance)
+    List<GameObject> Attackable_dice_object(int distance)
     {
         List<GameObject> attackable_list = new List<GameObject>();
         int movable_area = 0;
@@ -415,20 +415,10 @@ public class CardEffect : MonoBehaviour
                 int own_dice_y = own_list.GetComponent<Dice>().y + moves[i, 1];
                 if (own_dice_x > 5 || own_dice_x < 1)
                 {
-                    /*
-                    koma_able[i] = false;
-                    koma_position[i, 0] = 0.0f;
-                    koma_position[i, 1] = 0.0f;
-                    */
                     continue;
                 }
                 if (own_dice_y > 5 || own_dice_y < 1)
                 {
-                    /*
-                    koma_able[i] = false;
-                    koma_position[i, 0] = 0.0f;
-                    koma_position[i, 1] = 0.0f;
-                    */
                     continue;
                 }
 
@@ -453,11 +443,73 @@ public class CardEffect : MonoBehaviour
         return attackable_list;
     }
 
+    // 選択したダイスから攻撃可能な範囲に存在する敵ダイスダイスオブジェクトを取得
+    List<GameObject> Target_dice_object(GameObject attackerObj, int distance)
+    {
+        List<GameObject> target_list = new List<GameObject>();
+        int movable_area = 0;
+        int[,] moves = new int[movable_area, 2];
+
+        Dice dice = GetComponentInParent<Dice>();
+        Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
+
+        if (distance == 0)
+        {
+            movable_area = 1;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_0();
+        }
+        else if (distance == 1)
+        {
+            movable_area = 5;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_1();
+        }
+        else if (distance == 2)
+        {
+            movable_area = 9;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_2();
+        }
+
+        var own_dice_list = own_diceList();
+        var opp_dice_list = opp_diceList();
+
+        for (int i = 0; i < movable_area; i++)
+        {
+            int own_dice_x = attackerObj.GetComponent<Dice>().x + moves[i, 0];
+            int own_dice_y = attackerObj.GetComponent<Dice>().y + moves[i, 1];
+            if (own_dice_x > 5 || own_dice_x < 1)
+            {
+                continue;
+            }
+            if (own_dice_y > 5 || own_dice_y < 1)
+            {
+                continue;
+            }
+
+            foreach (GameObject opp_list in opp_dice_list)
+            {
+                int opp_dice_x = opp_list.GetComponent<Dice>().x;
+                int opp_dice_y = opp_list.GetComponent<Dice>().y;
+
+                if(own_dice_x == opp_dice_x && own_dice_y == opp_dice_y)
+                {
+                    target_list.Add(opp_list);
+                    break;
+                }
+            }
+        }
+        return target_list;
+    }
+
+
+
     int[,] Target_diceposition()
     {
         Card card = GetComponentInParent<Card>();
         var targets = GameObject.FindGameObjectsWithTag("DICE");
-        int opp_dicenum = Get_opp_dicenum();
+        int opp_dicenum = Get_opp_dicenum(card.flag);
         int[,] position = new int[opp_dicenum, 5];
         int i = 0;
         foreach (GameObject target in targets)
@@ -473,13 +525,13 @@ public class CardEffect : MonoBehaviour
         return position;
     }
 
-    int Get_own_dicenum()
+    int Get_own_dicenum(bool _flag)
     {
         var targets = GameObject.FindGameObjectsWithTag("DICE");
         int dicecount = 0;
         foreach (GameObject target in targets)
         {
-            if (target.GetComponent<Dice>().flag == true)
+            if (target.GetComponent<Dice>().flag == _flag)
             {
                 dicecount += 1;
             }
@@ -487,18 +539,46 @@ public class CardEffect : MonoBehaviour
         return dicecount;
     }
 
-    int Get_opp_dicenum()
+    int Get_opp_dicenum(bool _flag)
     {
         var targets = GameObject.FindGameObjectsWithTag("DICE");
         int dicecount = 0;
         foreach (GameObject target in targets)
         {
-            if (target.GetComponent<Dice>().flag == false)
+            if (target.GetComponent<Dice>().flag != _flag)
             {
                 dicecount += 1;
             }
         }
         return dicecount;
+    }
+
+    int Get_own_cardnum(bool _flag)
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        int cardcount = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().flag != _flag)
+            {
+                cardcount += 1;
+            }
+        }
+        return cardcount;
+    }
+
+    int Get_opp_cardnum(bool _flag)
+    {
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        int cardcount = 0;
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().flag != _flag)
+            {
+                cardcount += 1;
+            }
+        }
+        return cardcount;
     }
 
     // distance内のダイスの数を返す関数にするか、呼び出しもとでflagのtrue,false定めて
@@ -572,11 +652,13 @@ public class CardEffect : MonoBehaviour
 
     public int GetHand()
     {
+        Dice dice = GetComponentInParent<Dice>();
         GameObject gameObj = this.transform.parent.gameObject;
         GameObject gamehandobj = GameObject.Find("Hand");
         int pObjCount = gameObj.transform.childCount;
         int cObjCount = this.transform.childCount;
         int handCount = gamehandobj.transform.childCount;
+
 
         var targets = GameObject.FindGameObjectsWithTag("CARD");
         int cardnum = 0;
@@ -818,8 +900,9 @@ public class CardEffect : MonoBehaviour
                 player1 player = gamemaster.currentPlayer;
                 Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
-                List<GameObject> attackers = own_diceList();
-                List<GameObject> targets = opp_diceList();
+                //List<GameObject> attackers = own_diceList();
+                List<GameObject> attackers = Attackable_dice_object(distance); 
+                //List<GameObject> targets = opp_diceList();
 
                 bool activate_dice = DiceExistActivate();
                 int selected_dice_num = DiceExistSelected();
@@ -843,10 +926,11 @@ public class CardEffect : MonoBehaviour
                 attacker_dice_y = attackerObj.GetComponent<Dice>().y;
                 target_dice_x = selectedObj.GetComponent<Dice>().x;
                 target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
 
                 if (activate_dice == true)
                 {
-                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "at");
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
                     foreach (GameObject target in targets)
                     {
                         target_dice_x = target.GetComponent<Dice>().x;
@@ -875,63 +959,74 @@ public class CardEffect : MonoBehaviour
                 }
             }
 
-
             // 手札が発動コストを満たしているか確認
             if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
             {
-                activate_step = ACTIVATE.STEP.IDLE;
-                if (cost == 1 && activate_cost != EFFECT.COST.ONE)
+                List<GameObject> attackers = Attackable_dice_object(distance);
+                if (attackers.Count == 0)
                 {
-                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "有効射程範囲に敵ダイスが存在しません");
                     if (card_choose == true)
                     {
-                        //enable_cost = GetHand();
-                        activate_cost = EFFECT.COST.ONE;
-                        CardObj _cardobj = GetComponentInParent<CardObj>();
-                        _cardobj.GetCardCost(cost);
-                        Card card = GetComponentInParent<Card>();
-                        card.activate = true;
+                        step = EFFECT.STEP.IDLE;
                     }
                 }
-                if (cost == 2 && activate_cost != EFFECT.COST.TWO)
+                else if (attackers.Count > 0)
                 {
-                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
-                    if (card_choose == true)
+                    activate_step = ACTIVATE.STEP.IDLE;
+                    if (cost == 1 && activate_cost != EFFECT.COST.ONE)
                     {
-                        //enable_cost = GetHand();
-                        activate_cost = EFFECT.COST.TWO;
-                        CardObj _cardobj = GetComponentInParent<CardObj>();
-                        _cardobj.GetCardCost(cost);
-                        Card card = GetComponentInParent<Card>();
-                        card.activate = true;
+                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                        if (card_choose == true)
+                        {
+                            //enable_cost = GetHand();
+                            activate_cost = EFFECT.COST.ONE;
+                            CardObj _cardobj = GetComponentInParent<CardObj>();
+                            _cardobj.GetCardCost(cost);
+                            Card card = GetComponentInParent<Card>();
+                            card.activate = true;
+                        }
                     }
-                }
-                if (cost > 3)
-                {
-                    bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
-                }
-                
-                if (activate_cost == EFFECT.COST.ONE)
-                {
-                    // カードの発動コストを支払い終えたか確認
-                    if (this.CardExistActivate() == false)
+                    if (cost == 2 && activate_cost != EFFECT.COST.TWO)
+                    {
+                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                        if (card_choose == true)
+                        {
+                            //enable_cost = GetHand();
+                            activate_cost = EFFECT.COST.TWO;
+                            CardObj _cardobj = GetComponentInParent<CardObj>();
+                            _cardobj.GetCardCost(cost);
+                            Card card = GetComponentInParent<Card>();
+                            card.activate = true;
+                        }
+                    }
+                    if (cost > 3)
+                    {
+                        bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+                    }
+
+                    if (activate_cost == EFFECT.COST.ONE)
+                    {
+                        // カードの発動コストを支払い終えたか確認
+                        if (this.CardExistActivate() == false)
+                        {
+                            attack_processing();
+                        }
+                    }
+
+                    if (activate_cost == EFFECT.COST.TWO)
+                    {
+                        // カードの発動コストを支払い終えたか確認
+                        if (this.CardExistActivate() == false)
+                        {
+                            attack_processing();
+                        }
+                    }
+
+                    if (cost == 0)
                     {
                         attack_processing();
                     }
-                }
-
-                if (activate_cost == EFFECT.COST.TWO)
-                {
-                    // カードの発動コストを支払い終えたか確認
-                    if (this.CardExistActivate() == false)
-                    {
-                        attack_processing();
-                    }
-                }
-
-                if (cost == 0)
-                {
-                    attack_processing();
                 }
             }
             else
