@@ -143,7 +143,7 @@ public class CardEffect : MonoBehaviour
     {
         int a;
         int damage = 1;
-        int distance = 2; // 変則的に斜め1マス分だけ離れた位置の敵ダイスの身に使える
+        int distance = -1; // 変則的に斜め1マス分だけ離れた位置の敵ダイスの身に使える
         int cost = 0;
         a = Getdiceposition().GetLength(0);
         int[,] position = new int[a, 5];
@@ -402,7 +402,18 @@ public class CardEffect : MonoBehaviour
             moves = new int[movable_area, 2];
             moves = dice_move1.GetMoves_2();
         }
-
+        else if (distance == 5)
+        {
+            movable_area = 17;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_5();
+        }
+        else if (distance == -1)
+        {
+            movable_area = 5;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_i1();
+        }
         var own_dice_list = own_diceList();
         var opp_dice_list = opp_diceList();
 
@@ -471,9 +482,22 @@ public class CardEffect : MonoBehaviour
             moves = new int[movable_area, 2];
             moves = dice_move1.GetMoves_2();
         }
+        else if (distance == 5)
+        {
+            movable_area = 17;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_5();
+        }
+        else if (distance == -1)
+        {
+            movable_area = 5;
+            moves = new int[movable_area, 2];
+            moves = dice_move1.GetMoves_i1();
+        }
 
         var own_dice_list = own_diceList();
         var opp_dice_list = opp_diceList();
+        var all_dice_list = GameObject.FindGameObjectsWithTag("DICE");
 
         for (int i = 0; i < movable_area; i++)
         {
@@ -487,16 +511,34 @@ public class CardEffect : MonoBehaviour
             {
                 continue;
             }
-
-            foreach (GameObject opp_list in opp_dice_list)
+            // A11の敵味方関係なく攻撃対象をとる効果
+            if (distance == 5)
             {
-                int opp_dice_x = opp_list.GetComponent<Dice>().x;
-                int opp_dice_y = opp_list.GetComponent<Dice>().y;
-
-                if(own_dice_x == opp_dice_x && own_dice_y == opp_dice_y)
+                foreach (GameObject all_list in all_dice_list)
                 {
-                    target_list.Add(opp_list);
-                    break;
+                    int opp_dice_x = all_list.GetComponent<Dice>().x;
+                    int opp_dice_y = all_list.GetComponent<Dice>().y;
+
+                    if (own_dice_x == opp_dice_x && own_dice_y == opp_dice_y)
+                    {
+                        target_list.Add(all_list);
+                        //break;
+                    }
+                }
+            }
+            // A11以外の攻撃カード
+            else if(distance != 5)
+            {
+                foreach (GameObject opp_list in opp_dice_list)
+                {
+                    int opp_dice_x = opp_list.GetComponent<Dice>().x;
+                    int opp_dice_y = opp_list.GetComponent<Dice>().y;
+
+                    if (own_dice_x == opp_dice_x && own_dice_y == opp_dice_y)
+                    {
+                        target_list.Add(opp_list);
+                        break;
+                    }
                 }
             }
         }
@@ -959,84 +1001,198 @@ public class CardEffect : MonoBehaviour
                 }
             }
 
-            // 手札が発動コストを満たしているか確認
-            if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
+            void A11_processing()
             {
-                List<GameObject> attackers = Attackable_dice_object(distance);
-                if (attackers.Count == 0)
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = Attackable_dice_object(distance); 
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
                 {
-                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "有効射程範囲に敵ダイスが存在しません");
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
+
+                if (activate_dice == true)
+                {
+                    bool attacker_display = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    foreach (GameObject target in targets)
+                    {
+                        target.GetComponent<Dice>().selected = true;
+                    }
+                }
+
+                if(activate_dice == true && selected_dice_num > 0)
+                {
+                    foreach (GameObject target in targets)
+                    {
+                        Dice dice = target.GetComponent<Dice>();
+                        DragObj dragObj = dice.GetComponent<DragObj>();
+                        dragObj.eee();
+                        dice.hp -= damage;
+                    }
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
+            void attack_enable_check()
+            {
+                // 手札が発動コストを満たしているか確認
+                if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
+                {
+                    List<GameObject> attackers = Attackable_dice_object(distance);
+                    if (attackers.Count == 0)
+                    {
+                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "有効射程範囲に敵ダイスが存在しません");
+                        if (card_choose == true)
+                        {
+                            step = EFFECT.STEP.IDLE;
+                        }
+                    }
+                    else if (attackers.Count > 0)
+                    {
+                        activate_step = ACTIVATE.STEP.IDLE;
+                        if (cost == 1 && activate_cost != EFFECT.COST.ONE)
+                        {
+                            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                            if (card_choose == true)
+                            {
+                                //enable_cost = GetHand();
+                                activate_cost = EFFECT.COST.ONE;
+                                CardObj _cardobj = GetComponentInParent<CardObj>();
+                                _cardobj.GetCardCost(cost);
+                                Card card = GetComponentInParent<Card>();
+                                card.activate = true;
+                            }
+                        }
+                        if (cost == 2 && activate_cost != EFFECT.COST.TWO)
+                        {
+                            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                            if (card_choose == true)
+                            {
+                                //enable_cost = GetHand();
+                                activate_cost = EFFECT.COST.TWO;
+                                CardObj _cardobj = GetComponentInParent<CardObj>();
+                                _cardobj.GetCardCost(cost);
+                                Card card = GetComponentInParent<Card>();
+                                card.activate = true;
+                            }
+                        }
+                        if (cost > 3)
+                        {
+                            bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+                        }
+
+                        if (activate_cost == EFFECT.COST.ONE)
+                        {
+                            // カードの発動コストを支払い終えたか確認
+                            if (this.CardExistActivate() == false)
+                            {
+                                if (cardname == "A_11")
+                                {
+                                    A11_processing();
+                                }
+                                else if (cardname != "A_11")
+                                {
+                                    attack_processing();
+                                }
+
+                            }
+                        }
+
+                        if (activate_cost == EFFECT.COST.TWO)
+                        {
+                            // カードの発動コストを支払い終えたか確認
+                            if (this.CardExistActivate() == false)
+                            {
+                                attack_processing();
+                            }
+                        }
+
+                        if (cost == 0)
+                        {
+                            attack_processing();
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("cost:" + cost + "enable_cost:" + enable_cost);
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "このカードの発動に必要なコストが足りていません");
                     if (card_choose == true)
                     {
                         step = EFFECT.STEP.IDLE;
                     }
                 }
-                else if (attackers.Count > 0)
-                {
-                    activate_step = ACTIVATE.STEP.IDLE;
-                    if (cost == 1 && activate_cost != EFFECT.COST.ONE)
-                    {
-                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
-                        if (card_choose == true)
-                        {
-                            //enable_cost = GetHand();
-                            activate_cost = EFFECT.COST.ONE;
-                            CardObj _cardobj = GetComponentInParent<CardObj>();
-                            _cardobj.GetCardCost(cost);
-                            Card card = GetComponentInParent<Card>();
-                            card.activate = true;
-                        }
-                    }
-                    if (cost == 2 && activate_cost != EFFECT.COST.TWO)
-                    {
-                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
-                        if (card_choose == true)
-                        {
-                            //enable_cost = GetHand();
-                            activate_cost = EFFECT.COST.TWO;
-                            CardObj _cardobj = GetComponentInParent<CardObj>();
-                            _cardobj.GetCardCost(cost);
-                            Card card = GetComponentInParent<Card>();
-                            card.activate = true;
-                        }
-                    }
-                    if (cost > 3)
-                    {
-                        bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
-                    }
-
-                    if (activate_cost == EFFECT.COST.ONE)
-                    {
-                        // カードの発動コストを支払い終えたか確認
-                        if (this.CardExistActivate() == false)
-                        {
-                            attack_processing();
-                        }
-                    }
-
-                    if (activate_cost == EFFECT.COST.TWO)
-                    {
-                        // カードの発動コストを支払い終えたか確認
-                        if (this.CardExistActivate() == false)
-                        {
-                            attack_processing();
-                        }
-                    }
-
-                    if (cost == 0)
-                    {
-                        attack_processing();
-                    }
-                }
             }
-            else
+
+
+            if (cardname == "A_1")
             {
-                Debug.Log("cost:" + cost + "enable_cost:" + enable_cost);
-                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "このカードの発動に必要なコストが足りていません");
-                if (card_choose == true)
-                {
-                    step = EFFECT.STEP.IDLE;
-                }
+                attack_enable_check();
+            }
+            if (cardname == "A_2")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_3")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_4")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_5")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_6")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_7")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_8")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_9")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_10")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_11")
+            {
+                attack_enable_check();
             }
         }
 
@@ -1054,7 +1210,6 @@ public class CardEffect : MonoBehaviour
             {
                 dice_x = target.GetComponent<Dice>().x;
                 dice_y = target.GetComponent<Dice>().y;
-;
                 bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                 if (activate_i == true)
                 {

@@ -127,6 +127,50 @@ public class Dice_move1 : MonoBehaviour
         }
         return moves;
     }
+
+    public int[,] GetMoves_5(bool reverse = false)
+    {
+        int reversenum = 1;
+        if (reverse)
+        {
+            reversenum = -1;
+        }
+        int[,] moves = new int[17, 2];
+
+        int[] xs = { 4, 3, 2, 1, -4, -3, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        int[] ys = { 0, 0, 0, 0, 0, 0, 0, 0, 4, 3, 2, 1, -4, -3, -2, -1, 0 };
+        int i = 0;
+        foreach (int x in xs)
+        {
+            int y = ys[i];
+            moves[i, 0] = x;
+            moves[i, 1] = y * reversenum;
+            i++;
+        }
+        return moves;
+    }
+
+    public int[,] GetMoves_i1(bool reverse = false)
+    {
+        int reversenum = 1;
+        if (reverse)
+        {
+            reversenum = -1;
+        }
+        int[,] moves = new int[5, 2];
+
+        int[] xs = { 1, -1, -1, 1, 0 };
+        int[] ys = { 1, -1, 1, -1, 0 };
+        int i = 0;
+        foreach (int x in xs)
+        {
+            int y = ys[i];
+            moves[i, 0] = x;
+            moves[i, 1] = y * reversenum;
+            i++;
+        }
+        return moves;
+    }
 }
 
 /*
