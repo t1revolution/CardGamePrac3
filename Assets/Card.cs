@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    /*
     public Text typeText;
     public Text atText;
     public Text nameText;
+    */
     public int cost;
     public string name;
     public int type;
@@ -29,9 +31,11 @@ public class Card : MonoBehaviour
         flag = _cardData.flag;
         activate = _cardData.activate;
         selected = _cardData.selected;
+        /*
         typeText.text = type.ToString();
         nameText.text = name.ToString();
         atText.text = cost.ToString();
+        */
     }
     
     /*

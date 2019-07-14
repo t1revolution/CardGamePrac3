@@ -50,12 +50,12 @@ public class GameMaster : MonoBehaviour
 
     List<DiceData> DiceDataList = new List<DiceData>()
     {
-        new DiceData(1, "dice1", 6, 1, 5, true, false, false),
-        new DiceData(2, "dice2", 6, 3, 5, true, false, false),
-        new DiceData(3, "dice3", 6, 5, 5, true, false, false),
-        new DiceData(4, "dice4", 6, 1, 1, false, false, false),
-        new DiceData(5, "dice5", 6, 3, 1, false, false, false),
-        new DiceData(6, "dice6", 6, 5, 1, false, false, false),
+        new DiceData(0, "dice1", 6, 1, 5, true, false, false),
+        new DiceData(0, "dice2", 6, 3, 5, true, false, false),
+        new DiceData(0, "dice3", 6, 5, 5, true, false, false),
+        new DiceData(0, "dice4", 6, 1, 1, false, false, false),
+        new DiceData(0, "dice5", 6, 3, 1, false, false, false),
+        new DiceData(0, "dice6", 6, 5, 1, false, false, false),
     };
     List<CardData> ManacardDataList1 = new List<CardData>()
     {
@@ -69,29 +69,35 @@ public class GameMaster : MonoBehaviour
     };
     List<CardData> player1CardDataList = new List<CardData>()
     {
-        new CardData(0, "A_1", (int)Type.ATTACK, 2, true, false, false),
-        new CardData(1, "A_2", (int)Type.ATTACK, 1, true, false, false),
-        new CardData(2, "A_3", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(3, "A_4", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(4, "A_5", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(5, "A_6", (int)Type.ATTACK, 2, true, false, false),
-        new CardData(6, "A_7", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(7, "A_8", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(8, "A_9", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(9, "A_10", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(1, "A_1", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(2, "A_2", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(3, "A_3", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(4, "A_4", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(5, "A_5", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(7, "A_7", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(8, "A_8", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(9, "A_9", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(10, "A_10", (int)Type.ATTACK, 1, true, false, false),
     };
     List<CardData> player2CardDataList = new List<CardData>()
     {
-        new CardData(0, "A_11", (int)Type.ATTACK, 1, false, false, false),
-        new CardData(1, "R_1", (int)Type.REFLECT, 1, false, false, false),
-        new CardData(2, "R_2", (int)Type.REFLECT, 1, false, false, false),
-        new CardData(3, "R_3", (int)Type.REFLECT, 1, false, false, false),
-        new CardData(4, "R_4", (int)Type.REFLECT, 1, false, false, false),
-        new CardData(5, "S_1", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(6, "S_2", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(7, "S_3", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(8, "S_4", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(9, "S_5", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(1, "A_11", (int)Type.ATTACK, 1, false, false, false),
+        new CardData(2, "R_1", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(3, "R_2", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(4, "R_3", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(5, "R_4", (int)Type.REFLECT, 1, false, false, false),
+        new CardData(6, "S_1", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(7, "S_2", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(8, "S_3", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(9, "S_4", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(10, "S_5", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(11, "A_1", (int)Type.ATTACK, 2, false, false, false),
+        new CardData(12, "A_2", (int)Type.ATTACK, 1, false, false, false),
+        new CardData(13, "A_3", (int)Type.ATTACK, 0, false, false, false),
+        new CardData(14, "A_4", (int)Type.ATTACK, 0, false, false, false),
+        new CardData(15, "A_5", (int)Type.ATTACK, 0, false, false, false),
+        new CardData(16, "A_6", (int)Type.ATTACK, 2, false, false, false),
     };
 
     public player1 currentPlayer;
@@ -181,6 +187,10 @@ public class GameMaster : MonoBehaviour
         Debug.Log("EndPhase");
         currentPlayer.SetGraveyard();
         currentPlayer.SetManazone();
+
+        CardEffect cardeffect = this.GetComponent<CardEffect>();
+        cardeffect.MoveCountReset();
+
         player1 tmpPlayer = waitPlayer;
         waitPlayer = currentPlayer;
         currentPlayer = tmpPlayer;
