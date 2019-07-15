@@ -740,7 +740,19 @@ public class CardEffect : MonoBehaviour
 
         return setcard_Count;
     }
+
+    public int Getgraveyard()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Graveyard graveyard = gameObj.transform.parent.GetComponentInChildren<Graveyard>();
+        int graveyard_num = graveyard.Get_graveyard_num();
+        
+        return graveyard_num;
+    }
     
+
     public bool CardExistActivate()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
@@ -1101,7 +1113,11 @@ public class CardEffect : MonoBehaviour
                     }
                     if (cardname == "A_9")
                     {
-                        player.Draw();
+                        int graveyard_num = Getgraveyard();
+                        if (graveyard_num >= 15)
+                        {
+                            damage += 2;
+                        }
                     }
 
                     GameObject target = diceExistSelected();

@@ -23,6 +23,11 @@ public class Graveyard : MonoBehaviour
     {
         Debug.Log("TEST_aAAAAa");
     }
+    public int Get_graveyard_num()
+    {
+        int graveyard_num = this.transform.childCount;
+        return graveyard_num;
+    }
 }
 
 /*
