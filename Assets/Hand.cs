@@ -42,4 +42,11 @@ public class Hand : MonoBehaviour
     {
         Debug.Log("slkjlsd");
     }
+
+    public int Get_handnum()
+    {
+        //int handnum;
+        int handnum = this.transform.childCount;
+        return handnum;
+    }
 }

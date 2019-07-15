@@ -59,7 +59,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     private Image image;
     private Sprite sprite;
-    enum Type
+    public enum Type
     {
         ATTACK,
         SUPPORT,

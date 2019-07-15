@@ -63,4 +63,19 @@ public class Field : MonoBehaviour
     {
         return cardList[_position];
     }
+
+    public int Get_setcard_num()
+    {
+        int setcard_num = 0;
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.type == (int)CardObj.Type.REFLECT)
+            {
+                setcard_num += 1;
+            }
+        }
+        return setcard_num;
+    }
 }

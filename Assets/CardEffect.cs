@@ -706,24 +706,41 @@ public class CardEffect : MonoBehaviour
     {
         Dice dice = GetComponentInParent<Dice>();
         GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Hand hand = gameObj.transform.parent.GetComponentInChildren<Hand>();
+        int handnum = hand.Get_handnum();
+
+        /*
         GameObject gamehandobj = GameObject.Find("Hand");
         int pObjCount = gameObj.transform.childCount;
         int cObjCount = this.transform.childCount;
         int handCount = gamehandobj.transform.childCount;
-
-
-        var targets = GameObject.FindGameObjectsWithTag("CARD");
-        int cardnum = 0;
-        foreach (GameObject target in targets)
-        {
-            if (target.GetComponent<Card>().flag == flag)
-            {
-                cardnum++;
-            }
-        }
-        return handCount;
+        //return handCount;
+        */
+        return handnum;
     }
 
+    public int Getsetcard()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        GameObject playerObj = GameObject.Find("Player");
+        GameObject playerObj1 = GameObject.Find("Player (1)");
+
+        Field field = playerObj.GetComponentInChildren<Field>();
+        Field field1 = playerObj1.GetComponentInChildren<Field>();
+
+        int setcard_num = field.Get_setcard_num();
+        int setcard_num1 = field1.Get_setcard_num();
+        int setcard_Count = setcard_num + setcard_num1;
+
+        Debug.Log("setcard_num:" + setcard_num);
+        Debug.Log("setcard_num1:" + setcard_num1);
+        Debug.Log("setcard_Count:" + setcard_Count);
+
+        return setcard_Count;
+    }
+    
     public bool CardExistActivate()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
@@ -1079,7 +1096,8 @@ public class CardEffect : MonoBehaviour
                     }
                     if (cardname == "A_2")
                     {
-                        move_1(attackerObj);
+                        int setcard_num = Getsetcard();
+                        damage = setcard_num;
                     }
                     if (cardname == "A_9")
                     {
@@ -1092,8 +1110,6 @@ public class CardEffect : MonoBehaviour
                     DragObj dragObj = target_dice.GetComponent<DragObj>();
                     dragObj.eee();
                     target_dice.hp -= damage;
-
-                    
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
