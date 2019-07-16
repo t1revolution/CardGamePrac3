@@ -73,11 +73,18 @@ public class DragObj : MonoBehaviour
     {
         this.dice_step = DICE.STEP.TOUCHE1;
     }
-    // ダイスの移動に関する関数
-    public void dicetranslate2()
+    // ダイスの移動に関する関数** 2とはSupportカードで起きたバグのためselected
+    // をここで変更するために処理を変えたため必要になった。
+    public void dicetranslate2_1()
     {
-        this.dice_step = DICE.STEP.TOUCHE2;
+        this.dice_step = DICE.STEP.TOUCHE2_1;
     }
+    // ダイスの移動に関する関数
+    public void dicetranslate2_2()
+    {
+        this.dice_step = DICE.STEP.TOUCHE2_2;
+    }
+
     // ダイスのダメージに関する関数
     public void dicestep_damage()
     {
@@ -237,7 +244,96 @@ public class DragObj : MonoBehaviour
             }
         }
 
-        if (dice_step == DICE.STEP.TOUCHE2)
+        if (dice_step == DICE.STEP.TOUCHE2_1)
+        {
+            Dice dice = GetComponentInParent<Dice>();
+            Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
+            
+            //List<KomaMove> moves = new List<KomaMove>();
+            int[,] moves = new int[4, 2];
+            bool[] koma_able = new bool[4];
+            float[,] koma_position = new float[4,2];
+
+            moves = dice_move1.GetMoves();
+            Vector3 tmp = this.transform.position;
+
+            for(int i = 0; i < 4; i++)
+            {
+                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                {
+                    koma_able[i] = false;　
+                    koma_position[i, 0] = 0.0f;
+                    koma_position[i, 1] = 0.0f;
+                    continue;
+                }
+                if (dice.y + moves[i, 1] > 5 || dice.y + moves[i, 1] < 1)
+                {
+                    koma_able[i] = false;
+                    koma_position[i, 0] = 0.0f;
+                    koma_position[i, 1] = 0.0f;
+                    continue;
+                }
+                if (dice.flag == true)
+                {
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
+                    koma_able[i] = activate_i;
+                }
+                else if (dice.flag == false)
+                {
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
+                    koma_able[i] = activate_i;
+                }
+            }
+
+            if (koma_able[0] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
+                dice.x = dice.x + moves[0, 0];
+                dice.y = dice.y + moves[0, 1];
+                dice.selected = true;
+            }
+            if (koma_able[1] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[1, 0], koma_position[1, 1], 0);
+                dice.x = dice.x + moves[1, 0];
+                dice.y = dice.y + moves[1, 1];
+                dice.selected = true;
+            }
+            if (koma_able[2] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[2, 0], koma_position[2, 1], 0);
+                dice.x = dice.x + moves[2, 0];
+                dice.y = dice.y + moves[2, 1];
+                dice.selected = true;
+            }
+            if (koma_able[3] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[3, 0], koma_position[3, 1], 0);
+                dice.x = dice.x + moves[3, 0];
+                dice.y = dice.y + moves[3, 1];
+                dice.selected = true;
+            }
+        }
+
+        if (dice_step == DICE.STEP.TOUCHE2_2)
         {
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
@@ -292,6 +388,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
                 dice.x = dice.x + moves[0, 0];
                 dice.y = dice.y + moves[0, 1];
+                dice.selected = true;
             }
             if (koma_able[1] == true)
             {
@@ -301,6 +398,10 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[1, 0], koma_position[1, 1], 0);
                 dice.x = dice.x + moves[1, 0];
                 dice.y = dice.y + moves[1, 1];
+
+                // A_9 の攻撃後の移動ができてここでできない理由がわからないが、時間の都合上ここで整合性をとって
+                // S1_S3_S4_S6_processing を機能させることを優先する。
+                dice.selected = true;
             }
             if (koma_able[2] == true)
             {
@@ -310,6 +411,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[2, 0], koma_position[2, 1], 0);
                 dice.x = dice.x + moves[2, 0];
                 dice.y = dice.y + moves[2, 1];
+                dice.selected = true;
             }
             if (koma_able[3] == true)
             {
@@ -319,6 +421,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[3, 0], koma_position[3, 1], 0);
                 dice.x = dice.x + moves[3, 0];
                 dice.y = dice.y + moves[3, 1];
+                dice.selected = true;
             }
             if (koma_able[4] == true)
             {
@@ -328,6 +431,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[4, 0], koma_position[4, 1], 0);
                 dice.x = dice.x + moves[4, 0];
                 dice.y = dice.y + moves[4, 1];
+                dice.selected = true;
             }
             if (koma_able[5] == true)
             {
@@ -337,6 +441,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[5, 0], koma_position[5, 1], 0);
                 dice.x = dice.x + moves[5, 0];
                 dice.y = dice.y + moves[5, 1];
+                dice.selected = true;
             }
             if (koma_able[6] == true)
             {
@@ -346,6 +451,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[6, 0], koma_position[6, 1], 0);
                 dice.x = dice.x + moves[6, 0];
                 dice.y = dice.y + moves[6, 1];
+                dice.selected = true;
             }
             if (koma_able[7] == true)
             {
@@ -355,6 +461,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[7, 0], koma_position[7, 1], 0);
                 dice.x = dice.x + moves[7, 0];
                 dice.y = dice.y + moves[7, 1];
+                dice.selected = true;
             }
             if (koma_able[8] == true)
             {
@@ -364,6 +471,7 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[8, 0], koma_position[8, 1], 0);
                 dice.x = dice.x + moves[8, 0];
                 dice.y = dice.y + moves[8, 1];
+                dice.selected = true;
             }
             /*
             if (koma_able[9] == true)
