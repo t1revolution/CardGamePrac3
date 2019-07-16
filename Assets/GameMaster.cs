@@ -78,7 +78,12 @@ public class GameMaster : MonoBehaviour
         new CardData(7, "A_7", (int)Type.ATTACK, 0, true, false, false),
         new CardData(8, "A_8", (int)Type.ATTACK, 0, true, false, false),
         new CardData(9, "A_9", (int)Type.ATTACK, 0, true, false, false),
-        new CardData(10, "A_10", (int)Type.ATTACK, 1, true, false, false),
+        new CardData(10, "A_10", (int)Type.ATTACK, 0, true, false, false),
+        new CardData(11, "S_6", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(13, "S_8", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(14, "S_9", (int)Type.SUPPORT, 2, true, false, false),
+        new CardData(15, "S_10", (int)Type.SUPPORT, 3, true, false, false),
     };
     List<CardData> player2CardDataList = new List<CardData>()
     {
@@ -87,17 +92,19 @@ public class GameMaster : MonoBehaviour
         new CardData(3, "R_2", (int)Type.REFLECT, 1, false, false, false),
         new CardData(4, "R_3", (int)Type.REFLECT, 1, false, false, false),
         new CardData(5, "R_4", (int)Type.REFLECT, 1, false, false, false),
-        new CardData(6, "S_1", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(7, "S_2", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(8, "S_3", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(9, "S_4", (int)Type.SUPPORT, 1, false, false, false),
-        new CardData(10, "S_5", (int)Type.SUPPORT, 1, false, false, false),
+        new CardData(6, "S_1", (int)Type.SUPPORT, 0, false, false, false),
+        new CardData(7, "S_2", (int)Type.SUPPORT, 0, false, false, false),
+        new CardData(8, "S_3", (int)Type.SUPPORT, 0, false, false, false),
+        new CardData(9, "S_4", (int)Type.SUPPORT, 0, false, false, false),
+        new CardData(10, "S_5", (int)Type.SUPPORT, 2, false, false, false),
+        /*
         new CardData(11, "A_1", (int)Type.ATTACK, 2, false, false, false),
         new CardData(12, "A_2", (int)Type.ATTACK, 1, false, false, false),
         new CardData(13, "A_3", (int)Type.ATTACK, 0, false, false, false),
         new CardData(14, "A_4", (int)Type.ATTACK, 0, false, false, false),
         new CardData(15, "A_5", (int)Type.ATTACK, 0, false, false, false),
         new CardData(16, "A_6", (int)Type.ATTACK, 2, false, false, false),
+        */
     };
 
     public player1 currentPlayer;

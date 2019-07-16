@@ -69,12 +69,17 @@ public class DragObj : MonoBehaviour
 
     // CardObjからcard名を受け取り発動タイプを切り分ける関数
     // ダイスの移動に関する関数
-    public void ddd()
+    public void dicetranslate1()
     {
-        this.dice_step = DICE.STEP.TOUCHE;
+        this.dice_step = DICE.STEP.TOUCHE1;
+    }
+    // ダイスの移動に関する関数
+    public void dicetranslate2()
+    {
+        this.dice_step = DICE.STEP.TOUCHE2;
     }
     // ダイスのダメージに関する関数
-    public void eee()
+    public void dicestep_damage()
     {
         this.dice_step = DICE.STEP.DAMAGED;
     }
@@ -110,7 +115,7 @@ public class DragObj : MonoBehaviour
         float basex = 735f + per1x;
         float basey = 590f + per1y;
 
-        if (dice_step == DICE.STEP.TOUCHE)
+        if (dice_step == DICE.STEP.TOUCHE1)
         {
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
@@ -230,6 +235,147 @@ public class DragObj : MonoBehaviour
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[3, 0]:" + koma_position[3, 0] + "koma_position[3, 1]:" + koma_position[3, 1]);
             }
+        }
+
+        if (dice_step == DICE.STEP.TOUCHE2)
+        {
+            Dice dice = GetComponentInParent<Dice>();
+            Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
+            
+            //List<KomaMove> moves = new List<KomaMove>();
+            int[,] moves = new int[9, 2];
+            bool[] koma_able = new bool[9];
+            float[,] koma_position = new float[9,2];
+
+            moves = dice_move1.GetMoves_2();
+            Vector3 tmp = this.transform.position;
+
+            for(int i = 0; i < 9; i++)
+            {
+                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                {
+                    koma_able[i] = false;　
+                    koma_position[i, 0] = 0.0f;
+                    koma_position[i, 1] = 0.0f;
+                    continue;
+                }
+                if (dice.y + moves[i, 1] > 5 || dice.y + moves[i, 1] < 1)
+                {
+                    koma_able[i] = false;
+                    koma_position[i, 0] = 0.0f;
+                    koma_position[i, 1] = 0.0f;
+                    continue;
+                }
+                if (dice.flag == true)
+                {
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
+                    koma_able[i] = activate_i;
+                }
+                else if (dice.flag == false)
+                {
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
+                    koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
+                    koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
+
+                    koma_able[i] = activate_i;
+                }
+            }
+
+            if (koma_able[0] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
+                dice.x = dice.x + moves[0, 0];
+                dice.y = dice.y + moves[0, 1];
+            }
+            if (koma_able[1] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[1, 0], koma_position[1, 1], 0);
+                dice.x = dice.x + moves[1, 0];
+                dice.y = dice.y + moves[1, 1];
+            }
+            if (koma_able[2] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[2, 0], koma_position[2, 1], 0);
+                dice.x = dice.x + moves[2, 0];
+                dice.y = dice.y + moves[2, 1];
+            }
+            if (koma_able[3] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[3, 0], koma_position[3, 1], 0);
+                dice.x = dice.x + moves[3, 0];
+                dice.y = dice.y + moves[3, 1];
+            }
+            if (koma_able[4] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[4, 0], koma_position[4, 1], 0);
+                dice.x = dice.x + moves[4, 0];
+                dice.y = dice.y + moves[4, 1];
+            }
+            if (koma_able[5] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[5, 0], koma_position[5, 1], 0);
+                dice.x = dice.x + moves[5, 0];
+                dice.y = dice.y + moves[5, 1];
+            }
+            if (koma_able[6] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[6, 0], koma_position[6, 1], 0);
+                dice.x = dice.x + moves[6, 0];
+                dice.y = dice.y + moves[6, 1];
+            }
+            if (koma_able[7] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[7, 0], koma_position[7, 1], 0);
+                dice.x = dice.x + moves[7, 0];
+                dice.y = dice.y + moves[7, 1];
+            }
+            if (koma_able[8] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[8, 0], koma_position[8, 1], 0);
+                dice.x = dice.x + moves[8, 0];
+                dice.y = dice.y + moves[8, 1];
+            }
+            /*
+            if (koma_able[9] == true)
+            {
+                this.dice_step = DICE.STEP.NONE;
+                this.step = CARD.STEP.IDLE;
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
+                this.transform.position = new Vector3(koma_position[9, 0], koma_position[9, 1], 0);
+                dice.x = dice.x + moves[9, 0];
+                dice.y = dice.y + moves[9, 1];
+            }
+            */
         }
 
         else if (dice_step == DICE.STEP.DAMAGED)

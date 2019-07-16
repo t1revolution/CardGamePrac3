@@ -12,6 +12,7 @@ class EFFECT
         IDLE = 0,
         ATTACK,
         MANA,
+        SUPORT,
     };
     public enum TYPE
     {
@@ -109,6 +110,56 @@ public class CardEffect : MonoBehaviour
         {
             cardname = card.name;
             step = EFFECT.STEP.MANA;
+        }
+        if (card.name == "S_1")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_2")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_3")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_4")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_5")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_6")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_7")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_8")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_9")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
+        }
+        if (card.name == "S_10")
+        {
+            cardname = card.name;
+            step = EFFECT.STEP.SUPORT;
         }
     }
 
@@ -278,6 +329,21 @@ public class CardEffect : MonoBehaviour
         int[,] position = new int[a, 5];
         //position = Getdiceposition();
         position = Get_own_diceposition();
+        return position;
+    }
+
+    public int[,] S_1()
+    {
+        int a;
+        int damage = 1;
+        int distance = 5;
+        int cost = 1;
+        a = Getdiceposition().GetLength(0);
+        int[,] position = new int[a, 5];
+        position = Getdiceposition();
+        position[0, 2] = damage;
+        position[0, 3] = distance;
+        position[0, 4] = cost;
         return position;
     }
 
@@ -1041,7 +1107,7 @@ public class CardEffect : MonoBehaviour
                     GameObject target = diceExistSelected();
                     Dice dice = target.GetComponent<Dice>();
                     DragObj dragObj = dice.GetComponent<DragObj>();
-                    dragObj.eee();
+                    dragObj.dicestep_damage();
                     dice.hp -= damage;
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
@@ -1124,7 +1190,7 @@ public class CardEffect : MonoBehaviour
                     Dice target_dice = target.GetComponent<Dice>();
                     Dice attacker_dice = attackerObj.GetComponent<Dice>();
                     DragObj dragObj = target_dice.GetComponent<DragObj>();
-                    dragObj.eee();
+                    dragObj.dicestep_damage();
                     target_dice.hp -= damage;
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
@@ -1187,7 +1253,7 @@ public class CardEffect : MonoBehaviour
                     Dice target_dice = target.GetComponent<Dice>();
                     Dice attacker_dice = attackerObj.GetComponent<Dice>();
                     DragObj dragObj = target_dice.GetComponent<DragObj>();
-                    dragObj.eee();
+                    dragObj.dicestep_damage();
                     target_dice.hp -= damage;
 
                     if (cardname == "A_7")
@@ -1259,7 +1325,7 @@ public class CardEffect : MonoBehaviour
                     {
                         Dice dice = target.GetComponent<Dice>();
                         DragObj dragObj = dice.GetComponent<DragObj>();
-                        dragObj.eee();
+                        dragObj.dicestep_damage();
                         dice.hp -= damage;
                     }
                     step = EFFECT.STEP.IDLE;
@@ -1396,6 +1462,613 @@ public class CardEffect : MonoBehaviour
                 }
             }
 
+            attack_enable_check();
+
+            /*
+            if (cardname == "A_1")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_2")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_3")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_4")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_5")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_6")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_7")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_8")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_9")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_10")
+            {
+                attack_enable_check();
+            }
+            if (cardname == "A_11")
+            {
+                attack_enable_check();
+            }
+            */
+        }
+
+        if (step == EFFECT.STEP.MANA)
+        {
+            GameObject gameOb = GameObject.Find("GameMaster");
+            GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+            player1 player = gamemaster.currentPlayer;
+            Card card = this.GetComponent<Card>();
+            player.PushSettingCardOnFieldFromHand(card);
+            int dice_x;
+            int dice_y;
+            List<GameObject> targets = own_diceList();
+            foreach (GameObject target in targets)
+            {
+                dice_x = target.GetComponent<Dice>().x;
+                dice_y = target.GetComponent<Dice>().y;
+                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                if (activate_i == true)
+                {
+                    Dice dice = target.GetComponent<Dice>();
+                    dice.movecount += 1;
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicetranslate1();
+                    step = EFFECT.STEP.IDLE;
+                }
+            }
+        }
+
+
+   //#####################################################################################################
+
+
+        if (this.step == EFFECT.STEP.SUPORT)
+        {
+            int[,] position = A_1();
+            /*
+             
+            ここに個別の処理をそれぞれ埋め込む 
+             */
+            if (cardname == "A_1")
+            {
+                position = A_1();
+            }
+            if (cardname == "A_2")
+            {
+                position = A_2();
+            }
+            if (cardname == "A_3")
+            {
+                position = A_3();
+            }
+            if (cardname == "A_4")
+            {
+                position = A_4();
+            }
+            if (cardname == "A_5")
+            {
+                position = A_5();
+            }
+            if (cardname == "A_6")
+            {
+                position = A_6();
+            }
+            if (cardname == "A_7")
+            {
+                position = A_7();
+            }
+            if (cardname == "A_8")
+            {
+                position = A_8();
+            }
+            if (cardname == "A_9")
+            {
+                position = A_9();
+            }
+            if (cardname == "A_10")
+            {
+                position = A_10();
+            }
+            if (cardname == "A_11")
+            {
+                position = A_11();
+            }
+
+            Card card_ = this.GetComponent<Card>();
+
+            int damage = position[0, 2];
+            int distance = position[0, 3];
+            int cost = card_.cost;
+            int[,] own_dice_position = Get_own_diceposition();
+            int[,] opp_dice_position = Get_opp_diceposition();
+            int enable_cost = GetHand() - 1; // 発動中のカードを除くため-1
+            //int in_distance_dicenum = Get_in_distance_dicenum(distance); // distance内存在する相手のダイス数  distanceを渡せばいいのかな?
+            int dice_x;
+            int dice_y;
+            int attacker_dice_x;
+            int attacker_dice_y;
+            int target_dice_x;
+            int target_dice_y;
+
+            void attack_processing()
+            {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = Attackable_dice_object(distance);
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
+                {
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
+
+                if (activate_dice == true)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    foreach (GameObject target in targets)
+                    {
+                        target_dice_x = target.GetComponent<Dice>().x;
+                        target_dice_y = target.GetComponent<Dice>().y;
+                        bool atrget_i = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "");
+                        if (atrget_i == true)
+                        {
+                            target.GetComponent<Dice>().selected = true;
+                        }
+                    }
+                }
+
+                if (activate_dice == true && selected_dice_num > 0)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    bool target_ = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "tar");
+
+                    GameObject target = diceExistSelected();
+                    Dice dice = target.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    dice.hp -= damage;
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
+            void S1_S3_S4_S6_processing()
+            {
+                //DiceFlagrestore();
+                List<GameObject> own_dicelist = own_diceList();
+                bool activate_dice = DiceExistActivate();
+                Debug.Log("aaaaaaaaaaaaaaaaaa");
+
+
+                foreach (GameObject own_dice in own_dicelist)
+                {
+                    attacker_dice_x = own_dice.GetComponent<Dice>().x;
+                    attacker_dice_y = own_dice.GetComponent<Dice>().y;
+                    bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                    if (attacker_i == true)
+                    {
+                        own_dice.GetComponent<Dice>().activate = true;
+                    }
+                }
+                GameObject attackerObj = diceExistActivate();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                if (cardname == "S_1")
+                {
+                    position = A_1();
+                }
+                if (cardname == "S_3")
+                {
+                    Debug.Log("ccccccccccccccccc");
+                    move_2(attackerObj);
+                }
+                if (cardname == "S_4")
+                {
+                    position = A_3();
+                }
+                if (cardname == "S_6")
+                {
+                    position = A_3();
+                }
+
+                if (activate_dice == true)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+
+                    GameObject target = diceExistSelected();
+                    Dice dice = target.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    //dice.hp -= damage;
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
+            void A1_A2_A9_processing()
+            {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = Attackable_dice_object(distance);
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
+                {
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
+
+                if (activate_dice == true)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    foreach (GameObject target in targets)
+                    {
+                        target_dice_x = target.GetComponent<Dice>().x;
+                        target_dice_y = target.GetComponent<Dice>().y;
+                        bool atrget_i = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "");
+                        if (atrget_i == true)
+                        {
+                            target.GetComponent<Dice>().selected = true;
+                        }
+                    }
+                }
+
+                if (activate_dice == true && selected_dice_num > 0)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    bool target_ = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "tar");
+
+                    if (cardname == "A_1")
+                    {
+                        damage = Get_movecount() / 2;
+                    }
+                    if (cardname == "A_2")
+                    {
+                        int setcard_num = Getsetcard();
+                        damage = setcard_num;
+                    }
+                    if (cardname == "A_9")
+                    {
+                        int graveyard_num = Getgraveyard();
+                        if (graveyard_num >= 15)
+                        {
+                            damage += 2;
+                        }
+                    }
+
+                    GameObject target = diceExistSelected();
+                    Dice target_dice = target.GetComponent<Dice>();
+                    Dice attacker_dice = attackerObj.GetComponent<Dice>();
+                    DragObj dragObj = target_dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    target_dice.hp -= damage;
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+            void A7_A8_A10_processing()
+            {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = Attackable_dice_object(distance);
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
+                {
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
+
+                if (activate_dice == true)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    foreach (GameObject target in targets)
+                    {
+                        target_dice_x = target.GetComponent<Dice>().x;
+                        target_dice_y = target.GetComponent<Dice>().y;
+                        bool atrget_i = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "");
+                        if (atrget_i == true)
+                        {
+                            target.GetComponent<Dice>().selected = true;
+                        }
+                    }
+                }
+                if (activate_dice == true && selected_dice_num > 0)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    bool target_ = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "tar");
+
+                    GameObject target = diceExistSelected();
+                    Dice target_dice = target.GetComponent<Dice>();
+                    Dice attacker_dice = attackerObj.GetComponent<Dice>();
+                    DragObj dragObj = target_dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    target_dice.hp -= damage;
+
+                    if (cardname == "A_7")
+                    {
+                        if (attacker_dice.hp < 6)
+                        {
+                            attacker_dice.hp += damage;
+                        }
+                    }
+                    if (cardname == "A_8")
+                    {
+                        move_1(attackerObj);
+                    }
+                    if (cardname == "A_10")
+                    {
+                        player.Draw();
+                    }
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
+            void A11_processing()
+            {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+                List<GameObject> attackers = Attackable_dice_object(distance);
+
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                if (activate_dice == false)
+                {
+                    foreach (GameObject attacker in attackers)
+                    {
+                        attacker_dice_x = attacker.GetComponent<Dice>().x;
+                        attacker_dice_y = attacker.GetComponent<Dice>().y;
+                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                        if (attacker_i == true)
+                        {
+                            attacker.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                GameObject selectedObj = diceExistSelected();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+                target_dice_x = selectedObj.GetComponent<Dice>().x;
+                target_dice_y = selectedObj.GetComponent<Dice>().y;
+                List<GameObject> targets = Target_dice_object(attackerObj, distance);
+
+                if (activate_dice == true)
+                {
+                    bool attacker_display = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+                    foreach (GameObject target in targets)
+                    {
+                        target.GetComponent<Dice>().selected = true;
+                    }
+                }
+
+                if (activate_dice == true && selected_dice_num > 0)
+                {
+                    foreach (GameObject target in targets)
+                    {
+                        Dice dice = target.GetComponent<Dice>();
+                        DragObj dragObj = dice.GetComponent<DragObj>();
+                        dragObj.dicestep_damage();
+                        dice.hp -= damage;
+                    }
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                }
+            }
+
+            void attack_enable_check()
+            {
+                // 手札が発動コストを満たしているか確認
+                if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
+                {
+                    activate_step = ACTIVATE.STEP.IDLE;
+                    if (cost == 0 && activate_cost != EFFECT.COST.ZERO)
+                    {
+                        Debug.Log("bbbbbbbbbbb");
+
+                        activate_cost = EFFECT.COST.ZERO;
+                        CardObj _cardobj = GetComponentInParent<CardObj>();
+                        _cardobj.GetCardCost(cost);
+                        Card card = GetComponentInParent<Card>();
+                        //card.activate = true;
+                    }
+                    if (cost == 1 && activate_cost != EFFECT.COST.ONE)
+                    {
+                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを1枚選択してください");
+                        if (card_choose == true)
+                        {
+                            //enable_cost = GetHand();
+                            activate_cost = EFFECT.COST.ONE;
+                            CardObj _cardobj = GetComponentInParent<CardObj>();
+                            _cardobj.GetCardCost(cost);
+                            Card card = GetComponentInParent<Card>();
+                            card.activate = true;
+                        }
+                    }
+                    if (cost == 2 && activate_cost != EFFECT.COST.TWO)
+                    {
+                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                        if (card_choose == true)
+                        {
+                            //enable_cost = GetHand();
+                            activate_cost = EFFECT.COST.TWO;
+                            CardObj _cardobj = GetComponentInParent<CardObj>();
+                            _cardobj.GetCardCost(cost);
+                            Card card = GetComponentInParent<Card>();
+                            card.activate = true;
+                        }
+                    }
+                    if (cost > 3)
+                    {
+                        bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+                    }
+
+                    if (activate_cost == EFFECT.COST.ZERO)
+                    {
+                        Debug.Log("dddddddddddddd");
+
+                        if (cardname == "S_3")
+                        {
+                            Debug.Log("eeeeeeeeeeeeeee");
+
+                            S1_S3_S4_S6_processing();
+                        }
+                        else if (cardname == "A_8")
+                        {
+                            A7_A8_A10_processing();
+                        }
+                        else if (cardname == "A_9")
+                        {
+                            A1_A2_A9_processing();
+                        }
+                        else if (cardname == "A_10")
+                        {
+                            A7_A8_A10_processing();
+                        }
+                        else
+                        {
+                            attack_processing();
+                        }
+                    }
+
+                    if (activate_cost == EFFECT.COST.ONE)
+                    {
+                        // カードの発動コストを支払い終えたか確認
+                        if (this.CardExistActivate() == false)
+                        {
+                            if (cardname == "A_2")
+                            {
+                                A1_A2_A9_processing();
+                            }
+                            else if (cardname == "A_11")
+                            {
+                                A11_processing();
+                            }
+                            else
+                            {
+                                attack_processing();
+                            }
+                        }
+                    }
+
+                    if (activate_cost == EFFECT.COST.TWO)
+                    {
+                        // カードの発動コストを支払い終えたか確認
+                        if (this.CardExistActivate() == false)
+                        {
+                            if (cardname == "A_1")
+                            {
+                                A1_A2_A9_processing();
+                            }
+                            else
+                            {
+                                attack_processing();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("cost:" + cost + "enable_cost:" + enable_cost);
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "このカードの発動に必要なコストが足りていません");
+                    if (card_choose == true)
+                    {
+                        step = EFFECT.STEP.IDLE;
+                    }
+                }
+            }
+
 
             if (cardname == "A_1")
             {
@@ -1441,34 +2114,11 @@ public class CardEffect : MonoBehaviour
             {
                 attack_enable_check();
             }
-        }
 
-        if (step == EFFECT.STEP.MANA)
-        {
-            GameObject gameOb = GameObject.Find("GameMaster");
-            GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
-            player1 player = gamemaster.currentPlayer;
-            Card card = this.GetComponent<Card>();
-            player.PushSettingCardOnFieldFromHand(card);
-            int dice_x;
-            int dice_y;
-            List<GameObject> targets = own_diceList();
-            foreach (GameObject target in targets)
-            {
-                dice_x = target.GetComponent<Dice>().x;
-                dice_y = target.GetComponent<Dice>().y;
-                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (activate_i == true)
-                {
-                    Dice dice = target.GetComponent<Dice>();
-                    dice.movecount += 1;
-                    DragObj dragObj = dice.GetComponent<DragObj>();
-                    dragObj.ddd();
-                    step = EFFECT.STEP.IDLE;
-                }
-            }
-        }
+            attack_enable_check();
 
+
+        }
 
         void move_1(GameObject move_dice)
         {
@@ -1478,51 +2128,23 @@ public class CardEffect : MonoBehaviour
             Dice dice = move_dice.GetComponent<Dice>();
             dice.movecount += 1;
             DragObj dragObj = dice.GetComponent<DragObj>();
-            dragObj.ddd();
+            dragObj.dicetranslate1();
             //step = EFFECT.STEP.IDLE;
         }
 
-        /*
-        if (step == EFFECT.STEP.MANA)
+        void move_2(GameObject move_dice)
         {
-            GameObject gameOb = GameObject.Find("GameMaster");
-            GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
-            player1 player = gamemaster.currentPlayer;
-            Card card = this.GetComponent<Card>();
-            player.PushSettingCardOnFieldFromHand(card);
-            int[,] position = M_1();
-            int damage = position[0, 2];
-            int distance = position[0, 3];
-            int dice_x;
-            int dice_y;
-            List<GameObject> targets = own_diceList();
-            for (int i = 0; i < position.GetLength(0); i++)
-            {
-                dice_x = position[i, 0];
-                dice_y = position[i, 1];
-                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (activate_i == true)
-                {
-                    //dice_step = DICE.STEP.TOUCHE;
-                    Debug.Log("aaaaaaaaaaaaaaaaaaaaa");
-                    var gameObj = GameObject.FindGameObjectsWithTag("DICE");
-                    for (int j = 0; j < position.GetLength(0); j++) // A_1でtargetobjごと受け取っていれば同じことをせずに済んだ
-                    {
-                        Dice dice = gameObj[j].GetComponent<Dice>();
-                        Debug.Log("dice.x:" + dice.x + "dice_x:" + dice_x);
-                        Debug.Log("dice.y:" + dice.y + "dice_y:" + dice_y);
-                        if (dice.x == dice_x && dice.y == dice_y) // 再び座標と一致するオブジェクトを探している、後で絶対直す
-                        {
-                            Debug.Log("bbbbbbbbbbbbbbb");
-                            DragObj dragObj = dice.GetComponent<DragObj>();
-                            dragObj.ddd();
-                            step = EFFECT.STEP.IDLE;
-                        }
-                    }
-                }
-            }
+            //GameObject gameOb = GameObject.Find("GameMaster");
+            //Card card = this.GetComponent<Card>();
+
+            Dice dice = move_dice.GetComponent<Dice>();
+            dice.movecount += 2;
+            DragObj dragObj = dice.GetComponent<DragObj>();
+            dragObj.dicetranslate2();
+            //step = EFFECT.STEP.IDLE;
         }
-        */
+
+        
 
     }
 }

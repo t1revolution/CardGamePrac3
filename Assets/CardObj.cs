@@ -32,7 +32,8 @@ public class DICE
     {
         NONE = -1,
         IDLE = 0,
-        TOUCHE,
+        TOUCHE1,
+        TOUCHE2,
         DAMAGED,
         ATTACK,
         TARGET,
@@ -97,7 +98,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     public void DiceAction()
     {
         this.transform.localScale = new Vector3(0.6f, 0.6f, 0.0f);
-        this.dice_step = DICE.STEP.TOUCHE;
+        this.dice_step = DICE.STEP.TOUCHE1;
     }
     // コスト支払い時のみ接触判定で機能する関数
     public void CardCost()
