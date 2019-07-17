@@ -1736,9 +1736,6 @@ public class CardEffect : MonoBehaviour
                 if (cardname == "S_1")
                 {
                     movedices_S_1(own_dicelist);
-                    Debug.Log("aaaaaaaaaaaaaaaa");
-
-
 
                     Dice dice = attackerObj.GetComponent<Dice>();
                     DragObj dragObj = dice.GetComponent<DragObj>();
@@ -1746,19 +1743,17 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
-
                 }
 
                 if (activate_dice == true)
                 {
-                    
                     if (cardname == "S_3")
                     {
                         move_2_2(attackerObj);
-                        //attackerObj.GetComponent<Dice>().selected = true;
                     }
                     if (cardname == "S_4")
                     {
+                        move_2_1(attackerObj);
                     }
                     if (cardname == "S_6")
                     {
@@ -1777,6 +1772,10 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+                    if(cardname == "S_4")
+                    {
+                        dice.hp += 1;
+                    }
                 }
             }
 
@@ -2055,6 +2054,10 @@ public class CardEffect : MonoBehaviour
                         {
                             S1_S3_S4_S6_processing();
                         }
+                        if (cardname == "S_4")
+                        {
+                            S1_S3_S4_S6_processing();
+                        }
                         if (cardname == "S_6")
                         {
                             S1_S3_S4_S6_processing();
@@ -2188,7 +2191,7 @@ public class CardEffect : MonoBehaviour
         void move_2_1(GameObject move_dice)
         {
             Dice dice = move_dice.GetComponent<Dice>();
-            dice.movecount += 2;
+            dice.movecount += 1;
             DragObj dragObj = dice.GetComponent<DragObj>();
             dragObj.dicetranslate2_1();
         }
