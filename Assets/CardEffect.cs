@@ -1733,11 +1733,25 @@ public class CardEffect : MonoBehaviour
                 attacker_dice_x = attackerObj.GetComponent<Dice>().x;
                 attacker_dice_y = attackerObj.GetComponent<Dice>().y;
 
+                if (cardname == "S_1")
+                {
+                    movedices_S_1(own_dicelist);
+                    Debug.Log("aaaaaaaaaaaaaaaa");
+
+
+
+                    Dice dice = attackerObj.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+
+                }
+
                 if (activate_dice == true)
                 {
-                    if (cardname == "S_1")
-                    {
-                    }
+                    
                     if (cardname == "S_3")
                     {
                         move_2_2(attackerObj);
@@ -2033,6 +2047,10 @@ public class CardEffect : MonoBehaviour
 
                     if (activate_cost == EFFECT.COST.ZERO)
                     {
+                        if (cardname == "S_1")
+                        {
+                            S1_S3_S4_S6_processing();
+                        }
                         if (cardname == "S_3")
                         {
                             S1_S3_S4_S6_processing();
@@ -2181,6 +2199,18 @@ public class CardEffect : MonoBehaviour
             dice.movecount += 2;
             DragObj dragObj = dice.GetComponent<DragObj>();
             dragObj.dicetranslate2_2();
+        }
+
+        //void movedices_S_1(GameObject move_dice)
+        void movedices_S_1(List<GameObject> move_dices)
+        {
+            foreach (GameObject move_dice in move_dices)
+            {
+                Dice dice = move_dice.GetComponent<Dice>();
+                //dice.movecount += 1;
+                DragObj dragObj = dice.GetComponent<DragObj>();
+                dragObj.dicetranslate_S_1();
+            }
         }
 
         if (step == EFFECT.STEP.MANA)

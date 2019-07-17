@@ -35,6 +35,7 @@ public class DICE
         TOUCHE1,
         TOUCHE2_1,
         TOUCHE2_2,
+        TOUCHE_S_1,
         DAMAGED,
         ATTACK,
         TARGET,

@@ -85,6 +85,11 @@ public class DragObj : MonoBehaviour
         this.dice_step = DICE.STEP.TOUCHE2_2;
     }
 
+    public void dicetranslate_S_1()
+    {
+        this.dice_step = DICE.STEP.TOUCHE_S_1;
+    }
+
     // ダイスのダメージに関する関数
     public void dicestep_damage()
     {
@@ -473,17 +478,51 @@ public class DragObj : MonoBehaviour
                 dice.y = dice.y + moves[8, 1];
                 dice.selected = true;
             }
-            /*
-            if (koma_able[9] == true)
+        }
+
+        if (dice_step == DICE.STEP.TOUCHE_S_1)
+        {
+            Dice dice = GetComponentInParent<Dice>();
+            Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
+
+            int[,] moves = new int[1, 2];
+            bool koma_able = false;
+            float[,] koma_position = new float[4, 2];
+
+            if (dice.flag == false)
+            {
+                moves[0, 0] = 0;
+                moves[0, 1] = 1;
+            }
+            else if (dice.flag == true)
+            {
+                moves[0, 0] = 0;
+                moves[0, 1] = -1;
+            }
+
+            if (dice.x + moves[0, 0] <= 5 && dice.x + moves[0, 0] >= 1)
+            {
+                if (dice.y + moves[0, 1] <= 5 && dice.y + moves[0, 1] >= 1)
+                {
+                    koma_able = true;
+                }
+            }
+            
+            koma_position[0, 0] = basex - per1x * (dice.x + moves[0, 0]);
+            koma_position[0, 1] = basey - per1y * (dice.y + moves[0, 1]);
+            if (koma_able == true)
             {
                 this.dice_step = DICE.STEP.NONE;
                 this.step = CARD.STEP.IDLE;
                 this.transform.localScale = new Vector3(0.5f, 0.5f, 0.0f);
-                this.transform.position = new Vector3(koma_position[9, 0], koma_position[9, 1], 0);
-                dice.x = dice.x + moves[9, 0];
-                dice.y = dice.y + moves[9, 1];
+                this.transform.position = new Vector3(koma_position[0, 0], koma_position[0, 1], 0);
+                dice.movecount += 1;
+
+                dice.x = dice.x + moves[0, 0];
+                dice.y = dice.y + moves[0, 1];
+                Debug.Log("x:" + dice.x + "y:" + dice.y);
+                Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
             }
-            */
         }
 
         else if (dice_step == DICE.STEP.DAMAGED)
