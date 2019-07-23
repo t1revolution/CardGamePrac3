@@ -817,7 +817,26 @@ public class CardEffect : MonoBehaviour
         
         return graveyard_num;
     }
-    
+
+    public int GetExistS_2()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        int S_2_num = field.GetS_2();
+        return S_2_num;
+    }
+
+    public int GetExistS_2_activate()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        int S_2_activatenum = field.GetS_2_activate();
+        return S_2_activatenum;
+    }
 
     public bool CardExistActivate()
     {
@@ -977,6 +996,35 @@ public class CardEffect : MonoBehaviour
         }
     }
 
+    public void S_2flag_true()
+    {
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        field.GetS_2_true();
+        
+        /*
+        foreach (Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                card.activate = true;
+                break;
+            }
+        }
+        */
+
+    }
+
+    public void S_2flag_restore()
+    {
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        field.GetS_2flag_restore();
+    }
 
     void OnGUI()
     {
@@ -984,6 +1032,8 @@ public class CardEffect : MonoBehaviour
         float per1y = 65f;
         float basex = 735f + per1x;
         float basey = 590f + per1y;
+        int exist_S_2;
+        int exist_S_2_activate;
 
         if (this.step == EFFECT.STEP.ATTACK)
         {
@@ -1124,6 +1174,14 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if(exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
+                    }
                 }
             }
 
@@ -1207,6 +1265,14 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
+                    }
                 }
             }
             void A7_A8_A10_processing()
@@ -1286,6 +1352,14 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
+                    }
                 }
             }
 
@@ -1343,6 +1417,14 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
+                    }
                 }
             }
 
@@ -1524,6 +1606,7 @@ public class CardEffect : MonoBehaviour
             */
         }
 
+        /*
         if (step == EFFECT.STEP.MANA)
         {
             GameObject gameOb = GameObject.Find("GameMaster");
@@ -1549,6 +1632,7 @@ public class CardEffect : MonoBehaviour
                 }
             }
         }
+        */
 
 
    //#####################################################################################################
@@ -1699,32 +1783,37 @@ public class CardEffect : MonoBehaviour
                 bool activate_dice = DiceExistActivate();
                 int selected_dice_num = DiceExistSelected();
                 int activate_dice_num = CardExistActivate_num();
-                Debug.Log("activate_dice_num:" + activate_dice_num);
 
                 if (cardname == "S_3" || cardname == "S_4")
                 {
-                    foreach (GameObject own_dice in own_dicelist)
+                    if (activate_dice == false)
                     {
-                        attacker_dice_x = own_dice.GetComponent<Dice>().x;
-                        attacker_dice_y = own_dice.GetComponent<Dice>().y;
-                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
-                        if (attacker_i == true)
+                        foreach (GameObject own_dice in own_dicelist)
                         {
-                            own_dice.GetComponent<Dice>().activate = true;
+                            attacker_dice_x = own_dice.GetComponent<Dice>().x;
+                            attacker_dice_y = own_dice.GetComponent<Dice>().y;
+                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                            if (attacker_i == true)
+                            {
+                                own_dice.GetComponent<Dice>().activate = true;
+                            }
                         }
                     }
                 }
 
                 if (cardname == "S_6")
                 {
-                    foreach (GameObject opp_dice in opp_dicelist)
+                    if (activate_dice == false)
                     {
-                        attacker_dice_x = opp_dice.GetComponent<Dice>().x;
-                        attacker_dice_y = opp_dice.GetComponent<Dice>().y;
-                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
-                        if (attacker_i == true)
+                        foreach (GameObject opp_dice in opp_dicelist)
                         {
-                            opp_dice.GetComponent<Dice>().activate = true;
+                            attacker_dice_x = opp_dice.GetComponent<Dice>().x;
+                            attacker_dice_y = opp_dice.GetComponent<Dice>().y;
+                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                            if (attacker_i == true)
+                            {
+                                opp_dice.GetComponent<Dice>().activate = true;
+                            }
                         }
                     }
                 }
@@ -1743,6 +1832,14 @@ public class CardEffect : MonoBehaviour
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
+                    }
                 }
 
                 if (activate_dice == true)
@@ -1775,6 +1872,14 @@ public class CardEffect : MonoBehaviour
                     if(cardname == "S_4")
                     {
                         dice.hp += 1;
+                    }
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2flag_true();
                     }
                 }
             }
@@ -2173,7 +2278,6 @@ public class CardEffect : MonoBehaviour
 
             attack_enable_check();
 
-
         }
 
         void move_1(GameObject move_dice)
@@ -2225,7 +2329,12 @@ public class CardEffect : MonoBehaviour
             player.PushSettingCardOnFieldFromHand(card);
             int dice_x;
             int dice_y;
+            //int exist_S_2;
+            //int exist_S_2_activate;
             List<GameObject> targets = own_diceList();
+
+            Debug.Log("aaaaaaaaaaaa");
+
             foreach (GameObject target in targets)
             {
                 dice_x = target.GetComponent<Dice>().x;
@@ -2237,12 +2346,19 @@ public class CardEffect : MonoBehaviour
                     dice.movecount += 1;
                     DragObj dragObj = dice.GetComponent<DragObj>();
                     dragObj.dicetranslate1();
-                    step = EFFECT.STEP.IDLE;
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 == exist_S_2_activate)
+                    {
+                        step = EFFECT.STEP.IDLE;
+                        S_2flag_restore();
+                    }
+                    else
+                    {
+                        S_2flag_true();
+                    }
                 }
             }
         }
-
-
-
     }
 }

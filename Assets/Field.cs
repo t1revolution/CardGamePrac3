@@ -78,4 +78,64 @@ public class Field : MonoBehaviour
         }
         return setcard_num;
     }
+
+    public int GetS_2()
+    {
+        int S2_num = 0;
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                S2_num += 1;
+            }
+        }
+        return S2_num;
+    }
+
+    public int GetS_2_activate()
+    {
+        int S2_num = 0;
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                if (card.activate == true)
+                {
+                    S2_num += 1;
+                }
+            }
+        }
+        return S2_num;
+    }
+
+    public void GetS_2_true()
+    {
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                card.activate = true;
+                break;
+            }
+        }
+    }
+
+    public void GetS_2flag_restore()
+    {
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                card.activate = false;
+            }
+        }
+    }
 }

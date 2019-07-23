@@ -84,6 +84,7 @@ public class GameMaster : MonoBehaviour
         new CardData(13, "S_8", (int)Type.SUPPORT, 0, true, false, false),
         new CardData(14, "S_9", (int)Type.SUPPORT, 2, true, false, false),
         new CardData(15, "S_10", (int)Type.SUPPORT, 3, true, false, false),
+        new CardData(16, "S_2", (int)Type.SUPPORT, 0, true, false, false),
     };
     List<CardData> player2CardDataList = new List<CardData>()
     {

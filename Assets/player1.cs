@@ -123,7 +123,7 @@ public class player1 : MonoBehaviour
         for (int i = 0; i < times; i++)
         {
             Card card = field.cardList[n];
-            Debug.Log("i:" + i);
+            //Debug.Log("i:" + i);
             if (card.type == (int)Type.MANA)
             {
                 SendManazone(card);
