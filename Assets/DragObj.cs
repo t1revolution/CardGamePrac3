@@ -96,6 +96,22 @@ public class DragObj : MonoBehaviour
         this.dice_step = DICE.STEP.DAMAGED;
     }
 
+    private GameObject Get_owncard_Object()
+    {
+        GameObject owncard = new GameObject();
+        Dice dice = GetComponentInParent<Dice>();
+        var targets = GameObject.FindGameObjectsWithTag("CARD");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Card>().flag == dice.flag)
+            {
+                owncard = target;
+                break;
+            }
+        }
+        return owncard;
+    }
+
     /*
     // 攻撃を行うダイスを選択する際のみ機能する関数
     public void AttackDice_select()
@@ -131,7 +147,11 @@ public class DragObj : MonoBehaviour
         {
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
-            
+
+            GameObject gameObj = Get_owncard_Object();
+            Card card = gameObj.GetComponent<Card>();
+            CardEffect cardeffect = gameObj.GetComponent<CardEffect>();
+
             //List<KomaMove> moves = new List<KomaMove>();
             int[,] moves = new int[4, 2];
             bool[] koma_able = new bool[4];
@@ -187,7 +207,9 @@ public class DragObj : MonoBehaviour
                 dice.y = dice.y + moves[0, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
-                
+
+                cardeffect.S_2selected_restore();
+
                 /*
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
@@ -218,6 +240,7 @@ public class DragObj : MonoBehaviour
                 dice.y = dice.y + moves[1, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[1, 0]:" + koma_position[1, 0] + "koma_position[1, 1]:" + koma_position[1, 1]);
+                cardeffect.S_2selected_restore();
             }
             if (koma_able[2] == true)
             {
@@ -232,6 +255,7 @@ public class DragObj : MonoBehaviour
                 dice.y = dice.y + moves[2, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[2, 0]:" + koma_position[2, 0] + "koma_position[2, 1]:" + koma_position[2, 1]);
+                cardeffect.S_2selected_restore();
             }
             if (koma_able[3] == true)
             {
@@ -246,6 +270,7 @@ public class DragObj : MonoBehaviour
                 dice.y = dice.y + moves[3, 1];
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[3, 0]:" + koma_position[3, 0] + "koma_position[3, 1]:" + koma_position[3, 1]);
+                cardeffect.S_2selected_restore();
             }
         }
 

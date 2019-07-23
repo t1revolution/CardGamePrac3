@@ -112,21 +112,61 @@ public class Field : MonoBehaviour
         return S2_num;
     }
 
-    public void GetS_2_true()
+    public int GetS_2_selected()
     {
+        int S2_num = 0;
         foreach(Transform child in transform)
         {
             Card card = child.GetComponent<Card>();
             CardObj cardObj = child.GetComponent<CardObj>();
             if (card.name == "S_2")
             {
-                card.activate = true;
-                break;
+                if (card.selected == true)
+                {
+                    S2_num += 1;
+                }
+            }
+        }
+        return S2_num;
+    }
+
+
+
+    public void GetS_2activate_true()
+    {
+        foreach (Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                if (card.activate == false)
+                {
+                    card.activate = true;
+                    break;
+                }
             }
         }
     }
 
-    public void GetS_2flag_restore()
+    public void GetS_2selected_true()
+    {
+        foreach (Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                if (card.selected == false)
+                {
+                    card.selected = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void GetS_2activate_restore()
     {
         foreach(Transform child in transform)
         {
@@ -135,6 +175,19 @@ public class Field : MonoBehaviour
             if (card.name == "S_2")
             {
                 card.activate = false;
+            }
+        }
+    }
+
+    public void GetS_2selected_restore()
+    {
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "S_2")
+            {
+                card.selected = false;
             }
         }
     }

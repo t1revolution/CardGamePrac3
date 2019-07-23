@@ -30,7 +30,7 @@ class EFFECT
     }
 }
 
-class ACTIVATE // 発動コストの二重払いを回避するため
+public class ACTIVATE // 発動コストの二重払いを回避するため
 {
     public enum STEP
     {
@@ -838,6 +838,15 @@ public class CardEffect : MonoBehaviour
         return S_2_activatenum;
     }
 
+    public int GetExistS_2_selected()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        int S_2_selectednum = field.GetS_2_selected();
+        return S_2_selectednum;
+    }
+
     public bool CardExistActivate()
     {
         var targets = GameObject.FindGameObjectsWithTag("CARD");
@@ -996,12 +1005,12 @@ public class CardEffect : MonoBehaviour
         }
     }
 
-    public void S_2flag_true()
+    public void S_2activate_true()
     {
         GameObject gameObj = this.transform.parent.gameObject;
         // Playerオブジェクトまで上り取得
         Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
-        field.GetS_2_true();
+        field.GetS_2activate_true();
         
         /*
         foreach (Transform child in transform)
@@ -1015,15 +1024,27 @@ public class CardEffect : MonoBehaviour
             }
         }
         */
-
     }
 
-    public void S_2flag_restore()
+    public void S_2selected_true()
     {
         GameObject gameObj = this.transform.parent.gameObject;
-        // Playerオブジェクトまで上り取得
         Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
-        field.GetS_2flag_restore();
+        field.GetS_2selected_true();
+    }
+
+    public void S_2activate_restore()
+    {
+        GameObject gameObj = this.transform.parent.gameObject;
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        field.GetS_2activate_restore();
+    }
+
+    public void S_2selected_restore()
+    {
+        GameObject gameObj = this.transform.parent.gameObject;
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        field.GetS_2selected_restore();
     }
 
     void OnGUI()
@@ -1180,7 +1201,7 @@ public class CardEffect : MonoBehaviour
                     if(exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
             }
@@ -1271,7 +1292,7 @@ public class CardEffect : MonoBehaviour
                     if (exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
             }
@@ -1358,7 +1379,7 @@ public class CardEffect : MonoBehaviour
                     if (exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
             }
@@ -1423,7 +1444,7 @@ public class CardEffect : MonoBehaviour
                     if (exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
             }
@@ -1838,7 +1859,7 @@ public class CardEffect : MonoBehaviour
                     if (exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
 
@@ -1879,7 +1900,7 @@ public class CardEffect : MonoBehaviour
                     if (exist_S_2 > 0)
                     {
                         step = EFFECT.STEP.MANA;
-                        S_2flag_true();
+                        S_2activate_true();
                     }
                 }
             }
@@ -2329,33 +2350,42 @@ public class CardEffect : MonoBehaviour
             player.PushSettingCardOnFieldFromHand(card);
             int dice_x;
             int dice_y;
-            //int exist_S_2;
-            //int exist_S_2_activate;
+
+            int selected_S_2_num = GetExistS_2_selected();
             List<GameObject> targets = own_diceList();
 
-            Debug.Log("aaaaaaaaaaaa");
+            Debug.Log("selected_S_2_num:" + selected_S_2_num);
 
-            foreach (GameObject target in targets)
+            if (selected_S_2_num == 0)
             {
-                dice_x = target.GetComponent<Dice>().x;
-                dice_y = target.GetComponent<Dice>().y;
-                bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                if (activate_i == true)
+                foreach (GameObject target in targets)
                 {
-                    Dice dice = target.GetComponent<Dice>();
-                    dice.movecount += 1;
-                    DragObj dragObj = dice.GetComponent<DragObj>();
-                    dragObj.dicetranslate1();
-                    exist_S_2 = GetExistS_2();
-                    exist_S_2_activate = GetExistS_2_activate();
-                    if (exist_S_2 == exist_S_2_activate)
+                    dice_x = target.GetComponent<Dice>().x;
+                    dice_y = target.GetComponent<Dice>().y;
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                    if (activate_i == true)
                     {
-                        step = EFFECT.STEP.IDLE;
-                        S_2flag_restore();
-                    }
-                    else
-                    {
-                        S_2flag_true();
+                        S_2selected_true();
+
+
+                        Dice dice = target.GetComponent<Dice>();
+                        dice.movecount += 1;
+                        DragObj dragObj = dice.GetComponent<DragObj>();
+                        dragObj.dicetranslate1();
+                        exist_S_2 = GetExistS_2();
+                        exist_S_2_activate = GetExistS_2_activate();
+                        Debug.Log("exist_S_2:" + exist_S_2);
+                        Debug.Log("exist_S_2_activate:" + exist_S_2_activate);
+
+                        if (exist_S_2 == exist_S_2_activate)
+                        {
+                            step = EFFECT.STEP.IDLE;
+                            S_2activate_restore();
+                        }
+                        else
+                        {
+                            S_2activate_true();
+                        }
                     }
                 }
             }
