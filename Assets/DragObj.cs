@@ -98,9 +98,9 @@ public class DragObj : MonoBehaviour
 
     private GameObject Get_owncard_Object()
     {
-        GameObject owncard = new GameObject();
         Dice dice = GetComponentInParent<Dice>();
         var targets = GameObject.FindGameObjectsWithTag("CARD");
+        GameObject owncard = targets[0];
         foreach (GameObject target in targets)
         {
             if (target.GetComponent<Card>().flag == dice.flag)

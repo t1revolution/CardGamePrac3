@@ -130,8 +130,6 @@ public class Field : MonoBehaviour
         return S2_num;
     }
 
-
-
     public void GetS_2activate_true()
     {
         foreach (Transform child in transform)

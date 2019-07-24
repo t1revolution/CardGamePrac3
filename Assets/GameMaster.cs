@@ -101,6 +101,9 @@ public class GameMaster : MonoBehaviour
         new CardData(8, "S_3", (int)Type.SUPPORT, 0, false, false, false),
         new CardData(9, "S_4", (int)Type.SUPPORT, 0, false, false, false),
         new CardData(10, "S_5", (int)Type.SUPPORT, 2, false, false, false),
+
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, false, false, false),
+
         /*
         new CardData(11, "A_1", (int)Type.ATTACK, 2, false, false, false),
         new CardData(12, "A_2", (int)Type.ATTACK, 1, false, false, false),
