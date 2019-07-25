@@ -411,6 +411,48 @@ public class CardEffect : MonoBehaviour
         return position;
     }
 
+    List<GameObject> all_diceList()
+    {
+        List<GameObject> all_dice_list = new List<GameObject>();
+        Card card = GetComponentInParent<Card>();
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        foreach (GameObject target in targets)
+        {
+            all_dice_list.Add(target);
+        }
+        return all_dice_list;
+    }
+
+    List<GameObject> activate_true_diceList()
+    {
+        List<GameObject> all_dice_list = new List<GameObject>();
+        Card card = GetComponentInParent<Card>();
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().activate == true)
+            {
+                all_dice_list.Add(target);
+            }
+        }
+        return all_dice_list;
+    }
+
+    List<GameObject> activate_false_diceList()
+    {
+        List<GameObject> all_dice_list = new List<GameObject>();
+        Card card = GetComponentInParent<Card>();
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().activate == false)
+            {
+                all_dice_list.Add(target);
+            }
+        }
+        return all_dice_list;
+    }
+
     List<GameObject> own_diceList()
     {
         List<GameObject> own_dice_list = new List<GameObject>();
@@ -425,7 +467,7 @@ public class CardEffect : MonoBehaviour
         }
         return own_dice_list;
     }
-
+    
     List<GameObject> opp_diceList()
     {
         List<GameObject> opp_dice_list = new List<GameObject>();
@@ -920,7 +962,7 @@ public class CardEffect : MonoBehaviour
         return existselected;
     }
 
-    public int CardExistActivate_num()
+    public int DiceExistActivate_num()
     {
         var targets = GameObject.FindGameObjectsWithTag("DICE");
         int existactivate = 0;
@@ -1803,7 +1845,7 @@ public class CardEffect : MonoBehaviour
                 List<GameObject> opp_dicelist = opp_diceList();
                 bool activate_dice = DiceExistActivate();
                 int selected_dice_num = DiceExistSelected();
-                int activate_dice_num = CardExistActivate_num();
+                int activate_dice_num = DiceExistActivate_num();
 
                 if (cardname == "S_3" || cardname == "S_4")
                 {
@@ -1819,6 +1861,148 @@ public class CardEffect : MonoBehaviour
                                 own_dice.GetComponent<Dice>().activate = true;
                             }
                         }
+                    }
+                }
+
+                if (cardname == "S_6")
+                {
+                    if (activate_dice == false)
+                    {
+                        foreach (GameObject opp_dice in opp_dicelist)
+                        {
+                            attacker_dice_x = opp_dice.GetComponent<Dice>().x;
+                            attacker_dice_y = opp_dice.GetComponent<Dice>().y;
+                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                            if (attacker_i == true)
+                            {
+                                opp_dice.GetComponent<Dice>().activate = true;
+                            }
+                        }
+                    }
+                }
+
+                GameObject attackerObj = diceExistActivate();
+                attacker_dice_x = attackerObj.GetComponent<Dice>().x;
+                attacker_dice_y = attackerObj.GetComponent<Dice>().y;
+
+                if (cardname == "S_1")
+                {
+                    movedices_S_1(own_dicelist);
+
+                    Dice dice = attackerObj.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2activate_true();
+                    }
+                }
+
+                if (activate_dice == true)
+                {
+                    if (cardname == "S_3")
+                    {
+                        move_2_2(attackerObj);
+                    }
+                    if (cardname == "S_4")
+                    {
+                        move_2_1(attackerObj);
+                    }
+                    if (cardname == "S_6")
+                    {
+                        move_2_1(attackerObj);
+                    }
+                }
+
+                if (activate_dice == true && selected_dice_num > 0)
+                {
+                    bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
+
+                    //GameObject target = diceExistSelected();
+                    Dice dice = attackerObj.GetComponent<Dice>();
+                    DragObj dragObj = dice.GetComponent<DragObj>();
+                    dragObj.dicestep_damage();
+                    step = EFFECT.STEP.IDLE;
+                    activate_step = ACTIVATE.STEP.NONE;
+                    DiceFlagrestore();
+                    if(cardname == "S_4")
+                    {
+                        dice.hp += 1;
+                    }
+
+                    exist_S_2 = GetExistS_2();
+                    exist_S_2_activate = GetExistS_2_activate();
+                    if (exist_S_2 > 0)
+                    {
+                        step = EFFECT.STEP.MANA;
+                        S_2activate_true();
+                    }
+                }
+            }
+
+            void S5_S9_S10_processing()
+            {
+                List<GameObject> activate_false_dicelist = activate_false_diceList();
+                List<GameObject> activate_true_dicelist = activate_true_diceList();
+                List<GameObject> own_dicelist = own_diceList();
+                List<GameObject> opp_dicelist = opp_diceList();
+                bool activate_dice = DiceExistActivate();
+                int selected_dice_num = DiceExistSelected();
+                int activate_dice_num = DiceExistActivate_num();
+                int tmp_x;
+                int tmp_y;
+                float dice0_x_position;
+                float dice0_y_position;
+                float dice1_x_position;
+                float dice1_y_position;
+
+                if (cardname == "S_5")
+                {
+                    if (activate_dice_num < 2)
+                    {
+                        foreach (GameObject all_dice in activate_false_dicelist)
+                        {
+                            attacker_dice_x = all_dice.GetComponent<Dice>().x;
+                            attacker_dice_y = all_dice.GetComponent<Dice>().y;
+                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+                            if (attacker_i == true)
+                            {
+                                all_dice.GetComponent<Dice>().activate = true;
+                            }
+                        }
+                    }
+                    if (activate_dice_num == 1)
+                    {
+                        attacker_dice_x = activate_true_dicelist[0].GetComponent<Dice>().x;
+                        attacker_dice_y = activate_true_dicelist[0].GetComponent<Dice>().y;
+                        bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "select");
+                    }
+                    else if (activate_dice_num == 2)
+                    {
+                        GameObject dice0 = activate_true_dicelist[0];
+                        GameObject dice1 = activate_true_dicelist[1];
+
+                        tmp_x = dice0.GetComponent<Dice>().x;
+                        tmp_y = dice0.GetComponent<Dice>().y;
+                        dice0.GetComponent<Dice>().x = dice1.GetComponent<Dice>().x;
+                        dice0.GetComponent<Dice>().y = dice1.GetComponent<Dice>().y;
+                        dice1.GetComponent<Dice>().x = tmp_x;
+                        dice1.GetComponent<Dice>().y = tmp_y;
+
+                        dice0_x_position = basex - per1x * dice0.GetComponent<Dice>().x;
+                        dice0_y_position = basey - per1y * dice0.GetComponent<Dice>().y;
+                        dice1_x_position = basex - per1x * dice1.GetComponent<Dice>().x;
+                        dice1_y_position = basey - per1y * dice1.GetComponent<Dice>().y;
+
+                        dice0.transform.position = new Vector3(dice0_x_position, dice0_y_position, 0);
+                        dice1.transform.position = new Vector3(dice1_x_position, dice1_y_position, 0);
                     }
                 }
 
@@ -2206,7 +2390,7 @@ public class CardEffect : MonoBehaviour
                 }
             }
             */
-            void attack_enable_check()
+            void support_enable_check()
             {
                 // 手札が発動コストを満たしているか確認
                 if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
@@ -2264,6 +2448,10 @@ public class CardEffect : MonoBehaviour
                         if (cardname == "S_4")
                         {
                             S1_S3_S4_S6_processing();
+                        }
+                        if (cardname == "S_5")
+                        {
+                            S5_S9_S10_processing();
                         }
                         if (cardname == "S_6")
                         {
@@ -2339,8 +2527,7 @@ public class CardEffect : MonoBehaviour
                     }
                 }
             }
-
-
+            /*
             if (cardname == "A_1")
             {
                 attack_enable_check();
@@ -2385,8 +2572,9 @@ public class CardEffect : MonoBehaviour
             {
                 attack_enable_check();
             }
+            */
 
-            attack_enable_check();
+            support_enable_check();
 
         }
 
