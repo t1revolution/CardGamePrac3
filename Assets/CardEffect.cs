@@ -456,6 +456,21 @@ public class CardEffect : MonoBehaviour
         return all_dice_list;
     }
 
+    List<GameObject> selected_true_diceList()
+    {
+        List<GameObject> all_dice_list = new List<GameObject>();
+        Card card = GetComponentInParent<Card>();
+        var targets = GameObject.FindGameObjectsWithTag("DICE");
+        foreach (GameObject target in targets)
+        {
+            if (target.GetComponent<Dice>().selected == true)
+            {
+                all_dice_list.Add(target);
+            }
+        }
+        return all_dice_list;
+    }
+
     List<GameObject> own_diceList()
     {
         List<GameObject> own_dice_list = new List<GameObject>();
@@ -1978,6 +1993,8 @@ public class CardEffect : MonoBehaviour
             {
                 List<GameObject> activate_false_dicelist = activate_false_diceList();
                 List<GameObject> activate_true_dicelist = activate_true_diceList();
+                List<GameObject> selected_true_dicelist = selected_true_diceList();
+                List<GameObject> all_dicelist = all_diceList();
                 List<GameObject> own_dicelist = own_diceList();
                 List<GameObject> opp_dicelist = opp_diceList();
                 List<GameObject> setcardList = opp_setcardList();
@@ -2070,62 +2087,56 @@ public class CardEffect : MonoBehaviour
                     }
                 }
 
+                if (cardname == "S_10")
+                {
+                    if (activate_dice == false && selected_dice_num == 0)
+                    {
+                        foreach (GameObject all_dice in all_dicelist)
+                        {
+                            attacker_dice_x = all_dice.GetComponent<Dice>().x;
+                            attacker_dice_y = all_dice.GetComponent<Dice>().y;
+                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+
+                            if (attacker_i == true)
+                            {
+                                all_dice.GetComponent<Dice>().selected = true;
+                            }
+                        }
+                    }
+
+                    if(activate_dice == false && selected_dice_num > 0)
+                    {
+                        GameObject Stop_dice = selected_true_dicelist[0];
+                        System.Random cRandom = new System.Random();
+                        int iResult = cRandom.Next(1, 7);
+                        Stop_dice.GetComponent<Dice>().hp = iResult;
+
+                        attacker_dice_x = Stop_dice.GetComponent<Dice>().x;
+                        attacker_dice_y = Stop_dice.GetComponent<Dice>().y;
+                        bool dice_stop = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
+
+                        if (dice_stop)
+                        {
+                            Stop_dice.GetComponent<Dice>().hp = iResult;
+                            Stop_dice.GetComponent<Dice>().activate = true;
+                        }
+                    }
+                }
+
                 GameObject attackerObj = diceExistActivate();
                 attacker_dice_x = attackerObj.GetComponent<Dice>().x;
                 attacker_dice_y = attackerObj.GetComponent<Dice>().y;
 
-                if (cardname == "S_1")
-                {
-                    movedices_S_1(own_dicelist);
-
-                    Dice dice = attackerObj.GetComponent<Dice>();
-                    DragObj dragObj = dice.GetComponent<DragObj>();
-                    dragObj.dicestep_damage();
-                    step = EFFECT.STEP.IDLE;
-                    activate_step = ACTIVATE.STEP.NONE;
-                    DiceFlagrestore();
-
-                    exist_S_2 = GetExistS_2();
-                    exist_S_2_activate = GetExistS_2_activate();
-                    if (exist_S_2 > 0)
-                    {
-                        step = EFFECT.STEP.MANA;
-                        S_2activate_true();
-                    }
-                }
-
-                if (activate_dice == true)
-                {
-                    if (cardname == "S_3")
-                    {
-                        move_2_2(attackerObj);
-                    }
-                    if (cardname == "S_4")
-                    {
-                        move_2_1(attackerObj);
-                    }
-                    if (cardname == "S_6")
-                    {
-                        move_2_1(attackerObj);
-                    }
-                }
-
                 if (activate_dice == true && selected_dice_num > 0)
                 {
                     bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
-
-                    //GameObject target = diceExistSelected();
                     Dice dice = attackerObj.GetComponent<Dice>();
                     DragObj dragObj = dice.GetComponent<DragObj>();
                     dragObj.dicestep_damage();
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
-                    if(cardname == "S_4")
-                    {
-                        dice.hp += 1;
-                    }
-
+                    
                     exist_S_2 = GetExistS_2();
                     exist_S_2_activate = GetExistS_2_activate();
                     if (exist_S_2 > 0)
@@ -2530,9 +2541,45 @@ public class CardEffect : MonoBehaviour
                             }
                         }
                     }
-                    if (cost > 3)
+                    if (cost == 3 && activate_cost != EFFECT.COST.THREE)
                     {
-                        bool card_choose = GUI.Button(new Rect(550, 350, 500, 450), "捨てるカードを選択してください");
+                        int graveyard_num = Getgraveyard();
+                        if (cardname == "S_10")
+                        {
+                            if (graveyard_num < 1)
+                            {
+                                bool annotation = GUI.Button(new Rect(350, 220, 500, 450), "墓地のカード15枚に満たず発動条件を満たしません");
+                                if (annotation == true)
+                                {
+                                    step = EFFECT.STEP.IDLE;
+                                }
+                            }
+                            // 下のやつはいらないかもしれない。
+                            else
+                            {
+                                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを3枚選択してください");
+                                if (card_choose == true)
+                                {
+                                    activate_cost = EFFECT.COST.THREE;
+                                    CardObj _cardobj = GetComponentInParent<CardObj>();
+                                    _cardobj.GetCardCost(cost);
+                                    Card card = GetComponentInParent<Card>();
+                                    card.activate = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを3枚選択してください");
+                            if (card_choose == true)
+                            {
+                                activate_cost = EFFECT.COST.THREE;
+                                CardObj _cardobj = GetComponentInParent<CardObj>();
+                                _cardobj.GetCardCost(cost);
+                                Card card = GetComponentInParent<Card>();
+                                card.activate = true;
+                            }
+                        }
                     }
 
                     if (activate_cost == EFFECT.COST.ZERO)
@@ -2623,6 +2670,18 @@ public class CardEffect : MonoBehaviour
                             }
                             else
                             {
+                            }
+                        }
+                    }
+
+                    if (activate_cost == EFFECT.COST.THREE)
+                    {
+                        // カードの発動コストを支払い終えたか確認
+                        if (this.CardExistActivate() == false)
+                        {
+                            if (cardname == "S_10")
+                            {
+                                S5_S9_S10_processing();
                             }
                         }
                     }
