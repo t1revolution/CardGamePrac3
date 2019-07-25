@@ -1984,7 +1984,7 @@ public class CardEffect : MonoBehaviour
                         attacker_dice_y = activate_true_dicelist[0].GetComponent<Dice>().y;
                         bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "select");
                     }
-                    else if (activate_dice_num == 2)
+                    else if (activate_dice_num == 2 && selected_dice_num == 0)
                     {
                         GameObject dice0 = activate_true_dicelist[0];
                         GameObject dice1 = activate_true_dicelist[1];
@@ -2003,6 +2003,9 @@ public class CardEffect : MonoBehaviour
 
                         dice0.transform.position = new Vector3(dice0_x_position, dice0_y_position, 0);
                         dice1.transform.position = new Vector3(dice1_x_position, dice1_y_position, 0);
+
+                        dice0.GetComponent<Dice>().selected = true;
+                        dice1.GetComponent<Dice>().selected = true;
                     }
                 }
 
@@ -2089,6 +2092,18 @@ public class CardEffect : MonoBehaviour
                 }
             }
 
+            void S_2_processing()
+            {
+                step = EFFECT.STEP.IDLE;
+                exist_S_2 = GetExistS_2() - 1;
+                exist_S_2_activate = GetExistS_2_activate();
+                if (exist_S_2 > 0)
+                {
+                    step = EFFECT.STEP.MANA;
+                    S_2activate_true();
+                }
+            }
+
             void S_7_processing()
             {
                 GameObject gameOb = GameObject.Find("GameMaster");
@@ -2105,7 +2120,7 @@ public class CardEffect : MonoBehaviour
                     S_2activate_true();
                 }
             }
-
+            
             void S_8_processing()
             {
                 GameObject gameOb = GameObject.Find("GameMaster");
@@ -2441,6 +2456,11 @@ public class CardEffect : MonoBehaviour
                         {
                             S1_S3_S4_S6_processing();
                         }
+                        if (cardname == "S_2")
+                        {
+                            S_2_processing();
+                        }
+
                         if (cardname == "S_3")
                         {
                             S1_S3_S4_S6_processing();
@@ -2449,10 +2469,7 @@ public class CardEffect : MonoBehaviour
                         {
                             S1_S3_S4_S6_processing();
                         }
-                        if (cardname == "S_5")
-                        {
-                            S5_S9_S10_processing();
-                        }
+                        
                         if (cardname == "S_6")
                         {
                             S1_S3_S4_S6_processing();
@@ -2510,6 +2527,10 @@ public class CardEffect : MonoBehaviour
                         {
                             if (cardname == "A_1")
                             {
+                            }
+                            if (cardname == "S_5")
+                            {
+                                S5_S9_S10_processing();
                             }
                             else
                             {
