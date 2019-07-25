@@ -16,7 +16,10 @@ class EFFECT
     };
     public enum TYPE
     {
-        NONE = -1,
+        ATTACK,
+        SUPPORT,
+        REFLECT,
+        MANA,
     };
     public enum COST
     {
@@ -481,6 +484,30 @@ public class CardEffect : MonoBehaviour
             }
         }
         return opp_dice_list;
+    }
+
+    List<GameObject> opp_setcardList()
+    {
+        GameObject playerObj0 = GameObject.Find("Player");
+        GameObject playerObj1 = GameObject.Find("Player (1)");
+
+        Field field0 = playerObj0.GetComponentInChildren<Field>();
+        Field field1 = playerObj1.GetComponentInChildren<Field>();
+
+        List<GameObject> opp_setcard_list = new List<GameObject>();
+        
+        GameObject gameObj = this.transform.parent.gameObject;
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+
+        if (field == field0)
+        {
+            opp_setcard_list = field1.Get_opp_setcardList();
+        }
+        else
+        {
+            opp_setcard_list = field0.Get_opp_setcardList();
+        }
+        return opp_setcard_list;
     }
 
     // 攻撃可能な範囲に敵ダイスがある味方ダイスオブジェクトを取得
@@ -1953,6 +1980,8 @@ public class CardEffect : MonoBehaviour
                 List<GameObject> activate_true_dicelist = activate_true_diceList();
                 List<GameObject> own_dicelist = own_diceList();
                 List<GameObject> opp_dicelist = opp_diceList();
+                List<GameObject> setcardList = opp_setcardList();
+
                 bool activate_dice = DiceExistActivate();
                 int selected_dice_num = DiceExistSelected();
                 int activate_dice_num = DiceExistActivate_num();
@@ -1962,6 +1991,7 @@ public class CardEffect : MonoBehaviour
                 float dice0_y_position;
                 float dice1_x_position;
                 float dice1_y_position;
+                Vector3 card_position;
 
                 if (cardname == "S_5")
                 {
@@ -2009,18 +2039,32 @@ public class CardEffect : MonoBehaviour
                     }
                 }
 
-                if (cardname == "S_6")
+                if (cardname == "S_9")
                 {
-                    if (activate_dice == false)
+                    foreach (GameObject setcard in setcardList)
                     {
-                        foreach (GameObject opp_dice in opp_dicelist)
+                        card_position = setcard.transform.position;
+                        bool target_card = GUI.Button(new Rect(card_position.x - 40f, card_position.y - 570f, 80, 120), "");
+                        //bool target_card = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "");
+                        if (target_card == true)
                         {
-                            attacker_dice_x = opp_dice.GetComponent<Dice>().x;
-                            attacker_dice_y = opp_dice.GetComponent<Dice>().y;
-                            bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
-                            if (attacker_i == true)
+                            GameObject gameObj = GameObject.Find("GameMaster");
+                            GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
+                            player1 player = gamemaster.currentPlayer;
+                            //player.ActivationCostFromHand(setcard.GetComponent<Card>());
+                            player.Distract_oppcard_FromField(setcard.GetComponent<Card>());
+                            
+                            step = EFFECT.STEP.IDLE;
+                            activate_step = ACTIVATE.STEP.NONE;
+                            DiceFlagrestore();
+                            CardFlagrestore();
+
+                            exist_S_2 = GetExistS_2();
+                            exist_S_2_activate = GetExistS_2_activate();
+                            if (exist_S_2 > 0)
                             {
-                                opp_dice.GetComponent<Dice>().activate = true;
+                                step = EFFECT.STEP.MANA;
+                                S_2activate_true();
                             }
                         }
                     }
@@ -2405,8 +2449,23 @@ public class CardEffect : MonoBehaviour
                 }
             }
             */
+
             void support_enable_check()
             {
+                List<GameObject> setcardList = opp_setcardList();
+                /*
+                if (setcardList.Count == 0)
+                {
+                    bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "有効射程範囲に敵ダイスが存在しません");
+                    if (card_choose == true)
+                    {
+                        step = EFFECT.STEP.IDLE;
+                    }
+                }
+                */
+
+
+
                 // 手札が発動コストを満たしているか確認
                 if (cost <= enable_cost || activate_step == ACTIVATE.STEP.IDLE)
                 {
@@ -2434,15 +2493,41 @@ public class CardEffect : MonoBehaviour
                     }
                     if (cost == 2 && activate_cost != EFFECT.COST.TWO)
                     {
-                        bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
-                        if (card_choose == true)
+                        if (cardname == "S_9")
                         {
-                            //enable_cost = GetHand();
-                            activate_cost = EFFECT.COST.TWO;
-                            CardObj _cardobj = GetComponentInParent<CardObj>();
-                            _cardobj.GetCardCost(cost);
-                            Card card = GetComponentInParent<Card>();
-                            card.activate = true;
+                            if (setcardList.Count == 0)
+                            {
+                                bool annotation = GUI.Button(new Rect(350, 220, 500, 450), "セットカードが存在しません");
+                                if (annotation == true)
+                                {
+                                    step = EFFECT.STEP.IDLE;
+                                }
+                            }
+                            // 下のやつはいらないかもしれない。
+                            else
+                            {
+                                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                                if (card_choose == true)
+                                {
+                                    activate_cost = EFFECT.COST.TWO;
+                                    CardObj _cardobj = GetComponentInParent<CardObj>();
+                                    _cardobj.GetCardCost(cost);
+                                    Card card = GetComponentInParent<Card>();
+                                    card.activate = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                            if (card_choose == true)
+                            {
+                                activate_cost = EFFECT.COST.TWO;
+                                CardObj _cardobj = GetComponentInParent<CardObj>();
+                                _cardobj.GetCardCost(cost);
+                                Card card = GetComponentInParent<Card>();
+                                card.activate = true;
+                            }
                         }
                     }
                     if (cost > 3)
@@ -2529,6 +2614,10 @@ public class CardEffect : MonoBehaviour
                             {
                             }
                             if (cardname == "S_5")
+                            {
+                                S5_S9_S10_processing();
+                            }
+                            if (cardname == "S_9")
                             {
                                 S5_S9_S10_processing();
                             }

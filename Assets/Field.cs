@@ -19,6 +19,13 @@ public class FIELD
         THEREE,
         FOUR,
     };
+    public enum TYPE
+    {
+        ATTACK,
+        SUPPORT,
+        REFLECT,
+        MANA,
+    };
 }
 
 public class Field : MonoBehaviour
@@ -188,5 +195,20 @@ public class Field : MonoBehaviour
                 card.selected = false;
             }
         }
+    }
+
+    public List<GameObject> Get_opp_setcardList()
+    {
+        List<GameObject> opp_setcard_list = new List<GameObject>();
+        foreach (Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.type == (int)FIELD.TYPE.REFLECT)
+            {
+                opp_setcard_list.Add(child.gameObject);
+            }
+        }
+        return opp_setcard_list;
     }
 }

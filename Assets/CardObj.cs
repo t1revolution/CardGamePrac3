@@ -265,6 +265,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             int hand_num;
             int selected_cost;
             int cost;
+            bool ret = false;
             cost = cardeffect.Getcost();
             hand_num = cardeffect.GetHand();
             selected_cost = cardeffect.CardExistSelected();
@@ -276,7 +277,15 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             // タップされた手札にボタンを生成したい
             //bool ret = GUI.Button(new Rect(card_position.x + 500f, card_position.y - 500f, 200, 300), "コストとして選択されたカード");
             //bool ret = GUI.Button(new Rect(card_position.x + 620f, card_position.y + 640f, 80, 120), "select");
-            bool ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
+            if(card.flag == true)
+            {
+                ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
+            }
+            else
+            {
+                ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y - 837f, 80, 120), "select");
+            }
+            //bool ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
             if (ret == true)
             {
                 Debug.Log("RETURN BUTTON WAS CLICKED!!!!!!");

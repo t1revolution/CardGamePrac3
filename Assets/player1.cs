@@ -40,6 +40,24 @@ public class player1 : MonoBehaviour
         graveyard.Add(card);
     }
 
+    public void Distract_oppcard_FromField(Card card)
+    {
+        GameObject playerObj0 = GameObject.Find("Player");
+        GameObject playerObj1 = GameObject.Find("Player (1)");
+
+        Graveyard graveyard0 = playerObj0.GetComponentInChildren<Graveyard>();
+        Graveyard graveyard1 = playerObj1.GetComponentInChildren<Graveyard>();
+        
+        if (graveyard == graveyard0)
+        {
+            graveyard1.Add(card);
+        }
+        else
+        {
+            graveyard0.Add(card);
+        }
+    }
+
     public void Draw()
     {
         Card card = deck.Pull(0);
