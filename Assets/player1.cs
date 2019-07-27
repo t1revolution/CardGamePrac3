@@ -34,6 +34,12 @@ public class player1 : MonoBehaviour
         field.Add(card);
     }
 
+    public void PullGraveyardCard(Card card)
+    {
+        //graveyard.Pull_sophisticate(card);
+        hand.Add(card);
+    }
+
     public void ActivationCostFromHand(Card card)
     {
         hand.Pull_sophisticate(card);

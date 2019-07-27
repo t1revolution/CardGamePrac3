@@ -525,6 +525,22 @@ public class CardEffect : MonoBehaviour
         return opp_setcard_list;
     }
 
+    List<GameObject> graveyard_cardList()
+    {
+        /*
+        GameObject playerObj0 = GameObject.Find("Player");
+        GameObject playerObj1 = GameObject.Find("Player (1)");
+        Field field0 = playerObj0.GetComponentInChildren<Field>();
+        Field field1 = playerObj1.GetComponentInChildren<Field>();
+        */
+
+        List<GameObject> graveyard_cardlist = new List<GameObject>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        Graveyard graveyard = gameObj.transform.parent.GetComponentInChildren<Graveyard>();
+        graveyard_cardlist = graveyard.Get_garaveyard_cardList();
+        return graveyard_cardlist;
+    }
+
     // 攻撃可能な範囲に敵ダイスがある味方ダイスオブジェクトを取得
     List<GameObject> Attackable_dice_object(int distance)
     {
@@ -1810,8 +1826,6 @@ public class CardEffect : MonoBehaviour
             int[,] opp_dice_position = Get_opp_diceposition();
             int enable_cost = GetHand() - 1; // 発動中のカードを除くため-1
             //int in_distance_dicenum = Get_in_distance_dicenum(distance); // distance内存在する相手のダイス数  distanceを渡せばいいのかな?
-            int dice_x;
-            int dice_y;
             int attacker_dice_x;
             int attacker_dice_y;
             int target_dice_x;
@@ -2184,20 +2198,26 @@ public class CardEffect : MonoBehaviour
                 Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
                 List<GameObject> attackers = Attackable_dice_object(distance);
+                List<GameObject> graveyard_cardlist = graveyard_cardList();
 
                 bool activate_dice = DiceExistActivate();
+                bool activate_card = CardExistActivate();
                 int selected_dice_num = DiceExistSelected();
-                if (activate_dice == false)
+                string graveyard_cardname;
+                int i = 0;
+                int card_x = 80;
+                if (activate_card == false)
                 {
-                    foreach (GameObject attacker in attackers)
+                    foreach (GameObject garaveyard_card in graveyard_cardlist)
                     {
-                        attacker_dice_x = attacker.GetComponent<Dice>().x;
-                        attacker_dice_y = attacker.GetComponent<Dice>().y;
-                        bool attacker_i = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "");
-                        if (attacker_i == true)
+                        graveyard_cardname = garaveyard_card.GetComponent<Card>().name;
+                        bool target_card = GUI.Button(new Rect(500f + (card_x + 20) * i, 440f, 80, 120), graveyard_cardname);
+                        if (target_card == true)
                         {
-                            attacker.GetComponent<Dice>().activate = true;
+                            garaveyard_card.GetComponent<Card>().activate = true;
+                            player.PullGraveyardCard(garaveyard_card.GetComponent<Card>());
                         }
+                        i++;
                     }
                 }
 
@@ -2224,7 +2244,7 @@ public class CardEffect : MonoBehaviour
                     }
                 }
 
-                if (activate_dice == true && selected_dice_num > 0)
+                if (activate_card == true)
                 {
                     bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
                     bool target_ = GUI.Button(new Rect(basex - 33f - per1x * (target_dice_x), basey - 432f + per1y * (target_dice_y), 66, 66), "tar");
@@ -2233,10 +2253,10 @@ public class CardEffect : MonoBehaviour
                     Dice dice = target.GetComponent<Dice>();
                     DragObj dragObj = dice.GetComponent<DragObj>();
                     dragObj.dicestep_damage();
-                    dice.hp -= damage;
                     step = EFFECT.STEP.IDLE;
                     activate_step = ACTIVATE.STEP.NONE;
                     DiceFlagrestore();
+                    CardFlagrestore();
                 }
             }
 

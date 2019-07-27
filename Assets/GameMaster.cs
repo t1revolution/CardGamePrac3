@@ -70,16 +70,22 @@ public class GameMaster : MonoBehaviour
     List<CardData> player1CardDataList = new List<CardData>()
     {
         new CardData(1, "A_1", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(1, "A_1", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(1, "A_1", (int)Type.ATTACK, 2, true, false, false),
         new CardData(2, "A_2", (int)Type.ATTACK, 1, true, false, false),
+        /*
         new CardData(3, "A_3", (int)Type.ATTACK, 0, true, false, false),
         new CardData(4, "A_4", (int)Type.ATTACK, 0, true, false, false),
         new CardData(5, "A_5", (int)Type.ATTACK, 0, true, false, false),
         new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        */
+
+        /*
         new CardData(7, "A_7", (int)Type.ATTACK, 0, true, false, false),
         new CardData(8, "A_8", (int)Type.ATTACK, 0, true, false, false),
         new CardData(9, "A_9", (int)Type.ATTACK, 0, true, false, false),
         new CardData(10, "A_10", (int)Type.ATTACK, 0, true, false, false),
-        /*
+        
         new CardData(11, "S_6", (int)Type.SUPPORT, 0, true, false, false),
         new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
         new CardData(13, "S_8", (int)Type.SUPPORT, 0, true, false, false),
@@ -88,6 +94,16 @@ public class GameMaster : MonoBehaviour
         */
         new CardData(16, "S_2", (int)Type.SUPPORT, 0, true, false, false),
         new CardData(17, "S_2", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(8, "S_3", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(8, "S_3", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(8, "S_3", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(13, "S_8", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(13, "S_8", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
+        new CardData(12, "S_7", (int)Type.SUPPORT, 0, true, false, false),
+
         new CardData(14, "S_9", (int)Type.SUPPORT, 2, true, false, false),
         new CardData(15, "S_10", (int)Type.SUPPORT, 3, true, false, false),
 

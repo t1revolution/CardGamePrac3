@@ -28,6 +28,18 @@ public class Graveyard : MonoBehaviour
         int graveyard_num = this.transform.childCount;
         return graveyard_num;
     }
+
+    public List<GameObject> Get_garaveyard_cardList()
+    {
+        List<GameObject> graveyard_cardlist = new List<GameObject>();
+        foreach (Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            graveyard_cardlist.Add(child.gameObject);
+        }
+        return graveyard_cardlist;
+    }
 }
 
 /*
