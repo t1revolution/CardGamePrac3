@@ -109,7 +109,7 @@ public class player1 : MonoBehaviour
         }
     }
     
-    void SendGraveyard(Card _card)
+    public void SendGraveyard(Card _card)
     {
         field.Pull(_card);
         graveyard.Add(_card);

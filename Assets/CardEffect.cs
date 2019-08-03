@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 
@@ -50,6 +51,33 @@ public class CardEffect : MonoBehaviour
     ACTIVATE.STEP activate_step = ACTIVATE.STEP.NONE;
     private string cardname;
     private bool flag;
+
+    private static Resources cardA_1;
+    //private static Sprite m_texture;
+    private static Texture2D m_texture;
+    //private static Texture tramp_texture;
+
+
+    /*
+    [MenuItem("Assets/CardEffect")]
+    private static void Init()
+    {
+        //GetWindow<CardEffect>();
+
+        var path = "Assets/Resources/A_1.jpg";
+        var path1 = "Assets/Tramp.jpg";
+        //cardA_1 = AssetDatabase.LoadAssetAtPath<Resources>(path);
+        //m_texture = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        m_texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path1);
+    }
+    
+
+    string path1 = "Assets/Tramp.jpg";
+    //cardA_1 = AssetDatabase.LoadAssetAtPath<Resources>(path);
+    //m_texture = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    m_texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path1);
+    */
+
 
     public void Activate(Card card)
     {
@@ -2199,23 +2227,46 @@ public class CardEffect : MonoBehaviour
                 player.PushSettingCardOnFieldFromHand(card);
                 List<GameObject> attackers = Attackable_dice_object(distance);
                 List<GameObject> graveyard_cardlist = graveyard_cardList();
+                List<GameObject> graveyard_cardlist1 = graveyard_cardList();
 
                 bool activate_dice = DiceExistActivate();
                 bool activate_card = CardExistActivate();
                 int selected_dice_num = DiceExistSelected();
                 string graveyard_cardname;
+                int graveyard_cardnum = graveyard_cardlist.Count;
+                float card_leftside = 600f - 55f * graveyard_cardnum / 2;
                 int i = 0;
-                int card_x = 80;
+                //int card_x = 80;
                 if (activate_card == false)
                 {
-                    foreach (GameObject garaveyard_card in graveyard_cardlist)
+                    foreach (GameObject graveyard_card in graveyard_cardlist)
                     {
-                        graveyard_cardname = garaveyard_card.GetComponent<Card>().name;
-                        bool target_card = GUI.Button(new Rect(500f + (card_x + 20) * i, 440f, 80, 120), graveyard_cardname);
+                        graveyard_cardname = graveyard_card.GetComponent<Card>().name;
+                        bool target_card = GUI.Button(new Rect(card_leftside + 55f * i, 560f, 51, 76), "");
+                        //bool target_card1 = GUI.Button(new Rect(420f + (card_x + 20) * i, 390f, 80, 120), "");
+                        //bool target_card2 = GUI.Button(new Rect(420f + (card_x + 20) * i, 520f, 80, 120), "");
+                        //bool target_card = GUI.Button(new Rect(500f + (card_x + 20) * i, 440f, 80, 120), m_texture);
+                        //bool target_card = GUI.Button(new Rect(500f + (card_x + 20) * i, 440f, 80, 120), m_texture.texture);
+                        //bool target_card = GUI.Button(new Rect(500f + (card_x + 20) * i, 440f, 80, 120), graveyard_cardname);
+
+                        graveyard_card.transform.localScale = new Vector3(0.51f, 0.76f, 0.0f);
+                        graveyard_card.transform.position = new Vector3(card_leftside + 26f + 55f * i, 311f, 50);
+                        //graveyard_card.transform.SetSiblingIndex(1);
+                        graveyard_card.GetComponent<Renderer>().sortingOrder = 1;
+
                         if (target_card == true)
                         {
-                            garaveyard_card.GetComponent<Card>().activate = true;
-                            player.PullGraveyardCard(garaveyard_card.GetComponent<Card>());
+                            graveyard_card.GetComponent<Card>().activate = true;
+                            player.PullGraveyardCard(graveyard_card.GetComponent<Card>());
+                            graveyard_card.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+                            //graveyard_cardlist1.Remove(graveyard_card);
+                            graveyard_cardlist1 = graveyard_cardList();
+                            foreach (GameObject _card in graveyard_cardlist1)
+                            {
+                                player.SendGraveyard(_card.GetComponent<Card>());
+                                _card.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
+                            }
+                            break;
                         }
                         i++;
                     }
