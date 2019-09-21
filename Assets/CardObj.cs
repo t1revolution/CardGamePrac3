@@ -157,7 +157,6 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             {
                 dice_x = position[i, 0];
                 dice_y = position[i, 1];
-
                 bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
                 if (activate_i == true)
                 {
@@ -199,14 +198,14 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 // 発動コスト、その他特殊な発動条件のカードがあり実行タイミングは要検討
                 // 下4行のコメントアウトをとったことにより、
                 // 発動コストちょうどの手札枚数のときコスト不足が表示されてしまうので注意
-                
-                
+
+
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
                 //Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
-                
+
 
                 // ##########################################################
 
@@ -277,7 +276,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             // タップされた手札にボタンを生成したい
             //bool ret = GUI.Button(new Rect(card_position.x + 500f, card_position.y - 500f, 200, 300), "コストとして選択されたカード");
             //bool ret = GUI.Button(new Rect(card_position.x + 620f, card_position.y + 640f, 80, 120), "select");
-            if(card.flag == true)
+            if (card.flag == true)
             {
                 ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
             }
@@ -320,7 +319,7 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 }
             }
         }
-        
+
         /*
         else if (this.step == CARD.STEP.DISCAHRGE)
         {
@@ -347,4 +346,3 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
         */
     }
 }
-

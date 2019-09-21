@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class DragObj : MonoBehaviour
-{ 
+{
     public CARD.STEP step = CARD.STEP.NONE;
     public DICE.STEP dice_step = DICE.STEP.NONE;
     private DICE.EFFECT reference = DICE.EFFECT.NONE;
@@ -155,16 +155,16 @@ public class DragObj : MonoBehaviour
             //List<KomaMove> moves = new List<KomaMove>();
             int[,] moves = new int[4, 2];
             bool[] koma_able = new bool[4];
-            float[,] koma_position = new float[4,2];
+            float[,] koma_position = new float[4, 2];
 
             moves = dice_move1.GetMoves();
             Vector3 tmp = this.transform.position;
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                if (dice.x + moves[i, 0] > 5 || dice.x + moves[i, 0] < 1)
                 {
-                    koma_able[i] = false;　
+                    koma_able[i] = false;
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
                     continue;
@@ -178,7 +178,7 @@ public class DragObj : MonoBehaviour
                 }
                 if (dice.flag == true)
                 {
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
 
@@ -214,10 +214,8 @@ public class DragObj : MonoBehaviour
                 GameObject gameObj = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
-
                 Card card = this.GetComponent<Card>();
                 player.PushSettingCardOnFieldFromHand(card);
-
                 //スプライトの差し替えはいらないが、移動先のマスにほかの駒が存在するなら大きさを小さくして同じマスに表示させる。
   　            if (card.type == (int)Type.REFLECT)
                 {
@@ -278,20 +276,20 @@ public class DragObj : MonoBehaviour
         {
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
-            
+
             //List<KomaMove> moves = new List<KomaMove>();
             int[,] moves = new int[4, 2];
             bool[] koma_able = new bool[4];
-            float[,] koma_position = new float[4,2];
+            float[,] koma_position = new float[4, 2];
 
             moves = dice_move1.GetMoves();
             Vector3 tmp = this.transform.position;
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                if (dice.x + moves[i, 0] > 5 || dice.x + moves[i, 0] < 1)
                 {
-                    koma_able[i] = false;　
+                    koma_able[i] = false;
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
                     continue;
@@ -305,7 +303,7 @@ public class DragObj : MonoBehaviour
                 }
                 if (dice.flag == true)
                 {
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
 
@@ -367,20 +365,20 @@ public class DragObj : MonoBehaviour
         {
             Dice dice = GetComponentInParent<Dice>();
             Dice_move1 dice_move1 = GetComponentInParent<Dice_move1>();
-            
+
             //List<KomaMove> moves = new List<KomaMove>();
             int[,] moves = new int[9, 2];
             bool[] koma_able = new bool[9];
-            float[,] koma_position = new float[9,2];
+            float[,] koma_position = new float[9, 2];
 
             moves = dice_move1.GetMoves_2();
             Vector3 tmp = this.transform.position;
 
-            for(int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                if (dice.x + moves[i,0] > 5 || dice.x + moves[i, 0] < 1)
+                if (dice.x + moves[i, 0] > 5 || dice.x + moves[i, 0] < 1)
                 {
-                    koma_able[i] = false;　
+                    koma_able[i] = false;
                     koma_position[i, 0] = 0.0f;
                     koma_position[i, 1] = 0.0f;
                     continue;
@@ -394,7 +392,7 @@ public class DragObj : MonoBehaviour
                 }
                 if (dice.flag == true)
                 {
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66),"");
+                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice.x + moves[i, 0]), basey - 432f + per1y * (dice.y + moves[i, 1]), 66, 66), "");
                     koma_position[i, 0] = basex - per1x * (dice.x + moves[i, 0]);
                     koma_position[i, 1] = basey - per1y * (dice.y + moves[i, 1]);
 
@@ -532,7 +530,7 @@ public class DragObj : MonoBehaviour
                     koma_able = true;
                 }
             }
-            
+
             koma_position[0, 0] = basex - per1x * (dice.x + moves[0, 0]);
             koma_position[0, 1] = basey - per1y * (dice.y + moves[0, 1]);
             if (koma_able == true)
@@ -619,7 +617,6 @@ public class DragObj : MonoBehaviour
             cost = cardeffect.Getcost();
             hand_num = cardeffect.GetHand();
             selected_cost = cardeffect.ExistSelected();
-
             bool ret = GUI.Button(new Rect(card_position.x - 40f, card_position.y + 700f, 80, 120), "select");
             if (ret == true)
             {
@@ -628,7 +625,6 @@ public class DragObj : MonoBehaviour
                 this.transform.localScale = new Vector3(0.8f, 1.2f, 0.0f);
                 this.reference = CARD.EFFECT.CANCEL;
                 card.selected = false;
-
                 //card.activate = true;
                 //card_position = new Vector3();
             }
