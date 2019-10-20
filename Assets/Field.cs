@@ -86,6 +86,36 @@ public class Field : MonoBehaviour
         return setcard_num;
     }
 
+    public int GetA_6()
+    {
+        int A6_num = 0;
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "A_6")
+            {
+                A6_num += 1;
+            }
+        }
+        return A6_num;
+    }
+
+    public int GetM_1()
+    {
+        int M1_num = 0;
+        foreach(Transform child in transform)
+        {
+            Card card = child.GetComponent<Card>();
+            CardObj cardObj = child.GetComponent<CardObj>();
+            if (card.name == "M_1")
+            {
+                M1_num += 1;
+            }
+        }
+        return M1_num;
+    }
+
     public int GetS_2()
     {
         int S2_num = 0;

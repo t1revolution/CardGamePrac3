@@ -80,6 +80,11 @@ public class GameMaster : MonoBehaviour
         new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
         */
 
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+
+
         /*
         new CardData(7, "A_7", (int)Type.ATTACK, 0, true, false, false),
         new CardData(8, "A_8", (int)Type.ATTACK, 0, true, false, false),
@@ -137,6 +142,11 @@ public class GameMaster : MonoBehaviour
         new CardData(15, "A_5", (int)Type.ATTACK, 0, false, false, false),
         new CardData(16, "A_6", (int)Type.ATTACK, 2, false, false, false),
         */
+
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+        new CardData(6, "A_6", (int)Type.ATTACK, 2, true, false, false),
+
     };
 
     public player1 currentPlayer;

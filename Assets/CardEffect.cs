@@ -945,6 +945,26 @@ public class CardEffect : MonoBehaviour
         return graveyard_num;
     }
 
+    public int GetExistA_6()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        int A_6_num = field.GetA_6();
+        return A_6_num;
+    }
+
+    public int GetExistM_1()
+    {
+        Dice dice = GetComponentInParent<Dice>();
+        GameObject gameObj = this.transform.parent.gameObject;
+        // Playerオブジェクトまで上り取得
+        Field field = gameObj.transform.parent.GetComponentInChildren<Field>();
+        int M_1_num = field.GetM_1();
+        return M_1_num;
+    }
+
     public int GetExistS_2()
     {
         Dice dice = GetComponentInParent<Dice>();
@@ -1197,7 +1217,7 @@ public class CardEffect : MonoBehaviour
 
             int[,] position = A_1();
             /*
-             
+            
             ここに個別の処理をそれぞれ埋め込む 
              */
             if (cardname == "A_1")
@@ -1616,15 +1636,30 @@ public class CardEffect : MonoBehaviour
                         }
                         if (cost == 2 && activate_cost != EFFECT.COST.TWO)
                         {
-                            bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
-                            if (card_choose == true)
+                            if (cardname == "M_1")
                             {
-                                //enable_cost = GetHand();
-                                activate_cost = EFFECT.COST.TWO;
-                                CardObj _cardobj = GetComponentInParent<CardObj>();
-                                _cardobj.GetCardCost(cost);
-                                Card card = GetComponentInParent<Card>();
-                                card.activate = true;
+                                int M1_num = GetExistM_1();
+                                if (M1_num > 0)
+                                {
+                                    bool card_choose0 = GUI.Button(new Rect(350, 220, 500, 450), "このターン中、マナカードを発動しておりこのカードは発動できません");
+                                    if (card_choose0 == true)
+                                    {
+                                        step = EFFECT.STEP.IDLE;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                bool card_choose = GUI.Button(new Rect(350, 220, 500, 450), "捨てるカードを2枚選択してください");
+                                if (card_choose == true)
+                                {
+                                    //enable_cost = GetHand();
+                                    activate_cost = EFFECT.COST.TWO;
+                                    CardObj _cardobj = GetComponentInParent<CardObj>();
+                                    _cardobj.GetCardCost(cost);
+                                    Card card = GetComponentInParent<Card>();
+                                    card.activate = true;
+                                }
                             }
                         }
                         if (cost > 3)
@@ -2453,7 +2488,6 @@ public class CardEffect : MonoBehaviour
             int[,] own_dice_position = Get_own_diceposition();
             int[,] opp_dice_position = Get_opp_diceposition();
             int enable_cost = GetHand() - 1; // 発動中のカードを除くため
-            //int in_distance_dicenum = Get_in_distance_dicenum(distance); // distance内存在する相手のダイス数  distanceを渡せばいいのかな?
             int attacker_dice_x;
             int attacker_dice_y;
             int target_dice_x;
@@ -3101,32 +3135,45 @@ public class CardEffect : MonoBehaviour
             int selected_S_2_num = GetExistS_2_selected();
             List<GameObject> targets = own_diceList();
 
-            if (selected_S_2_num == 0)
+            int A6_num = GetExistA_6();
+            if (A6_num > 0)
             {
-                foreach (GameObject target in targets)
+                bool card_choose0 = GUI.Button(new Rect(350, 220, 500, 450), "このターン中、「必殺のナイフ」を発動しておりこのカードは発動できません");
+                if (card_choose0 == true)
                 {
-                    dice_x = target.GetComponent<Dice>().x;
-                    dice_y = target.GetComponent<Dice>().y;
-                    bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
-                    if (activate_i == true)
+                    step = EFFECT.STEP.IDLE;
+                }
+            }
+
+            else if (A6_num == 0)
+            {
+                if (selected_S_2_num == 0)
+                {
+                    foreach (GameObject target in targets)
                     {
-                        S_2selected_true();
-
-                        Dice dice = target.GetComponent<Dice>();
-                        dice.movecount += 1;
-                        DragObj dragObj = dice.GetComponent<DragObj>();
-                        dragObj.dicetranslate1();
-                        exist_S_2 = GetExistS_2();
-                        exist_S_2_activate = GetExistS_2_activate();
-
-                        if (exist_S_2 == exist_S_2_activate)
+                        dice_x = target.GetComponent<Dice>().x;
+                        dice_y = target.GetComponent<Dice>().y;
+                        bool activate_i = GUI.Button(new Rect(basex - 33f - per1x * (dice_x), basey - 432f + per1y * (dice_y), 66, 66), "");
+                        if (activate_i == true)
                         {
-                            step = EFFECT.STEP.IDLE;
-                            S_2activate_restore();
-                        }
-                        else
-                        {
-                            S_2activate_true();
+                            S_2selected_true();
+
+                            Dice dice = target.GetComponent<Dice>();
+                            dice.movecount += 1;
+                            DragObj dragObj = dice.GetComponent<DragObj>();
+                            dragObj.dicetranslate1();
+                            exist_S_2 = GetExistS_2();
+                            exist_S_2_activate = GetExistS_2_activate();
+
+                            if (exist_S_2 == exist_S_2_activate)
+                            {
+                                step = EFFECT.STEP.IDLE;
+                                S_2activate_restore();
+                            }
+                            else
+                            {
+                                S_2activate_true();
+                            }
                         }
                     }
                 }
