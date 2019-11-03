@@ -204,7 +204,9 @@ public class CardObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
                 //Card card = this.GetComponent<Card>();
-                player.PushSettingCardOnFieldFromHand(card);
+
+
+                //player.PushSettingCardOnFieldFromHand(card);
 
 
                 // ##########################################################

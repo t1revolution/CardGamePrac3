@@ -1905,6 +1905,11 @@ public class CardEffect : MonoBehaviour
             {
                 List<GameObject> own_dicelist = own_diceList();
                 List<GameObject> opp_dicelist = opp_diceList();
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
                 bool activate_dice = DiceExistActivate();
                 int selected_dice_num = DiceExistSelected();
                 int activate_dice_num = DiceExistActivate_num();
@@ -2030,6 +2035,12 @@ public class CardEffect : MonoBehaviour
                 float dice1_y_position;
                 Vector3 card_position;
 
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+
                 if (cardname == "S_5")
                 {
                     if (activate_dice_num < 2)
@@ -2086,9 +2097,6 @@ public class CardEffect : MonoBehaviour
                         if (target_card == true)
                         {
                             GameObject gameObj = GameObject.Find("GameMaster");
-                            GameMaster gamemaster = gameObj.GetComponent<GameMaster>();
-                            player1 player = gamemaster.currentPlayer;
-                            //player.ActivationCostFromHand(setcard.GetComponent<Card>());
                             player.Distract_oppcard_FromField(setcard.GetComponent<Card>());
 
                             step = EFFECT.STEP.IDLE;
@@ -2169,6 +2177,12 @@ public class CardEffect : MonoBehaviour
 
             void S_2_processing()
             {
+                GameObject gameOb = GameObject.Find("GameMaster");
+                GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
+                player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+
                 step = EFFECT.STEP.IDLE;
                 exist_S_2 = GetExistS_2() - 1;
                 exist_S_2_activate = GetExistS_2_activate();
@@ -2184,6 +2198,9 @@ public class CardEffect : MonoBehaviour
                 GameObject gameOb = GameObject.Find("GameMaster");
                 GameMaster gamemaster = gameOb.GetComponent<GameMaster>();
                 player1 player = gamemaster.currentPlayer;
+                Card card = this.GetComponent<Card>();
+                player.PushSettingCardOnFieldFromHand(card);
+
                 player.Draw();
                 player.Draw();
                 step = EFFECT.STEP.IDLE;
