@@ -1512,6 +1512,8 @@ public class CardEffect : MonoBehaviour
                     if (cardname == "A_8")
                     {
                         move_1(attackerObj);
+                        Dice dice = attackerObj.GetComponent<Dice>();
+                        dice.movecount += 1;
                     }
                     if (cardname == "A_10")
                     {
@@ -1971,23 +1973,19 @@ public class CardEffect : MonoBehaviour
                         S_2activate_true();
                     }
                 }
-
+                
                 if (activate_dice == true)
                 {
                     if (cardname == "S_3")
                     {
                         move_2_2(attackerObj);
                     }
-                    if (cardname == "S_4")
-                    {
-                        move_2_1(attackerObj);
-                    }
-                    if (cardname == "S_6")
+                    if (cardname == "S_4" || cardname == "S_6")
                     {
                         move_2_1(attackerObj);
                     }
                 }
-
+                
                 if (activate_dice == true && selected_dice_num > 0)
                 {
                     bool attacker_ = GUI.Button(new Rect(basex - 33f - per1x * (attacker_dice_x), basey - 432f + per1y * (attacker_dice_y), 66, 66), "att");
@@ -3105,7 +3103,6 @@ public class CardEffect : MonoBehaviour
             //Card card = this.GetComponent<Card>();
 
             Dice dice = move_dice.GetComponent<Dice>();
-            dice.movecount += 1;
             DragObj dragObj = dice.GetComponent<DragObj>();
             dragObj.dicetranslate1();
             //step = EFFECT.STEP.IDLE;
@@ -3114,7 +3111,6 @@ public class CardEffect : MonoBehaviour
         void move_2_1(GameObject move_dice)
         {
             Dice dice = move_dice.GetComponent<Dice>();
-            dice.movecount += 1;
             DragObj dragObj = dice.GetComponent<DragObj>();
             dragObj.dicetranslate2_1();
         }
@@ -3122,18 +3118,15 @@ public class CardEffect : MonoBehaviour
         void move_2_2(GameObject move_dice)
         {
             Dice dice = move_dice.GetComponent<Dice>();
-            dice.movecount += 2;
             DragObj dragObj = dice.GetComponent<DragObj>();
             dragObj.dicetranslate2_2();
         }
 
-        //void movedices_S_1(GameObject move_dice)
         void movedices_S_1(List<GameObject> move_dices)
         {
             foreach (GameObject move_dice in move_dices)
             {
                 Dice dice = move_dice.GetComponent<Dice>();
-                //dice.movecount += 1;
                 DragObj dragObj = dice.GetComponent<DragObj>();
                 dragObj.dicetranslate_S_1();
             }
@@ -3176,7 +3169,6 @@ public class CardEffect : MonoBehaviour
                             S_2selected_true();
 
                             Dice dice = target.GetComponent<Dice>();
-                            dice.movecount += 1;
                             DragObj dragObj = dice.GetComponent<DragObj>();
                             dragObj.dicetranslate1();
                             exist_S_2 = GetExistS_2();

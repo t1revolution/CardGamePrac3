@@ -209,6 +209,7 @@ public class DragObj : MonoBehaviour
                 Debug.Log("koma_position[0, 0]:" + koma_position[0, 0] + "koma_position[0, 1]:" + koma_position[0, 1]);
 
                 cardeffect.S_2selected_restore();
+                dice.movecount += 1;
 
                 /*
                 GameObject gameObj = GameObject.Find("GameMaster");
@@ -239,6 +240,7 @@ public class DragObj : MonoBehaviour
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[1, 0]:" + koma_position[1, 0] + "koma_position[1, 1]:" + koma_position[1, 1]);
                 cardeffect.S_2selected_restore();
+                dice.movecount += 1;
             }
             if (koma_able[2] == true)
             {
@@ -254,6 +256,7 @@ public class DragObj : MonoBehaviour
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[2, 0]:" + koma_position[2, 0] + "koma_position[2, 1]:" + koma_position[2, 1]);
                 cardeffect.S_2selected_restore();
+                dice.movecount += 1;
             }
             if (koma_able[3] == true)
             {
@@ -269,6 +272,7 @@ public class DragObj : MonoBehaviour
                 Debug.Log("x:" + dice.x + "y:" + dice.y);
                 Debug.Log("koma_position[3, 0]:" + koma_position[3, 0] + "koma_position[3, 1]:" + koma_position[3, 1]);
                 cardeffect.S_2selected_restore();
+                dice.movecount += 1;
             }
         }
 
@@ -328,6 +332,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[0, 0];
                 dice.y = dice.y + moves[0, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[1] == true)
             {
@@ -338,6 +343,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[1, 0];
                 dice.y = dice.y + moves[1, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[2] == true)
             {
@@ -348,6 +354,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[2, 0];
                 dice.y = dice.y + moves[2, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[3] == true)
             {
@@ -358,6 +365,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[3, 0];
                 dice.y = dice.y + moves[3, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
         }
 
@@ -417,6 +425,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[0, 0];
                 dice.y = dice.y + moves[0, 1];
                 dice.selected = true;
+                dice.movecount += 2;
             }
             if (koma_able[1] == true)
             {
@@ -426,10 +435,8 @@ public class DragObj : MonoBehaviour
                 this.transform.position = new Vector3(koma_position[1, 0], koma_position[1, 1], 0);
                 dice.x = dice.x + moves[1, 0];
                 dice.y = dice.y + moves[1, 1];
-
-                // A_9 の攻撃後の移動ができてここでできない理由がわからないが、時間の都合上ここで整合性をとって
-                // S1_S3_S4_S6_processing を機能させることを優先する。
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[2] == true)
             {
@@ -440,6 +447,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[2, 0];
                 dice.y = dice.y + moves[2, 1];
                 dice.selected = true;
+                dice.movecount += 2;
             }
             if (koma_able[3] == true)
             {
@@ -450,6 +458,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[3, 0];
                 dice.y = dice.y + moves[3, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[4] == true)
             {
@@ -460,6 +469,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[4, 0];
                 dice.y = dice.y + moves[4, 1];
                 dice.selected = true;
+                dice.movecount += 2;
             }
             if (koma_able[5] == true)
             {
@@ -470,6 +480,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[5, 0];
                 dice.y = dice.y + moves[5, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[6] == true)
             {
@@ -480,6 +491,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[6, 0];
                 dice.y = dice.y + moves[6, 1];
                 dice.selected = true;
+                dice.movecount += 2;
             }
             if (koma_able[7] == true)
             {
@@ -490,6 +502,7 @@ public class DragObj : MonoBehaviour
                 dice.x = dice.x + moves[7, 0];
                 dice.y = dice.y + moves[7, 1];
                 dice.selected = true;
+                dice.movecount += 1;
             }
             if (koma_able[8] == true)
             {
